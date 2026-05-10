@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yohan Shanuka | Machine Learning Engineer</title>
+    <meta name="description" content="Portfolio of Yohan Shanuka, Machine Learning & Data Engineer focused on end-to-end MLOps and production deployments.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="glass-nav">
+        <div class="nav-container">
+            <div class="logo">YS<span>.</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#bento-overview">Profile</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact" class="btn-primary-sm">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div id="tsparticles"></div>
+        <div class="hero-content">
+            <p class="greeting reveal">Hello, World! I am</p>
+            <h1 class="reveal">Yohan Shanuka</h1>
+            <h2 class="reveal">I build <span class="typed-text"></span><span class="cursor">&nbsp;</span></h2>
+            <p class="hero-desc reveal">Bridging the gap between raw data and production-ready intelligent systems. Specializing in end-to-end Machine Learning, Data Engineering, and MLOps.</p>
+            <div class="hero-cta reveal">
+                <a href="#projects" class="btn-primary">View My Work <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="btn-secondary">Get in Touch</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <a href="#about">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Bento Overview Section (About & Skills) -->
+    <section id="bento-overview" class="bento-overview section-padding">
+        <div class="container">
+            <h2 class="section-title reveal">Profile & Expertise</h2>
+            
+            <div class="bento-grid">
+                
+                <!-- About Box (Large) -->
+                <div class="bento-item glass-card reveal bento-about" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+                    <h3><i class="fas fa-terminal neon-icon"></i> About Me</h3>
+                    <p>I am a highly motivated Machine Learning Engineer currently studying at the University of Vavuniya. I am passionate about building end-to-end machine learning systems that solve real-world problems.</p>
+                    <p>My expertise lies not just in training models, but in the entire lifecycle: from robust data pipelines to deploying scalable models in the cloud.</p>
+                    <div class="about-highlights">
+                        <div class="highlight"><i class="fas fa-code-branch"></i><span>End-to-End MLOps</span></div>
+                        <div class="highlight"><i class="fas fa-cloud"></i><span>Cloud Deployment</span></div>
+                    </div>
+                </div>
+
+                <!-- Profile Box (Vertical) -->
+                <div class="bento-item glass-card reveal bento-profile" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.2">
+                    <div class="profile-image-container">
+                        <img src="avatar.png" alt="Yohan Shanuka Profile" class="profile-image">
+                    </div>
+                    <h3>Yohan Shanuka</h3>
+                    <p class="role-badge">ML Engineer</p>
+                    <div class="social-links-small">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Skill Graph Box (Wide) -->
+                <div class="bento-item glass-card reveal bento-skills-core" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+                    <h3><i class="fas fa-chart-bar neon-icon"></i> Core Proficiency</h3>
+                    <div class="skill-graphs">
+                        <div class="skill-bar">
+                            <div class="skill-info">
+                                <span>Python & ML Frameworks</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-info">
+                                <span>SQL & Data Engineering</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-info">
+                                <span>Docker & MLOps</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Box (Small) -->
+                <div class="bento-item glass-card reveal bento-tools" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
+                    <h3><i class="fas fa-toolbox neon-icon"></i> Tech Stack</h3>
+                    <div class="skill-tags">
+                        <span>AWS</span>
+                        <span>MLflow</span>
+                        <span>Airflow</span>
+                        <span>FastAPI</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects section-padding">
+        <div class="container">
+            <h2 class="section-title reveal">Featured Projects</h2>
+            <p class="section-subtitle reveal">Real-world problems, solved and deployed.</p>
+            
+            <div class="projects-grid">
+                
+                <!-- Project 1 -->
+                <div class="project-card glass-card reveal" data-tilt>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <i class="fas fa-leaf project-icon neon-icon"></i>
+                            <div class="project-links">
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <h3>Tomato Disease Prediction System</h3>
+                        <p class="project-desc">An end-to-end computer vision system to detect diseases in tomato plants. Deployed as a web application serving predictions via a REST API.</p>
+                        <div class="business-impact">
+                            <i class="fas fa-chart-line"></i> Enables rapid, automated detection for farmers.
+                        </div>
+                        <div class="tech-stack">
+                            <span>PyTorch</span>
+                            <span>Flask</span>
+                            <span>Computer Vision</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card glass-card reveal" data-tilt>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <i class="fas fa-road project-icon neon-icon"></i>
+                            <div class="project-links">
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <h3>Road Damage Detection Model</h3>
+                        <p class="project-desc">Transfer learning with YOLOv8 to identify and classify road damage. Built robust data preparation pipelines and fine-tuned for high precision/recall.</p>
+                        <div class="business-impact">
+                            <i class="fas fa-chart-line"></i> Automates infrastructure maintenance surveys.
+                        </div>
+                        <div class="tech-stack">
+                            <span>YOLOv8</span>
+                            <span>Python</span>
+                            <span>OpenCV</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card glass-card reveal" data-tilt>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <i class="fas fa-project-diagram project-icon neon-icon"></i>
+                            <div class="project-links">
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                        <h3>Data Pipeline Automation</h3>
+                        <p class="project-desc">Automated ETL pipeline designed to ingest, clean, and transform messy data from multiple sources into a centralized data warehouse.</p>
+                        <div class="business-impact">
+                            <i class="fas fa-chart-line"></i> Reduced data preparation time by 60%.
+                        </div>
+                        <div class="tech-stack">
+                            <span>Apache Airflow</span>
+                            <span>SQL</span>
+                            <span>AWS S3</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience / Timeline Section -->
+    <section id="experience" class="experience section-padding">
+        <div class="container">
+            <h2 class="section-title reveal">Journey</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>University of Vavuniya</h3>
+                        <h4>Undergraduate</h4>
+                        <p class="timeline-date">Present</p>
+                        <p>Pursuing a degree focused on computing and data. Building a strong foundation in algorithms, databases, and machine learning fundamentals.</p>
+                    </div>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Machine Learning Projects</h3>
+                        <h4>Independent Developer</h4>
+                        <p class="timeline-date">Ongoing</p>
+                        <p>Designing and deploying computer vision and data engineering projects. Focusing on MLOps best practices and cloud deployments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section-padding">
+        <div class="container">
+            <h2 class="section-title reveal">Get In Touch</h2>
+            <p class="section-subtitle reveal">I am currently looking for internship opportunities. Let's build something amazing together.</p>
+            
+            <div class="contact-container reveal">
+                <div class="contact-info glass-card">
+                    <h3>Contact Information</h3>
+                    <div class="info-item">
+                        <i class="fas fa-envelope neon-icon"></i>
+                        <p>yohan.shanuka@example.com</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt neon-icon"></i>
+                        <p>Sri Lanka</p>
+                    </div>
+                    <div class="social-links-large">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fas fa-laptop-code"></i></a> <!-- Kaggle/HF placeholder -->
+                    </div>
+                </div>
+
+                <form class="contact-form glass-card">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary w-100">Send Message <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>&copy; <span id="year"></span> Yohan Shanuka. Designed with <i class="fas fa-heart"></i> for ML.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- tsParticles -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-particles-links@2/tsparticles.interaction.particles.links.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-move-base@2/tsparticles.move.base.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-circle@2/tsparticles.shape.circle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-color@2/tsparticles.updater.color.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-opacity@2/tsparticles.updater.opacity.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-out-modes@2/tsparticles.updater.out.modes.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-size@2/tsparticles.updater.size.min.js"></script>
+    <!-- Vanilla Tilt for 3D Cards -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>
