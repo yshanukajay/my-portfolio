@@ -24,17 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                 distance: 140,
                                 links: {
                                     opacity: 0.5,
-                                    color: "#00f0ff"
+                                    color: "#06B6D4"
                                 },
                             },
                         },
                     },
                     particles: {
                         color: {
-                            value: ["#00f0ff", "#7000ff"],
+                            value: ["#06B6D4", "#0F172A"],
                         },
                         links: {
-                            color: "#a0a0a5",
+                            color: "#64748B",
                             distance: 150,
                             enable: true,
                             opacity: 0.3,
