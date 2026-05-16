@@ -1,46 +1,36 @@
-# Professional Portfolio - Machine Learning Engineer & Data Engineer
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A modern, responsive personal portfolio website designed for machine learning and data engineering roles.
+## Getting Started
 
-## What This Portfolio Highlights
-
-- Machine learning project impact (problem, approach, metrics, deployment)
-- Data engineering foundations (pipelines, orchestration, warehousing, quality)
-- Technical stack across Python, SQL, cloud, and MLOps tools
-- Clear contact and professional profile for recruiters and hiring teams
-
-## Project Structure
-
-- `index.html` - Main portfolio content and layout
-- `styles.css` - Styling, responsive layout, and visual theme
-- `script.js` - Interactions (project filtering, smooth navigation, current year)
-
-## How To Run
-
-1. Open the project folder.
-2. Double-click `index.html`, or run a local static server.
-
-Example with Python:
+First, run the development server:
 
 ```bash
-python -m http.server 8000
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then open `http://localhost:8000`.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Recommended Customization
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Update these sections in `index.html` to make the site yours:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- Name, headline, and professional summary
-- Experience bullets with measurable outcomes
-- Project cards with GitHub/demo links
-- Contact links (LinkedIn, GitHub, email)
-- Certifications and education details
+## Learn More
 
-## Portfolio Tips for ML + Data Engineering Roles
+To learn more about Next.js, take a look at the following resources:
 
-- Quantify outcomes: latency reduction, model performance, pipeline reliability, cost savings.
-- Show end-to-end ownership: data ingestion -> training -> deployment -> monitoring.
-- Include one production-style project with architecture and business context.
-- Keep writing concise and impact-focused.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

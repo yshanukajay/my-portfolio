@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-outfit), sans-serif;
+  
+  --color-accent-primary: #0ea5e9;
+  --color-accent-secondary: #3b82f6;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold text-slate-900 tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-slate-200/60 shadow-sm transition-all duration-300;
+  }
+  .glass-card:hover {
+    @apply border-slate-300 shadow-md;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-blue-600;
+  }
+}

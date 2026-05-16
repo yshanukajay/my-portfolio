@@ -80,48 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setupParticles();
     }
 
-    // 2. Typing Effect for Hero Section
-    const typingElement = document.querySelector('.typed-text');
-    const roles = [
-        "Machine Learning Engineer",
-        "Data Engineer",
-        "MLOps Specialist"
-    ];
-    let roleIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 100;
+    // 2. Typing Effect for Hero Section (Removed as per new static design)
 
-    function type() {
-        const currentRole = roles[roleIndex];
-        
-        if (isDeleting) {
-            typingElement.textContent = currentRole.substring(0, charIndex - 1);
-            charIndex--;
-            typingSpeed = 50; // faster deletion
-        } else {
-            typingElement.textContent = currentRole.substring(0, charIndex + 1);
-            charIndex++;
-            typingSpeed = 100;
-        }
-
-        // Handle word completion and deletion initiation
-        if (!isDeleting && charIndex === currentRole.length) {
-            isDeleting = true;
-            typingSpeed = 2000; // pause at the end of word
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            roleIndex = (roleIndex + 1) % roles.length; // move to next word
-            typingSpeed = 500; // pause before typing new word
-        }
-
-        setTimeout(type, typingSpeed);
-    }
-
-    // Start typing effect
-    if (typingElement) {
-        setTimeout(type, 1000); // Initial delay
-    }
 
     // 3. Scroll Reveal Animation using Intersection Observer
     const revealElements = document.querySelectorAll('.reveal');
