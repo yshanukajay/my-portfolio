@@ -130,14 +130,21 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative hidden lg:flex justify-center items-center h-[500px]"
+          className="relative hidden lg:flex justify-center items-center h-[500px] w-full max-w-md"
         >
-          {/* Highly Professional Pipeline Visual */}
-          <div className="relative w-full max-w-md h-[500px] rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 bg-[#0D1117] shadow-2xl border border-slate-800">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-900/20 via-transparent to-transparent"></div>
-            
-            {/* The Central Pipeline Line */}
-            <div className="absolute top-12 bottom-12 w-px bg-slate-800 left-1/2 -translate-x-1/2">
+          {/* Ambient Background Glow */}
+          <motion.div 
+            animate={{ opacity: [0.2, 0.5, 0.2], scale: [0.9, 1.05, 0.9] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-4 bg-sky-500/20 blur-3xl rounded-full pointer-events-none"
+          />
+
+          {/* Inner Pipeline Container */}
+          <div className="relative w-full h-full rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 bg-[#0D1117] z-10 shadow-2xl border border-slate-800">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-900/20 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* The Central Pipeline Line */}
+              <div className="absolute top-12 bottom-12 w-px bg-slate-800 left-1/2 -translate-x-1/2">
               {/* Moving Data Particles */}
               <motion.div 
                 animate={{ top: ["0%", "100%"] }}
@@ -149,60 +156,88 @@ export default function HeroSection() {
             <div className="w-full flex flex-col justify-between h-full relative z-10 py-4">
               
               {/* Node 1: Ingestion */}
-              <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center justify-between">
                 <div className="w-[45%] flex justify-end">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right hover:border-sky-500/50 transition-colors">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right transition-colors">
                     <p className="text-sky-400 text-xs font-bold uppercase tracking-wider mb-0.5">Ingestion</p>
                     <p className="text-slate-400 text-[10px] font-mono">Kafka / AWS S3</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <motion.div 
+                  animate={{ 
+                    borderColor: ["#334155", "#38bdf8", "#334155"],
+                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(56,189,248,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, times: [0, 0.1, 0.3], ease: "easeInOut" }}
+                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
+                >
                   <Database size={16} className="text-sky-400" />
-                </div>
+                </motion.div>
                 <div className="w-[45%]"></div>
-              </motion.div>
+              </div>
 
               {/* Node 2: Processing */}
-              <motion.div animate={{ y: [0, 3, 0] }} transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between flex-row-reverse">
+              <div className="w-full flex items-center justify-between flex-row-reverse">
                 <div className="w-[45%] flex justify-start">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left hover:border-indigo-500/50 transition-colors">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left transition-colors">
                     <p className="text-indigo-400 text-xs font-bold uppercase tracking-wider mb-0.5">Processing</p>
                     <p className="text-slate-400 text-[10px] font-mono">Apache Spark</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <motion.div 
+                  animate={{ 
+                    borderColor: ["#334155", "#818cf8", "#334155"],
+                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(129,140,248,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, times: [0.2, 0.35, 0.55], ease: "easeInOut" }}
+                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
+                >
                   <Cog size={16} className="text-indigo-400" />
-                </div>
+                </motion.div>
                 <div className="w-[45%]"></div>
-              </motion.div>
+              </div>
 
               {/* Node 3: Model Training */}
-              <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 4, delay: 2, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center justify-between">
                 <div className="w-[45%] flex justify-end">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right hover:border-fuchsia-500/50 transition-colors">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right transition-colors">
                     <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider mb-0.5">Training</p>
                     <p className="text-slate-400 text-[10px] font-mono">PyTorch / MLflow</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <motion.div 
+                  animate={{ 
+                    borderColor: ["#334155", "#e879f9", "#334155"],
+                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(232,121,249,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, times: [0.5, 0.65, 0.85], ease: "easeInOut" }}
+                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
+                >
                   <Cpu size={16} className="text-fuchsia-400" />
-                </div>
+                </motion.div>
                 <div className="w-[45%]"></div>
-              </motion.div>
+              </div>
 
               {/* Node 4: API Serving */}
-              <motion.div animate={{ y: [0, 3, 0] }} transition={{ duration: 4, delay: 3, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between flex-row-reverse">
+              <div className="w-full flex items-center justify-between flex-row-reverse">
                 <div className="w-[45%] flex justify-start">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left hover:border-emerald-500/50 transition-colors">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left transition-colors">
                     <p className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-0.5">Serving</p>
                     <p className="text-slate-400 text-[10px] font-mono">FastAPI / Docker</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <motion.div 
+                  animate={{ 
+                    borderColor: ["#334155", "#34d399", "#334155"],
+                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(52,211,153,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, times: [0.75, 0.9, 1], ease: "easeInOut" }}
+                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
+                >
                   <Server size={16} className="text-emerald-400" />
-                </div>
+                </motion.div>
                 <div className="w-[45%]"></div>
-              </motion.div>
+              </div>
 
             </div>
           </div>
