@@ -15,6 +15,18 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Yohan Shanuka | ML & Data Engineer",
   description: "Portfolio of Yohan Shanuka, specializing in scalable Machine Learning systems, Data Engineering, and MLOps.",
+  openGraph: {
+    title: "Yohan Shanuka | ML & Data Engineer",
+    description: "Building scalable machine learning workflows and production-grade data pipelines.",
+    url: "https://yohanshanuka.com",
+    siteName: "Yohan Shanuka Portfolio",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yohan Shanuka | ML & Data Engineer",
+    description: "Building scalable machine learning workflows and production-grade data pipelines.",
+  },
 };
 
 export default function RootLayout({

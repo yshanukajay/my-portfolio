@@ -5,7 +5,7 @@ import { ArrowDown, Database, Cog, Beaker, Server, Activity } from "lucide-react
 
 export default function MLOpsPipelines() {
   return (
-    <section className="py-24 bg-white relative border-y border-slate-100 overflow-hidden">
+    <section id="pipelines" className="py-24 bg-white relative border-y border-slate-100 overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">MLOps Pipelines</h2>

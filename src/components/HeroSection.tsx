@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Download, Database, Cog, Cpu, Server } from "lucide-react";
 
 const GithubIcon = ({ size = 24 }: { size?: number }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -98,72 +98,79 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative hidden lg:flex justify-center items-center h-[500px]"
         >
-          {/* Abstract Data Flow Animation Placeholder */}
-          <div className="relative w-full max-w-md h-full rounded-2xl glass-card overflow-hidden flex flex-col items-center justify-center p-8 bg-gradient-to-br from-white/80 to-slate-50/50">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-100/40 via-transparent to-transparent"></div>
+          {/* Highly Professional Pipeline Visual */}
+          <div className="relative w-full max-w-md h-[500px] rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 bg-[#0D1117] shadow-2xl border border-slate-800">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-900/20 via-transparent to-transparent"></div>
             
-            {/* Mock Nodes */}
-            <div className="w-full flex justify-between items-center mb-16 relative z-10">
+            {/* The Central Pipeline Line */}
+            <div className="absolute top-12 bottom-12 w-px bg-slate-800 left-1/2 -translate-x-1/2">
+              {/* Moving Data Particles */}
               <motion.div 
-                animate={{ y: [0, -10, 0] }} 
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-16 h-16 rounded-xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-slate-400 font-mono text-xs"
-              >
-                RAW
-              </motion.div>
-              <div className="h-px bg-sky-200 w-16 relative">
-                 <motion.div 
-                   animate={{ left: ["0%", "100%"], opacity: [0, 1, 0] }}
-                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                   className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-sky-500" 
-                 />
-              </div>
-              <motion.div 
-                animate={{ y: [0, 10, 0] }} 
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-20 h-20 rounded-xl bg-sky-50 shadow-lg border border-sky-100 flex items-center justify-center text-sky-600 font-mono text-sm font-semibold"
-              >
-                ETL
-              </motion.div>
+                animate={{ top: ["0%", "100%"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                className="absolute left-1/2 -translate-x-1/2 w-1.5 h-8 rounded-full bg-gradient-to-b from-sky-400 to-transparent shadow-[0_0_10px_rgba(56,189,248,0.8)]"
+              />
             </div>
 
-            {/* Mock Model Node */}
-            <div className="w-full flex justify-center items-center mb-16 relative z-10">
-              <div className="h-16 w-px bg-indigo-200 absolute -top-16">
-                 <motion.div 
-                   animate={{ top: ["0%", "100%"], opacity: [0, 1, 0] }}
-                   transition={{ duration: 2, delay: 1, repeat: Infinity, ease: "linear" }}
-                   className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-indigo-500" 
-                 />
-              </div>
-              <motion.div 
-                animate={{ scale: [1, 1.05, 1] }} 
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="w-32 h-24 rounded-2xl bg-indigo-50 shadow-xl border border-indigo-100 flex flex-col items-center justify-center"
-              >
-                <span className="text-indigo-600 font-mono text-sm font-bold mb-1">MODEL</span>
-                <span className="text-indigo-400 text-xs font-mono">TRAINING</span>
+            <div className="w-full flex flex-col justify-between h-full relative z-10 py-4">
+              
+              {/* Node 1: Ingestion */}
+              <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between">
+                <div className="w-[45%] flex justify-end">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right hover:border-sky-500/50 transition-colors">
+                    <p className="text-sky-400 text-xs font-bold uppercase tracking-wider mb-0.5">Ingestion</p>
+                    <p className="text-slate-400 text-[10px] font-mono">Kafka / AWS S3</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <Database size={16} className="text-sky-400" />
+                </div>
+                <div className="w-[45%]"></div>
               </motion.div>
-            </div>
 
-            {/* Mock Output */}
-            <div className="w-full flex justify-between items-center relative z-10">
-              <div className="h-px bg-emerald-200 w-16 absolute right-16 -top-12 rotate-45 transform origin-right">
-                <motion.div 
-                   animate={{ left: ["0%", "100%"], opacity: [0, 1, 0] }}
-                   transition={{ duration: 2, delay: 0.5, repeat: Infinity, ease: "linear" }}
-                   className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-500" 
-                 />
-              </div>
-              <motion.div 
-                animate={{ y: [0, -5, 0] }} 
-                transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full h-16 rounded-xl bg-emerald-50 shadow-lg border border-emerald-100 flex items-center justify-center text-emerald-600 font-mono text-sm font-semibold"
-              >
-                API ENDPOINT
+              {/* Node 2: Processing */}
+              <motion.div animate={{ y: [0, 3, 0] }} transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between flex-row-reverse">
+                <div className="w-[45%] flex justify-start">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left hover:border-indigo-500/50 transition-colors">
+                    <p className="text-indigo-400 text-xs font-bold uppercase tracking-wider mb-0.5">Processing</p>
+                    <p className="text-slate-400 text-[10px] font-mono">Apache Spark</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <Cog size={16} className="text-indigo-400" />
+                </div>
+                <div className="w-[45%]"></div>
               </motion.div>
-            </div>
 
+              {/* Node 3: Model Training */}
+              <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 4, delay: 2, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between">
+                <div className="w-[45%] flex justify-end">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right hover:border-fuchsia-500/50 transition-colors">
+                    <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider mb-0.5">Training</p>
+                    <p className="text-slate-400 text-[10px] font-mono">PyTorch / MLflow</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <Cpu size={16} className="text-fuchsia-400" />
+                </div>
+                <div className="w-[45%]"></div>
+              </motion.div>
+
+              {/* Node 4: API Serving */}
+              <motion.div animate={{ y: [0, 3, 0] }} transition={{ duration: 4, delay: 3, repeat: Infinity, ease: "easeInOut" }} className="w-full flex items-center justify-between flex-row-reverse">
+                <div className="w-[45%] flex justify-start">
+                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left hover:border-emerald-500/50 transition-colors">
+                    <p className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-0.5">Serving</p>
+                    <p className="text-slate-400 text-[10px] font-mono">FastAPI / Docker</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#0D1117] border-2 border-slate-700 flex items-center justify-center relative z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <Server size={16} className="text-emerald-400" />
+                </div>
+                <div className="w-[45%]"></div>
+              </motion.div>
+
+            </div>
           </div>
         </motion.div>
       </div>

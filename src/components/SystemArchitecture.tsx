@@ -5,7 +5,7 @@ import { Network, ArrowRight } from "lucide-react";
 
 export default function SystemArchitecture() {
   return (
-    <section className="py-24 bg-slate-50 relative border-y border-slate-100">
+    <section id="architecture" className="py-24 bg-slate-50 relative border-y border-slate-100">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">System Architecture</h2>

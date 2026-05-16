@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TechStrip from "@/components/TechStrip";
 import AboutSection from "@/components/AboutSection";
@@ -6,10 +7,12 @@ import Projects from "@/components/Projects";
 import MLOpsPipelines from "@/components/MLOpsPipelines";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import AdditionalSections from "@/components/AdditionalSections";
+import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
+    <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden pt-16">
+      <Navbar />
       <HeroSection />
       <TechStrip />
       <AboutSection />
@@ -18,6 +21,7 @@ export default function Home() {
       <SystemArchitecture />
       <Projects />
       <AdditionalSections />
+      <ContactSection />
       
       <footer className="py-8 bg-white border-t border-slate-100 text-center text-slate-500 text-sm">
         <p>&copy; {new Date().getFullYear()} Yohan Shanuka. Designed for scalable ML.</p>
