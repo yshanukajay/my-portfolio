@@ -28,8 +28,42 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center pt-20 pb-10 overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="relative w-full min-h-[90vh] flex items-center justify-center pt-20 pb-10 overflow-hidden bg-slate-50">
+      
+      {/* Floating Data Particles Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(15)].map((_, i) => {
+          // Deterministic pseudo-random values to prevent hydration mismatches
+          const pseudoRandomX = (i * 37) % 100;
+          const pseudoRandomY = 100 + (i * 13) % 100;
+          const duration = 10 + (i % 5) * 2;
+          const delay = (i % 3) * 1.5;
+          
+          return (
+            <motion.div
+              key={i}
+              initial={{ 
+                opacity: 0, 
+                y: pseudoRandomY, 
+                left: `${pseudoRandomX}%`
+              }}
+              animate={{ 
+                opacity: [0, 0.5, 0], 
+                y: -100 
+              }}
+              transition={{
+                duration: duration,
+                repeat: Infinity,
+                delay: delay,
+                ease: "linear"
+              }}
+              className="absolute w-1 h-1 bg-sky-400 rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]"
+            />
+          );
+        })}
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
         {/* Left Side: Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

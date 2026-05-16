@@ -63,6 +63,40 @@ export default function AboutSection() {
               </div>
             </div>
           </div>
+          
+          {/* Dashboard Counters */}
+          <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} viewport={{ once: true }}
+              className="glass-card p-6 rounded-2xl text-center"
+            >
+              <h4 className="text-4xl font-bold text-sky-600 font-heading mb-2">
+                <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 2 }}>50</motion.span>TB+
+              </h4>
+              <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Data Processed</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} viewport={{ once: true }}
+              className="glass-card p-6 rounded-2xl text-center"
+            >
+              <h4 className="text-4xl font-bold text-indigo-600 font-heading mb-2">
+                <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 2 }}>20</motion.span>+
+              </h4>
+              <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Models Deployed</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} viewport={{ once: true }}
+              className="glass-card p-6 rounded-2xl text-center"
+            >
+              <h4 className="text-4xl font-bold text-emerald-600 font-heading mb-2">
+                <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 2 }}>99.9</motion.span>%
+              </h4>
+              <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Pipeline Uptime</p>
+            </motion.div>
+          </div>
+
         </motion.div>
       </div>
     </section>

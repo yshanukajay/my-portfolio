@@ -4,6 +4,7 @@ import TechStrip from "@/components/TechStrip";
 import AboutSection from "@/components/AboutSection";
 import TechStack from "@/components/TechStack";
 import Projects from "@/components/Projects";
+import Certifications from "@/components/Certifications";
 import MLOpsPipelines from "@/components/MLOpsPipelines";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import AdditionalSections from "@/components/AdditionalSections";
@@ -20,6 +21,7 @@ export default function Home() {
       <MLOpsPipelines />
       <SystemArchitecture />
       <Projects />
+      <Certifications />
       <AdditionalSections />
       <ContactSection />
       
