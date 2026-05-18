@@ -28,7 +28,7 @@ export default function MLOpsPipelines() {
               <div className="w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center">
                 <Database size={24} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">Training Pipeline</h3>
+              <h3 className="text-xl f  ont-bold text-slate-900">Training Pipeline</h3>
             </div>
             
             <div className="space-y-4">

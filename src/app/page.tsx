@@ -9,6 +9,7 @@ import MLOpsPipelines from "@/components/MLOpsPipelines";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import AdditionalSections from "@/components/AdditionalSections";
 import ContactSection from "@/components/ContactSection";
+import TerminalWidget from "@/components/TerminalWidget";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <Certifications />
       <AdditionalSections />
       <ContactSection />
+      <TerminalWidget />
       
       <footer className="py-8 bg-white border-t border-slate-100 text-center text-slate-500 text-sm">
         <p>&copy; {new Date().getFullYear()} Yohan Shanuka. Designed for scalable ML.</p>

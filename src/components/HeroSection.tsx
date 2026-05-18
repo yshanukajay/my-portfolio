@@ -2,14 +2,17 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowRight, Download, Database, Cog, Cpu, Server } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
+import Image from "next/image";
 
+/* ─── GitHub icon ─────────────────────────────────────────────────────────── */
 const GithubIcon = ({ size = 24 }: { size?: number }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
   </svg>
 );
 
+/* ─── Animated titles ─────────────────────────────────────────────────────── */
 const titles = [
   "Machine Learning Engineer",
   "MLOps Enthusiast",
@@ -17,54 +20,141 @@ const titles = [
   "ML Systems Developer",
 ];
 
+/* ─── Diagram slides config ───────────────────────────────────────────────── */
+const SLIDES = [
+  {
+    id: "data",
+    phase: "Phase 1",
+    title: "Data Engineering Pipeline",
+    subtitle: "Kafka · Spark · Airflow · Data Lake",
+    color: "#0ea5e9",
+    src: "/diagram-data-pipeline.png",
+  },
+  {
+    id: "ml",
+    phase: "Phase 2",
+    title: "Machine Learning Pipeline",
+    subtitle: "TensorFlow · PyTorch · MLflow · Feature Store",
+    color: "#818cf8",
+    src: "/diagram-ml-pipeline.png",
+  },
+  {
+    id: "mlops",
+    phase: "Phase 3",
+    title: "MLOps Deployment Pipeline",
+    subtitle: "Docker · Kubernetes · FastAPI · Monitoring",
+    color: "#2dd4bf",
+    src: "/diagram-mlops-pipeline.png",
+  },
+];
+
+const SLIDE_DURATION = 8; // seconds per slide
+
+/* ─── Flowing Data Streams Background ────────────────────────────────────── */
+function DataStreamsBg() {
+  const streams = Array.from({ length: 10 }).map((_, i) => {
+    const pr1 = ((i * 13) % 100) / 100;
+    const pr2 = ((i * 27) % 100) / 100;
+    const pr3 = ((i * 39) % 100) / 100;
+    const pr4 = ((i * 51) % 100) / 100;
+    return {
+      id: i,
+      y: 5 + i * 10,
+      duration: 20 + pr1 * 20,
+      width: 0.08 + pr2 * 0.18,
+      dash: 15 + pr3 * 25,
+      gap: 50 + pr4 * 50,
+    };
+  });
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 opacity-40 blur-[0.5px]">
+      <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="stream-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="transparent" />
+            <stop offset="50%" stopColor="#0ea5e9" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="transparent" />
+          </linearGradient>
+        </defs>
+        {streams.map((s) => (
+          <motion.line
+            key={s.id}
+            x1="0" y1={s.y}
+            x2="100" y2={s.y}
+            stroke="url(#stream-grad)"
+            strokeWidth={s.width}
+            strokeDasharray={`${s.dash} ${s.gap}`}
+            initial={{ strokeDashoffset: s.dash + s.gap }}
+            animate={{ strokeDashoffset: 0 }}
+            transition={{ duration: s.duration, repeat: Infinity, ease: "linear" }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+/* ─── Main component ──────────────────────────────────────────────────────── */
 export default function HeroSection() {
   const [titleIndex, setTitleIndex] = useState(0);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTitleIndex((prev) => (prev + 1) % titles.length);
+      setTitleIndex((p) => (p + 1) % titles.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
 
+  // Slide timer
+  useEffect(() => {
+    setProgress(0);
+    const tick = 100; // ms
+    const steps = (SLIDE_DURATION * 1000) / tick;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      setProgress((step / steps) * 100);
+      if (step >= steps) {
+        setSlideIndex((p) => (p + 1) % SLIDES.length);
+        step = 0;
+        setProgress(0);
+      }
+    }, tick);
+    return () => clearInterval(timer);
+  }, [slideIndex]);
+
+  const slide = SLIDES[slideIndex];
+
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center pt-20 pb-10 overflow-hidden bg-slate-50">
-      
-      {/* Floating Data Particles Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => {
-          // Deterministic pseudo-random values to prevent hydration mismatches
-          const pseudoRandomX = (i * 37) % 100;
-          const pseudoRandomY = 100 + (i * 13) % 100;
-          const duration = 10 + (i % 5) * 2;
-          const delay = (i % 3) * 1.5;
-          
-          return (
-            <motion.div
-              key={i}
-              initial={{ 
-                opacity: 0, 
-                y: pseudoRandomY, 
-                left: `${pseudoRandomX}%`
-              }}
-              animate={{ 
-                opacity: [0, 0.5, 0], 
-                y: -100 
-              }}
-              transition={{
-                duration: duration,
-                repeat: Infinity,
-                delay: delay,
-                ease: "linear"
-              }}
-              className="absolute w-1 h-1 bg-sky-400 rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]"
-            />
-          );
-        })}
+    <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-20 pb-10 bg-white">
+
+      {/* ── Right Half: Grid + Streams Background ── */}
+      <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block overflow-hidden pointer-events-none z-0">
+        {/* Subtle grid */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px)
+            `,
+            backgroundSize: "40px 40px",
+          }}
+        />
+        {/* Animated data streams */}
+        <DataStreamsBg />
+        {/* Soft left-edge fade */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent" />
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
-        {/* Left Side: Content */}
+      {/* ── CONTENT GRID ─────────────────────────────────────────── */}
+      <div className="relative z-10 container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+        {/* ── LEFT: Text ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,7 +162,7 @@ export default function HeroSection() {
           className="flex flex-col space-y-6"
         >
           <div className="flex items-center space-x-2">
-            <span className="h-px w-8 bg-sky-500"></span>
+            <span className="h-px w-8 bg-sky-500" />
             <p className="text-sm font-semibold tracking-wider text-sky-600 uppercase">
               Hello, I&apos;m
             </p>
@@ -82,7 +172,7 @@ export default function HeroSection() {
             Yohan Shanuka
           </h1>
 
-          <div className="h-10 text-2xl md:text-3xl font-medium text-slate-600">
+          <div className="h-10 text-2xl md:text-3xl font-medium text-slate-600 overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.span
                 key={titleIndex}
@@ -90,7 +180,8 @@ export default function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5 }}
-                className="inline-block text-gradient"
+                className="inline-block"
+                style={{ color: slide.color }}
               >
                 {titles[titleIndex]}
               </motion.span>
@@ -98,10 +189,33 @@ export default function HeroSection() {
           </div>
 
           <p className="text-lg md:text-xl text-slate-600 max-w-lg leading-relaxed">
-            I design scalable machine learning workflows, production-grade data pipelines, and cloud-ready ML systems.
+            I design scalable machine learning workflows, production-grade data
+            pipelines, and cloud-ready ML systems.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-4">
+          {/* Phase indicator chips */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {SLIDES.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => setSlideIndex(i)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300"
+                style={{
+                  borderColor: i === slideIndex ? s.color : "rgba(15,23,42,0.1)",
+                  color: i === slideIndex ? s.color : "#94a3b8",
+                  background: i === slideIndex ? `${s.color}10` : "transparent",
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: i === slideIndex ? s.color : "#cbd5e1" }}
+                />
+                {s.phase}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 pt-2">
             <a
               href="#projects"
               className="px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-sky-600 transition-colors flex items-center gap-2"
@@ -118,130 +232,102 @@ export default function HeroSection() {
               href="https://github.com/yshanukajay"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-white border border-slate-200 text-slate-800 rounded-lg hover:bg-slate-50 hover:text-sky-600 transition-colors shadow-sm"
+              className="p-3 bg-white border border-slate-200 text-slate-800 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
             >
               <GithubIcon size={20} />
             </a>
           </div>
         </motion.div>
 
-        {/* Right Side: Abstract Pipeline Visual */}
+        {/* ── RIGHT: Diagram Carousel ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative hidden lg:flex justify-center items-center h-[500px] w-full max-w-md"
+          className="relative hidden lg:flex flex-col gap-4 h-[520px] w-full"
         >
-          {/* Ambient Background Glow */}
-          <motion.div 
-            animate={{ opacity: [0.2, 0.5, 0.2], scale: [0.9, 1.05, 0.9] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-4 bg-sky-500/20 blur-3xl rounded-full pointer-events-none"
-          />
+          {/* Card container */}
+          <div className="relative flex-1 rounded-2xl overflow-hidden border border-slate-100 shadow-xl bg-white">
 
-          {/* Inner Pipeline Container */}
-          <div className="relative w-full h-full rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 bg-[#0D1117] z-10 shadow-2xl border border-slate-800">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-900/20 via-transparent to-transparent pointer-events-none"></div>
-              
-              {/* The Central Pipeline Line */}
-              <div className="absolute top-12 bottom-12 w-px bg-slate-800 left-1/2 -translate-x-1/2">
-              {/* Moving Data Particles */}
-              <motion.div 
-                animate={{ top: ["0%", "100%"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="absolute left-1/2 -translate-x-1/2 w-1.5 h-8 rounded-full bg-gradient-to-b from-sky-400 to-transparent shadow-[0_0_10px_rgba(56,189,248,0.8)]"
+            {/* Diagram image */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slideIndex}
+                initial={{ opacity: 0, scale: 1.02 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={slide.src}
+                  alt={slide.title}
+                  fill
+                  className="object-contain p-4"
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Slide label */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`label-${slideIndex}`}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white/80 to-transparent"
+              >
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+                    style={{ background: `${slide.color}15`, color: slide.color }}
+                  >
+                    {slide.phase}
+                  </span>
+                </div>
+                <p className="text-slate-800 font-bold text-sm">{slide.title}</p>
+                <p className="text-slate-400 text-xs font-mono mt-0.5">{slide.subtitle}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Progress bar */}
+          <div className="flex items-center gap-3">
+            {SLIDES.map((s, i) => (
+              <div
+                key={s.id}
+                className="flex-1 h-0.5 rounded-full bg-slate-100 overflow-hidden cursor-pointer"
+                onClick={() => setSlideIndex(i)}
+              >
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: s.color }}
+                  animate={{ width: i === slideIndex ? `${progress}%` : i < slideIndex ? "100%" : "0%" }}
+                  transition={{ duration: 0.1, ease: "linear" }}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Dot indicators */}
+          <div className="flex items-center justify-center gap-2">
+            {SLIDES.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => setSlideIndex(i)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: i === slideIndex ? 20 : 6,
+                  height: 6,
+                  background: i === slideIndex ? s.color : "#e2e8f0",
+                }}
               />
-            </div>
-
-            <div className="w-full flex flex-col justify-between h-full relative z-10 py-4">
-              
-              {/* Node 1: Ingestion */}
-              <div className="w-full flex items-center justify-between">
-                <div className="w-[45%] flex justify-end">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right transition-colors">
-                    <p className="text-sky-400 text-xs font-bold uppercase tracking-wider mb-0.5">Ingestion</p>
-                    <p className="text-slate-400 text-[10px] font-mono">Kafka / AWS S3</p>
-                  </div>
-                </div>
-                <motion.div 
-                  animate={{ 
-                    borderColor: ["#334155", "#38bdf8", "#334155"],
-                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(56,189,248,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, times: [0, 0.1, 0.3], ease: "easeInOut" }}
-                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
-                >
-                  <Database size={16} className="text-sky-400" />
-                </motion.div>
-                <div className="w-[45%]"></div>
-              </div>
-
-              {/* Node 2: Processing */}
-              <div className="w-full flex items-center justify-between flex-row-reverse">
-                <div className="w-[45%] flex justify-start">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left transition-colors">
-                    <p className="text-indigo-400 text-xs font-bold uppercase tracking-wider mb-0.5">Processing</p>
-                    <p className="text-slate-400 text-[10px] font-mono">Apache Spark</p>
-                  </div>
-                </div>
-                <motion.div 
-                  animate={{ 
-                    borderColor: ["#334155", "#818cf8", "#334155"],
-                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(129,140,248,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, times: [0.2, 0.35, 0.55], ease: "easeInOut" }}
-                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
-                >
-                  <Cog size={16} className="text-indigo-400" />
-                </motion.div>
-                <div className="w-[45%]"></div>
-              </div>
-
-              {/* Node 3: Model Training */}
-              <div className="w-full flex items-center justify-between">
-                <div className="w-[45%] flex justify-end">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-right transition-colors">
-                    <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider mb-0.5">Training</p>
-                    <p className="text-slate-400 text-[10px] font-mono">PyTorch / MLflow</p>
-                  </div>
-                </div>
-                <motion.div 
-                  animate={{ 
-                    borderColor: ["#334155", "#e879f9", "#334155"],
-                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(232,121,249,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, times: [0.5, 0.65, 0.85], ease: "easeInOut" }}
-                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
-                >
-                  <Cpu size={16} className="text-fuchsia-400" />
-                </motion.div>
-                <div className="w-[45%]"></div>
-              </div>
-
-              {/* Node 4: API Serving */}
-              <div className="w-full flex items-center justify-between flex-row-reverse">
-                <div className="w-[45%] flex justify-start">
-                  <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 rounded-xl shadow-lg w-full text-left transition-colors">
-                    <p className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-0.5">Serving</p>
-                    <p className="text-slate-400 text-[10px] font-mono">FastAPI / Docker</p>
-                  </div>
-                </div>
-                <motion.div 
-                  animate={{ 
-                    borderColor: ["#334155", "#34d399", "#334155"],
-                    boxShadow: ["0px 0px 15px rgba(0,0,0,0.5)", "0px 0px 20px rgba(52,211,153,0.8)", "0px 0px 15px rgba(0,0,0,0.5)"]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, times: [0.75, 0.9, 1], ease: "easeInOut" }}
-                  className="w-10 h-10 rounded-full bg-[#0D1117] border-2 flex items-center justify-center relative z-20"
-                >
-                  <Server size={16} className="text-emerald-400" />
-                </motion.div>
-                <div className="w-[45%]"></div>
-              </div>
-
-            </div>
+            ))}
           </div>
         </motion.div>
+
       </div>
     </section>
   );
