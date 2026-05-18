@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
-import Image from "next/image";
+import { DataEngineeringDiagram, MLPipelineDiagram, MLOpsDeployDiagram } from "./DiagramSlides";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
 const GithubIcon = ({ size = 24 }: { size?: number }) => (
@@ -28,7 +28,7 @@ const SLIDES = [
     title: "Data Engineering Pipeline",
     subtitle: "Kafka · Spark · Airflow · Data Lake",
     color: "#0ea5e9",
-    src: "/diagram-data-pipeline.png",
+    Diagram: DataEngineeringDiagram,
   },
   {
     id: "ml",
@@ -36,7 +36,7 @@ const SLIDES = [
     title: "Machine Learning Pipeline",
     subtitle: "TensorFlow · PyTorch · MLflow · Feature Store",
     color: "#818cf8",
-    src: "/diagram-ml-pipeline.png",
+    Diagram: MLPipelineDiagram,
   },
   {
     id: "mlops",
@@ -44,7 +44,7 @@ const SLIDES = [
     title: "MLOps Deployment Pipeline",
     subtitle: "Docker · Kubernetes · FastAPI · Monitoring",
     color: "#2dd4bf",
-    src: "/diagram-mlops-pipeline.png",
+    Diagram: MLOpsDeployDiagram,
   },
 ];
 
@@ -249,7 +249,7 @@ export default function HeroSection() {
           {/* Card container */}
           <div className="relative flex-1 rounded-2xl overflow-hidden border border-slate-100 shadow-xl bg-white">
 
-            {/* Diagram image */}
+            {/* Live animated diagram */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={slideIndex}
@@ -257,15 +257,9 @@ export default function HeroSection() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="absolute inset-0"
+                className="absolute inset-0 flex items-center justify-center p-4"
               >
-                <Image
-                  src={slide.src}
-                  alt={slide.title}
-                  fill
-                  className="object-contain p-4"
-                  priority
-                />
+                <slide.Diagram />
               </motion.div>
             </AnimatePresence>
 
