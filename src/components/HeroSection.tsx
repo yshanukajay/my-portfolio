@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { DataEngineeringDiagram, MLPipelineDiagram, MLOpsDeployDiagram } from "./DiagramSlides";
 
@@ -50,47 +50,105 @@ const SLIDES = [
 
 const SLIDE_DURATION = 8; // seconds per slide
 
-/* ─── Flowing Data Streams Background ────────────────────────────────────── */
-function DataStreamsBg() {
-  const streams = Array.from({ length: 10 }).map((_, i) => {
-    const pr1 = ((i * 13) % 100) / 100;
-    const pr2 = ((i * 27) % 100) / 100;
-    const pr3 = ((i * 39) % 100) / 100;
-    const pr4 = ((i * 51) % 100) / 100;
-    return {
-      id: i,
-      y: 5 + i * 10,
-      duration: 20 + pr1 * 20,
-      width: 0.08 + pr2 * 0.18,
-      dash: 15 + pr3 * 25,
-      gap: 50 + pr4 * 50,
-    };
-  });
+/* ─── Interactive Animated Grid ───────────────────────────────── */
+function AnimatedGrid() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [mouse, setMouse] = useState({ x: -999, y: -999 });
+
+  const onMove = (e: React.MouseEvent) => {
+    const r = ref.current?.getBoundingClientRect();
+    if (!r) return;
+    setMouse({ x: e.clientX - r.left, y: e.clientY - r.top });
+  };
+
+  // Intersection dots — every 2nd grid cell (80px spacing)
+  const dots = useMemo(() => {
+    const arr: { id: string; x: number; y: number; delay: number; dur: number; color: string }[] = [];
+    const colors = ["#6366f1", "#0ea5e9", "#818cf8", "#2dd4bf"];
+    for (let row = 0; row <= 11; row++) {
+      for (let col = 0; col <= 14; col++) {
+        arr.push({
+          id: `${row}-${col}`,
+          x: col * 80,
+          y: row * 80,
+          delay: ((row * 3 + col * 7) % 28) * 0.12,
+          dur: 2.2 + ((row + col) % 5) * 0.45,
+          color: colors[(row + col) % colors.length],
+        });
+      }
+    }
+    return arr;
+  }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-0 opacity-40 blur-[0.5px]">
-      <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <div
+      ref={ref}
+      className="absolute inset-0 overflow-hidden"
+      onMouseMove={onMove}
+      onMouseLeave={() => setMouse({ x: -999, y: -999 })}
+    >
+      {/* Scrolling grid lines */}
+      <motion.div
+        className="absolute left-0 right-0"
+        style={{
+          top: -40, bottom: -40,
+          backgroundImage: `
+            linear-gradient(rgba(99,102,241,0.10) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(14,165,233,0.08) 1px, transparent 1px)
+          `,
+          backgroundSize: "40px 40px",
+        }}
+        animate={{ y: [0, 40] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* Pulsing intersection dots */}
+      <svg className="absolute inset-0 w-full h-full">
         <defs>
-          <linearGradient id="stream-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="transparent" />
-            <stop offset="50%" stopColor="#0ea5e9" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="transparent" />
-          </linearGradient>
+          <filter id="dot-glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2.5" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
         </defs>
-        {streams.map((s) => (
-          <motion.line
-            key={s.id}
-            x1="0" y1={s.y}
-            x2="100" y2={s.y}
-            stroke="url(#stream-grad)"
-            strokeWidth={s.width}
-            strokeDasharray={`${s.dash} ${s.gap}`}
-            initial={{ strokeDashoffset: s.dash + s.gap }}
-            animate={{ strokeDashoffset: 0 }}
-            transition={{ duration: s.duration, repeat: Infinity, ease: "linear" }}
+        {dots.map((d) => (
+          <motion.circle
+            key={d.id}
+            cx={d.x} cy={d.y} r={1.8}
+            fill={d.color}
+            filter="url(#dot-glow)"
+            animate={{ opacity: [0.08, 0.65, 0.08] }}
+            transition={{ duration: d.dur, delay: d.delay, repeat: Infinity, ease: "easeInOut" }}
           />
         ))}
       </svg>
+
+      {/* Mouse proximity radial glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            mouse.x > 0
+              ? `radial-gradient(circle 200px at ${mouse.x}px ${mouse.y}px,
+                  rgba(99,102,241,0.22) 0%,
+                  rgba(14,165,233,0.12) 45%,
+                  transparent 75%)`
+              : "none",
+          transition: "background 60ms linear",
+        }}
+      />
+
+      {/* Ripple ring on mouse position */}
+      {mouse.x > 0 && (
+        <motion.div
+          className="absolute pointer-events-none rounded-full border border-indigo-400/30"
+          style={{ left: mouse.x - 20, top: mouse.y - 20, width: 40, height: 40 }}
+          animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: "easeOut" }}
+        />
+      )}
+
+      {/* Left-edge fade to page white */}
+      <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-white to-transparent pointer-events-none" />
     </div>
   );
 }
@@ -133,22 +191,8 @@ export default function HeroSection() {
     <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-20 pb-10 bg-white">
 
       {/* ── Right Half: Grid + Streams Background ── */}
-      <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block overflow-hidden pointer-events-none z-0">
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px)
-            `,
-            backgroundSize: "40px 40px",
-          }}
-        />
-        {/* Animated data streams */}
-        <DataStreamsBg />
-        {/* Soft left-edge fade */}
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent" />
+      <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block overflow-hidden z-0">
+        <AnimatedGrid />
       </div>
 
       {/* ── CONTENT GRID ─────────────────────────────────────────── */}
@@ -247,7 +291,8 @@ export default function HeroSection() {
           className="relative hidden lg:flex flex-col gap-4 h-[520px] w-full"
         >
           {/* Card container */}
-          <div className="relative flex-1 rounded-2xl overflow-hidden border border-slate-100 shadow-xl bg-white">
+          <div className="relative flex-1 rounded-2xl overflow-hidden shadow-2xl"
+            style={{ background: "#080d14", border: "1px solid rgba(148,163,184,0.12)" }}>
 
             {/* Live animated diagram */}
             <AnimatePresence mode="wait">
@@ -271,18 +316,19 @@ export default function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
-                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white/80 to-transparent"
+                className="absolute bottom-0 left-0 right-0 p-4"
+                style={{ background: "linear-gradient(to top, #080d14 60%, transparent)" }}
               >
                 <div className="flex items-center gap-2 mb-0.5">
                   <span
                     className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-                    style={{ background: `${slide.color}15`, color: slide.color }}
+                    style={{ background: `${slide.color}20`, color: slide.color, border: `1px solid ${slide.color}40` }}
                   >
                     {slide.phase}
                   </span>
                 </div>
-                <p className="text-slate-800 font-bold text-sm">{slide.title}</p>
-                <p className="text-slate-400 text-xs font-mono mt-0.5">{slide.subtitle}</p>
+                <p className="text-white font-bold text-sm" style={{ opacity: 0.9 }}>{slide.title}</p>
+                <p className="text-xs font-mono mt-0.5" style={{ color: slide.color, opacity: 0.7 }}>{slide.subtitle}</p>
               </motion.div>
             </AnimatePresence>
           </div>
