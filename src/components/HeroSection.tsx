@@ -14,10 +14,12 @@ const GithubIcon = ({ size = 24 }: { size?: number }) => (
 
 /* ─── Animated titles ─────────────────────────────────────────────────────── */
 const titles = [
-  "Machine Learning Engineer",
-  "MLOps Enthusiast",
+  "ML Engineer",
   "Data Engineer",
-  "ML Systems Developer",
+  "MLOps Enthusiast",
+  "Pipeline Architect",
+  "Distributed Systems Builder",
+  "Realtime Data Engineer",
 ];
 
 /* ─── Diagram slides config (for phase chips only) ───────────────────────── */
@@ -339,8 +341,8 @@ export default function HeroSection() {
         >
           <div className="flex items-center space-x-2">
             <span className="h-px w-8 bg-sky-500" />
-            <p className="text-sm font-semibold tracking-wider text-sky-600 uppercase">
-              Hello, I&apos;m
+            <p className="text-[11px] font-bold tracking-[0.18em] text-sky-600 uppercase">
+              ML Engineering&nbsp;•&nbsp;Data Systems&nbsp;•&nbsp;MLOps
             </p>
           </div>
 
@@ -365,9 +367,43 @@ export default function HeroSection() {
           </div>
 
           <p className="text-lg md:text-xl text-slate-600 max-w-lg leading-relaxed">
-            I design scalable machine learning workflows, production-grade data
-            pipelines, and cloud-ready ML systems.
+            Engineering scalable data pipelines, MLOps workflows, and cloud-native ML systems.
           </p>
+
+          {/* ── Mini Metrics Panel ── */}
+          <div className="grid grid-cols-2 gap-3 max-w-sm">
+            {[
+              { label: "Kafka Streaming", tag: "Realtime Ingestion", color: "#f97316" },
+              { label: "Airflow DAGs", tag: "Workflow Orchestration", color: "#0ea5e9" },
+              { label: "Dockerized ML Systems", tag: "Container Deployments", color: "#6366f1" },
+              { label: "Distributed Pipelines", tag: "Cloud-Native Arch", color: "#10b981" },
+            ].map((metric) => (
+              <div
+                key={metric.label}
+                className="group flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl border border-slate-200/80 bg-white/60 hover:border-slate-300 hover:bg-white hover:shadow-sm transition-all duration-200"
+              >
+                {/* Pulsing status dot */}
+                <span className="relative flex-shrink-0 mt-[3px]">
+                  <span
+                    className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping"
+                    style={{ backgroundColor: metric.color }}
+                  />
+                  <span
+                    className="relative inline-flex w-2 h-2 rounded-full"
+                    style={{ backgroundColor: metric.color }}
+                  />
+                </span>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[13px] font-semibold text-slate-700 leading-tight truncate">
+                    {metric.label}
+                  </span>
+                  <span className="text-[10px] font-medium text-slate-400 tracking-wide uppercase mt-0.5">
+                    {metric.tag}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
             {/* View Projects - Premium Animated Border Button */}
@@ -388,7 +424,7 @@ export default function HeroSection() {
               <div className="relative flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-900 rounded-[13px] text-white font-medium hover:bg-slate-800/90 transition-colors overflow-hidden">
                 {/* Shimmer sweep */}
                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out" />
-                <span className="relative z-10">View Projects</span>
+                <span className="relative z-10">View Systems</span>
                 <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-300" />
               </div>
             </MagneticButton>
