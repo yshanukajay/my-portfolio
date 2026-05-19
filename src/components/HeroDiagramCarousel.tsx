@@ -276,16 +276,18 @@ export default function HeroDiagramCarousel() {
       </div>
 
       <div className="relative w-[700px] h-[450px]">
-        {/* --- LAYER 0.5: Frosted Blur — only behind the diagram canvas --- */}
+        {/* --- LAYER 0.5: Frosted Blur — tight cluster area only --- */}
         <div
-          className="absolute inset-0 pointer-events-none rounded-2xl"
+          className="absolute pointer-events-none"
           style={{
+            inset: "10% 8%",
             zIndex: 0,
-            backdropFilter: "blur(14px) saturate(1.3)",
-            WebkitBackdropFilter: "blur(14px) saturate(1.3)",
-            background: "rgba(255,255,255,0.55)",
-            maskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 55%, transparent 100%)",
-            WebkitMaskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 55%, transparent 100%)",
+            backdropFilter: "blur(10px) saturate(1.2)",
+            WebkitBackdropFilter: "blur(10px) saturate(1.2)",
+            background: "rgba(255,255,255,0.42)",
+            maskImage: "radial-gradient(ellipse 80% 75% at 50% 50%, black 30%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 75% at 50% 50%, black 30%, transparent 100%)",
+            borderRadius: "50%",
           }}
         />
 
