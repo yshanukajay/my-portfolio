@@ -29,10 +29,15 @@ const SLIDES = [
 
 const SLIDE_DURATION = 7; // seconds per slide
 
-/* ─── Interactive Animated Grid ───────────────────────────────── */
-function AnimatedGrid() {
+/* ─── Interactive Geometric System Background (Mandala / Rangoli Inspired) ─── */
+function InteractiveGeometricBackground() {
   const ref = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: -999, y: -999 });
+  const [mouse, setMouse] = useState({ x: -1000, y: -1000 });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const onMove = (e: React.MouseEvent) => {
     const r = ref.current?.getBoundingClientRect();
@@ -40,94 +45,201 @@ function AnimatedGrid() {
     setMouse({ x: e.clientX - r.left, y: e.clientY - r.top });
   };
 
-  // Intersection dots — every 2nd grid cell (80px spacing)
-  const dots = useMemo(() => {
-    const arr: { id: string; x: number; y: number; delay: number; dur: number; color: string }[] = [];
-    const colors = ["#6366f1", "#0ea5e9", "#818cf8", "#2dd4bf"];
-    for (let row = 0; row <= 11; row++) {
-      for (let col = 0; col <= 14; col++) {
-        arr.push({
-          id: `${row}-${col}`,
-          x: col * 80,
-          y: row * 80,
-          delay: ((row * 3 + col * 7) % 28) * 0.12,
-          dur: 2.2 + ((row + col) % 5) * 0.45,
-          color: colors[(row + col) % colors.length],
-        });
-      }
+  const onLeave = () => setMouse({ x: -1000, y: -1000 });
+
+  // Saffron, Deep Indigo, Gold, Neon Teal
+  const colors = ["#fbbf24", "#f59e0b", "#3730a3", "#14b8a6", "#6366f1"];
+
+  // 1. Generate Mandala Nodes
+  const mandalaNodes = useMemo(() => {
+    const arr = [];
+    const cx = 500;
+    const cy = 300;
+
+    // Core
+    arr.push({ id: 0, origX: cx, origY: cy, color: colors[0], r: 6 });
+
+    // Inner Hexagon
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 * i) / 6;
+      arr.push({ id: 10 + i, origX: cx + Math.cos(angle) * 110, origY: cy + Math.sin(angle) * 110, color: colors[1], r: 4 });
     }
+
+    // Middle Dodecagon
+    for (let i = 0; i < 12; i++) {
+      const angle = (Math.PI * 2 * i) / 12 + Math.PI / 12;
+      arr.push({ id: 20 + i, origX: cx + Math.cos(angle) * 230, origY: cy + Math.sin(angle) * 230, color: colors[2], r: 3 });
+    }
+
+    // Outer Orbit
+    for (let i = 0; i < 12; i++) {
+      const angle = (Math.PI * 2 * i) / 12;
+      // Use 40 + i to avoid overlapping with Middle Dodecagon (which goes up to 31)
+      arr.push({ id: 40 + i, origX: cx + Math.cos(angle) * 380, origY: cy + Math.sin(angle) * 380, color: colors[3], r: 2 });
+    }
+
     return arr;
   }, []);
+
+  // 2. Generate Ambient Particles
+  const ambientParticles = useMemo(() => {
+    if (!mounted) return [];
+    const arr = [];
+    for (let i = 0; i < 25; i++) {
+      arr.push({
+        id: `p-${i}`,
+        origX: Math.random() * 800,
+        origY: Math.random() * 700,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        r: Math.random() * 2 + 1,
+        dur: 4 + Math.random() * 3,
+      });
+    }
+    return arr;
+  }, [mounted]);
+
+  // 3. Generate Connections
+  const connections = useMemo(() => {
+    const conns = [];
+    // Center to Inner
+    for (let i = 0; i < 6; i++) {
+      conns.push({ from: 0, to: 10 + i, type: "core" });
+      conns.push({ from: 10 + i, to: 10 + ((i + 1) % 6), type: "ring" });
+    }
+    // Inner to Middle
+    for (let i = 0; i < 6; i++) {
+      conns.push({ from: 10 + i, to: 20 + i * 2, type: "mesh" });
+      conns.push({ from: 10 + i, to: 20 + ((i * 2 + 1) % 12), type: "mesh" });
+    }
+    // Middle to Outer
+    for (let i = 0; i < 12; i++) {
+      conns.push({ from: 20 + i, to: 40 + i, type: "fade" });
+      conns.push({ from: 20 + i, to: 40 + ((i + 1) % 12), type: "fade" });
+    }
+    return conns;
+  }, []);
+
+  // 4. Calculate Magnetic Hover Physics
+  const processMagnetic = (items: any[]) => {
+    return items.map((item) => {
+      let nx = item.origX;
+      let ny = item.origY;
+      if (mouse.x > 0) {
+        const dx = mouse.x - nx;
+        const dy = mouse.y - ny;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 220) {
+          const force = Math.pow((220 - dist) / 220, 2);
+          nx -= dx * force * 0.35;
+          ny -= dy * force * 0.35;
+        }
+      }
+      return { ...item, x: nx, y: ny };
+    });
+  };
+
+  const activeNodes = processMagnetic(mandalaNodes);
+  const activeParticles = processMagnetic(ambientParticles);
 
   return (
     <div
       ref={ref}
       className="absolute inset-0 overflow-hidden"
       onMouseMove={onMove}
-      onMouseLeave={() => setMouse({ x: -999, y: -999 })}
+      onMouseLeave={onLeave}
     >
-      {/* Scrolling grid lines */}
-      <motion.div
-        className="absolute left-0 right-0"
-        style={{
-          top: -40, bottom: -40,
-          backgroundImage: `
-            linear-gradient(rgba(99,102,241,0.10) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(14,165,233,0.08) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-        }}
-        animate={{ y: [0, 40] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* Pulsing intersection dots */}
-      <svg className="absolute inset-0 w-full h-full">
+      <svg className="absolute inset-0 w-full h-full opacity-70" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <filter id="dot-glow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="2.5" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          <filter id="mandala-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
+          <radialGradient id="core-glass" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(251, 191, 36, 0.12)" />
+            <stop offset="70%" stopColor="rgba(251, 191, 36, 0.04)" />
+            <stop offset="100%" stopColor="rgba(251, 191, 36, 0)" />
+          </radialGradient>
         </defs>
-        {dots.map((d) => (
+
+        {/* Ambient Particles */}
+        {activeParticles.map((p) => (
           <motion.circle
-            key={d.id}
-            cx={d.x} cy={d.y} r={1.8}
-            fill={d.color}
-            filter="url(#dot-glow)"
-            animate={{ opacity: [0.08, 0.65, 0.08] }}
-            transition={{ duration: d.dur, delay: d.delay, repeat: Infinity, ease: "easeInOut" }}
+            key={p.id}
+            r={p.r}
+            fill={p.color}
+            filter="url(#mandala-glow)"
+            animate={{ cx: p.x, cy: p.y, opacity: [0.2, 0.8, 0.2] }}
+            transition={{
+              cx: { type: "spring", stiffness: 60, damping: 20 },
+              cy: { type: "spring", stiffness: 60, damping: 20 },
+              opacity: { duration: p.dur, repeat: Infinity, ease: "easeInOut" },
+            }}
+          />
+        ))}
+
+        {/* Dynamic Connections */}
+        {connections.map((conn, i) => {
+          const n1 = activeNodes.find((n) => n.id === conn.from);
+          const n2 = activeNodes.find((n) => n.id === conn.to);
+          if (!n1 || !n2) return null;
+
+          // Rangoli-style elegant curved paths
+          const dx = n2.x - n1.x;
+          const dy = n2.y - n1.y;
+          const cx = n1.x + dx / 2 - dy * 0.15;
+          const cy = n1.y + dy / 2 + dx * 0.15;
+          const d = `M ${n1.x} ${n1.y} Q ${cx} ${cy} ${n2.x} ${n2.y}`;
+
+          let stroke = "rgba(55, 48, 163, 0.15)"; // Deep Indigo Mesh
+          if (conn.type === "core") stroke = "rgba(251, 191, 36, 0.3)"; // Gold
+          if (conn.type === "ring") stroke = "rgba(245, 158, 11, 0.25)"; // Saffron
+          if (conn.type === "fade") stroke = "rgba(20, 184, 166, 0.1)"; // Neon Teal
+
+          return (
+            <motion.path
+              key={`conn-${i}`}
+              d={d}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={1.5}
+              animate={{ d }}
+              transition={{ type: "spring", stiffness: 60, damping: 20 }}
+            />
+          );
+        })}
+
+        {/* Core Glassmorphic Shield */}
+        <motion.circle
+          r={75}
+          fill="url(#core-glass)"
+          stroke="rgba(251, 191, 36, 0.15)"
+          strokeWidth={1}
+          animate={{ cx: activeNodes[0].x, cy: activeNodes[0].y }}
+          transition={{ type: "spring", stiffness: 60, damping: 20 }}
+        />
+
+        {/* Geometric Nodes */}
+        {activeNodes.map((node) => (
+          <motion.circle
+            key={`node-${node.id}`}
+            r={node.r}
+            fill={node.color}
+            filter="url(#mandala-glow)"
+            animate={{ cx: node.x, cy: node.y, opacity: [0.6, 1, 0.6] }}
+            transition={{
+              cx: { type: "spring", stiffness: 60, damping: 20 },
+              cy: { type: "spring", stiffness: 60, damping: 20 },
+              opacity: { duration: 3 + (node.id % 3), repeat: Infinity, ease: "easeInOut" },
+            }}
           />
         ))}
       </svg>
 
-      {/* Mouse proximity radial glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            mouse.x > 0
-              ? `radial-gradient(circle 200px at ${mouse.x}px ${mouse.y}px,
-                  rgba(99,102,241,0.22) 0%,
-                  rgba(14,165,233,0.12) 45%,
-                  transparent 75%)`
-              : "none",
-          transition: "background 60ms linear",
-        }}
-      />
-
-      {/* Ripple ring on mouse position */}
-      {mouse.x > 0 && (
-        <motion.div
-          className="absolute pointer-events-none rounded-full border border-indigo-400/30"
-          style={{ left: mouse.x - 20, top: mouse.y - 20, width: 40, height: 40 }}
-          animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: "easeOut" }}
-        />
-      )}
-
-      {/* Left-edge fade to page white */}
-      <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+      {/* Edge Fade */}
+      <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-white to-transparent pointer-events-none" />
     </div>
   );
 }
@@ -210,9 +322,9 @@ export default function HeroSection() {
   return (
     <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-20 pb-10 bg-white">
 
-      {/* ── Right Half: Grid + Streams Background ── */}
+      {/* ── Right Half: Geometric System Background ── */}
       <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block overflow-hidden z-0">
-        <AnimatedGrid />
+        <InteractiveGeometricBackground />
       </div>
 
       {/* ── CONTENT GRID ─────────────────────────────────────────── */}

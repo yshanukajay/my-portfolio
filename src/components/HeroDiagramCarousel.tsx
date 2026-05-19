@@ -29,28 +29,28 @@ const PHASES: PhaseData[] = [
     subtitle: "Kafka · Spark · Airflow · Iceberg",
     accent: "#0ea5e9", // Sky Blue
     nodes: {
-      n0: { label: "Kafka", sub: "event stream", x: 120, y: 120, color: "#f97316", opacity: 1 },
-      n1: { label: "Spark", sub: "batch / stream", x: 350, y: 120, color: "#0ea5e9", opacity: 1 },
-      n2: { label: "Airflow", sub: "orchestrator", x: 580, y: 120, color: "#10b981", opacity: 1 },
-      n3: { label: "Data Lake", sub: "parquet/delta", x: 580, y: 260, color: "#6366f1", opacity: 1 },
-      n4: { label: "Schema Reg", sub: "avro/protobuf", x: 120, y: 260, color: "#f97316", opacity: 1 },
-      n5: { label: "DQ Checks", sub: "expectations", x: 350, y: 260, color: "#10b981", opacity: 1 },
-      n6: { label: "Hidden", sub: "", x: 350, y: 260, color: "#64748b", opacity: 0 },
-      n7: { label: "Hidden", sub: "", x: 350, y: 260, color: "#64748b", opacity: 0 },
-      n8: { label: "Hidden", sub: "", x: 350, y: 260, color: "#64748b", opacity: 0 },
+      n0: { label: "Kafka", sub: "event stream", x: 120, y: 225, color: "#f97316", opacity: 1 },
+      n1: { label: "Schema Reg", sub: "avro/protobuf", x: 260, y: 140, color: "#f97316", opacity: 1 },
+      n2: { label: "Spark", sub: "batch / stream", x: 260, y: 310, color: "#0ea5e9", opacity: 1 },
+      n3: { label: "Airflow", sub: "orchestrator", x: 400, y: 140, color: "#10b981", opacity: 1 },
+      n4: { label: "DQ Checks", sub: "expectations", x: 400, y: 310, color: "#10b981", opacity: 1 },
+      n5: { label: "Data Lake", sub: "parquet/delta", x: 540, y: 225, color: "#6366f1", opacity: 1 },
+      n6: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
+      n7: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
+      n8: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
     },
     conns: {
-      c0: { from: "n0", to: "n1", opacity: 1 },
-      c1: { from: "n1", to: "n2", opacity: 1 },
-      c2: { from: "n1", to: "n3", opacity: 1 },
-      c3: { from: "n0", to: "n4", opacity: 1 },
-      c4: { from: "n4", to: "n5", opacity: 1 },
-      c5: { from: "n5", to: "n3", opacity: 1 },
-      c6: { from: "n2", to: "n3", opacity: 1 },
+      c0: { from: "n0", to: "n1", opacity: 1 }, // Kafka -> Schema
+      c1: { from: "n0", to: "n2", opacity: 1 }, // Kafka -> Spark
+      c2: { from: "n1", to: "n3", opacity: 1 }, // Schema -> Airflow
+      c3: { from: "n2", to: "n4", opacity: 1 }, // Spark -> DQ
+      c4: { from: "n3", to: "n5", opacity: 1 }, // Airflow -> Lake
+      c5: { from: "n4", to: "n5", opacity: 1 }, // DQ -> Lake
+      c6: { from: "n1", to: "n5", opacity: 0 },
       c7: { from: "n6", to: "n7", opacity: 0 },
       c8: { from: "n7", to: "n8", opacity: 0 },
     },
-    k8s: { opacity: 0, x: 140, y: 150, w: 420, h: 120 }
+    k8s: { opacity: 0, x: 200, y: 150, w: 300, h: 120 }
   },
   {
     id: "ml",
@@ -59,12 +59,12 @@ const PHASES: PhaseData[] = [
     subtitle: "TensorFlow · PyTorch · MLflow · Feature Store",
     accent: "#6366f1", // Indigo
     nodes: {
-      n0: { label: "Raw Data", sub: "structured/raw", x: 120, y: 100, color: "#64748b", opacity: 1 },
-      n1: { label: "Feature Store", sub: "feast/hopsworks", x: 350, y: 100, color: "#0ea5e9", opacity: 1 },
-      n2: { label: "Data Split", sub: "train/val/test", x: 580, y: 100, color: "#6366f1", opacity: 1 },
-      n3: { label: "TensorFlow", sub: "gpu training", x: 230, y: 240, color: "#f97316", opacity: 1 },
-      n4: { label: "PyTorch", sub: "custom loops", x: 470, y: 240, color: "#6366f1", opacity: 1 },
-      n5: { label: "MLflow", sub: "experiment track", x: 350, y: 360, color: "#10b981", opacity: 1 },
+      n0: { label: "Raw Data", sub: "structured/raw", x: 100, y: 225, color: "#64748b", opacity: 1 },
+      n1: { label: "Feature Store", sub: "feast/hopsworks", x: 240, y: 225, color: "#0ea5e9", opacity: 1 },
+      n2: { label: "Data Split", sub: "train/val/test", x: 380, y: 225, color: "#6366f1", opacity: 1 },
+      n3: { label: "TensorFlow", sub: "gpu training", x: 520, y: 150, color: "#f97316", opacity: 1 },
+      n4: { label: "PyTorch", sub: "custom loops", x: 520, y: 300, color: "#6366f1", opacity: 1 },
+      n5: { label: "MLflow", sub: "experiment track", x: 660, y: 225, color: "#10b981", opacity: 1 },
       n6: { label: "Hidden", sub: "", x: 350, y: 360, color: "#10b981", opacity: 0 },
       n7: { label: "Hidden", sub: "", x: 350, y: 360, color: "#10b981", opacity: 0 },
       n8: { label: "Hidden", sub: "", x: 350, y: 360, color: "#10b981", opacity: 0 },
@@ -72,10 +72,10 @@ const PHASES: PhaseData[] = [
     conns: {
       c0: { from: "n0", to: "n1", opacity: 1 },
       c1: { from: "n1", to: "n2", opacity: 1 },
-      c2: { from: "n2", to: "n3", opacity: 1 },
-      c3: { from: "n2", to: "n4", opacity: 1 },
-      c4: { from: "n3", to: "n5", opacity: 1 },
-      c5: { from: "n4", to: "n5", opacity: 1 },
+      c2: { from: "n2", to: "n3", opacity: 1 }, // Split up
+      c3: { from: "n2", to: "n4", opacity: 1 }, // Split down
+      c4: { from: "n3", to: "n5", opacity: 1 }, // Merge down
+      c5: { from: "n4", to: "n5", opacity: 1 }, // Merge up
       c6: { from: "n5", to: "n6", opacity: 0 },
       c7: { from: "n6", to: "n7", opacity: 0 },
       c8: { from: "n7", to: "n8", opacity: 0 },
@@ -89,57 +89,86 @@ const PHASES: PhaseData[] = [
     subtitle: "Docker · Kubernetes · FastAPI · Prometheus",
     accent: "#14b8a6", // Teal
     nodes: {
-      n0: { label: "GitHub", sub: "push / PR", x: 120, y: 80, color: "#475569", opacity: 1 },
-      n1: { label: "GH Actions", sub: "build & test", x: 350, y: 80, color: "#0ea5e9", opacity: 1 },
-      n2: { label: "Registry", sub: "docker / ecr", x: 580, y: 80, color: "#6366f1", opacity: 1 },
-      n3: { label: "API Pods", sub: "fastapi", x: 230, y: 210, color: "#14b8a6", opacity: 1 },
-      n4: { label: "ML Pods", sub: "inference", x: 470, y: 210, color: "#6366f1", opacity: 1 },
-      n5: { label: "Prometheus", sub: "metrics", x: 120, y: 350, color: "#f97316", opacity: 1 },
-      n6: { label: "Grafana", sub: "dashboards", x: 350, y: 350, color: "#f97316", opacity: 1 },
-      n7: { label: "PagerDuty", sub: "alerts", x: 580, y: 350, color: "#f43f5e", opacity: 1 },
+      n0: { label: "GitHub", sub: "push / PR", x: 100, y: 150, color: "#475569", opacity: 1 },
+      n1: { label: "GH Actions", sub: "build & test", x: 250, y: 150, color: "#0ea5e9", opacity: 1 },
+      n2: { label: "Registry", sub: "docker / ecr", x: 400, y: 150, color: "#6366f1", opacity: 1 },
+      n3: { label: "API Pods", sub: "fastapi", x: 560, y: 150, color: "#14b8a6", opacity: 1 },
+      n4: { label: "ML Pods", sub: "inference", x: 560, y: 280, color: "#6366f1", opacity: 1 },
+      n5: { label: "Prometheus", sub: "metrics", x: 400, y: 350, color: "#f97316", opacity: 1 },
+      n6: { label: "Grafana", sub: "dashboards", x: 250, y: 350, color: "#f97316", opacity: 1 },
+      n7: { label: "PagerDuty", sub: "alerts", x: 100, y: 350, color: "#f43f5e", opacity: 1 },
       n8: { label: "Hidden", sub: "", x: 580, y: 350, color: "#f43f5e", opacity: 0 },
     },
     conns: {
       c0: { from: "n0", to: "n1", opacity: 1 },
       c1: { from: "n1", to: "n2", opacity: 1 },
       c2: { from: "n2", to: "n3", opacity: 1 },
-      c3: { from: "n2", to: "n4", opacity: 1 },
-      c4: { from: "n3", to: "n5", opacity: 1 },
-      c5: { from: "n4", to: "n5", opacity: 1 },
-      c6: { from: "n5", to: "n6", opacity: 1 },
-      c7: { from: "n6", to: "n7", opacity: 1 },
-      c8: { from: "n7", to: "n8", opacity: 0 },
+      c3: { from: "n3", to: "n4", opacity: 1 },
+      c4: { from: "n4", to: "n5", opacity: 1 },
+      c5: { from: "n5", to: "n6", opacity: 1 },
+      c6: { from: "n6", to: "n7", opacity: 1 },
+      c7: { from: "n7", to: "n8", opacity: 0 },
+      c8: { from: "n2", to: "n4", opacity: 1 }, // Registry direct to ML Pods
     },
-    k8s: { opacity: 1, x: 140, y: 140, w: 420, h: 140 }
+    k8s: { opacity: 1, x: 500, y: 100, w: 120, h: 230 } // Encloses API and ML Pods
   }
 ];
 
-function NodeComponent({ node }: { node: NodeDef }) {
+function NodeComponent({ node, id }: { node: NodeDef; id: string }) {
+  // Use a pseudo-random seed based on the ID for consistent drift animations
+  const seed = id.charCodeAt(1) || 0;
+
   return (
-    <motion.g
-      animate={{ x: node.x, y: node.y, opacity: node.opacity }}
-      transition={{ type: "spring", stiffness: 50, damping: 14, mass: 1 }}
+    <motion.div
+      className="absolute flex flex-col items-center justify-center pointer-events-none"
+      animate={{
+        left: node.x,
+        top: node.y,
+        opacity: node.opacity,
+        y: [0, -3, 0, 3, 0],
+        x: [0, 2, 0, -2, 0]
+      }}
+      transition={{
+        left: { type: "spring", stiffness: 40, damping: 15, mass: 1 },
+        top: { type: "spring", stiffness: 40, damping: 15, mass: 1 },
+        opacity: { duration: 0.5 },
+        y: { duration: 8 + (seed % 3), repeat: Infinity, ease: "easeInOut" },
+        x: { duration: 9 + (seed % 4), repeat: Infinity, ease: "easeInOut" }
+      }}
+      style={{ transform: "translate(-50%, -50%)" }} // Center on coordinate
     >
-      <motion.rect
-        x={-70} y={-24} width={140} height={48} rx={8}
-        className="node"
-        style={{ filter: "drop-shadow(0px 4px 12px rgba(0,0,0,0.06))" }}
-        transition={{ duration: 0.5 }}
+      {/* Glowing Synapse Orb */}
+      <div
+        className="w-4 h-4 rounded-full"
+        style={{
+          backgroundColor: node.color,
+          boxShadow: `0 0 15px ${node.color}, 0 0 30px ${node.color}60, inset 0 0 8px rgba(255,255,255,0.9)`
+        }}
       />
-      <motion.circle
-        cx={-50} cy={0} r={5}
-        fill={node.color}
-        animate={{ scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <text x={-35} y={-2} className="node-title" fontSize={13} fontWeight={600} fontFamily="Inter, sans-serif">
-        {node.label}
-      </text>
-      <text x={-35} y={14} className="node-subtitle" fontSize={11} fontFamily="Inter, sans-serif">
-        {node.sub}
-      </text>
-    </motion.g>
+      {/* Floating Free Text */}
+      <div className="absolute top-6 flex flex-col items-center w-[160px] text-center" style={{ WebkitFontSmoothing: "antialiased" }}>
+        <span className="text-slate-600 font-bold text-[14px] leading-tight tracking-wide drop-shadow-sm">
+          {node.label}
+        </span>
+        <span
+          className="text-[10px] font-bold font-mono leading-none mt-1 uppercase tracking-widest opacity-90 drop-shadow-sm"
+          style={{ color: node.color }}
+        >
+          {node.sub}
+        </span>
+      </div>
+    </motion.div>
   );
+}
+
+function getPath(x1: number, y1: number, x2: number, y2: number) {
+  const dx = Math.abs(x2 - x1);
+  const dy = Math.abs(y2 - y1);
+  if (dx > dy) {
+    return `M ${x1} ${y1} C ${x1 + dx / 2} ${y1}, ${x2 - dx / 2} ${y2}, ${x2} ${y2}`;
+  } else {
+    return `M ${x1} ${y1} C ${x1} ${y1 + dy / 2}, ${x2} ${y2 - dy / 2}, ${x2} ${y2}`;
+  }
 }
 
 function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; nodes: Record<string, NodeDef>; activeColor: string }) {
@@ -148,29 +177,37 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
 
   if (!fromNode || !toNode) return null;
 
+  const d = getPath(fromNode.x, fromNode.y, toNode.x, toNode.y);
+
+  // Total length of dash + gap = 160. Offset by -160 to make it flow forward continuously.
+  const flowDash = "30 130";
+  const flowOffset = [0, -160];
+
   return (
     <motion.g animate={{ opacity: conn.opacity }} transition={{ duration: 0.4 }}>
-      <motion.line
+      {/* Base faint track */}
+      <motion.path
         className="connector-base"
-        strokeWidth={2}
-        animate={{ x1: fromNode.x, y1: fromNode.y, x2: toNode.x, y2: toNode.y }}
+        strokeWidth={1.5}
+        fill="none"
+        animate={{ d }}
         transition={{ type: "spring", stiffness: 50, damping: 14, mass: 1 }}
       />
-      <motion.line
+      {/* Glowing flowing liquid/comet */}
+      <motion.path
         className="connector-active"
-        strokeWidth={2}
-        strokeDasharray="6 8"
+        strokeWidth={3}
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray={flowDash}
+        style={{ filter: `drop-shadow(0px 0px 8px ${activeColor})` }}
         animate={{
-          x1: fromNode.x, y1: fromNode.y,
-          x2: toNode.x, y2: toNode.y,
-          strokeDashoffset: [0, -14]
+          d,
+          strokeDashoffset: flowOffset
         }}
         transition={{
-          x1: { type: "spring", stiffness: 50, damping: 14, mass: 1 },
-          y1: { type: "spring", stiffness: 50, damping: 14, mass: 1 },
-          x2: { type: "spring", stiffness: 50, damping: 14, mass: 1 },
-          y2: { type: "spring", stiffness: 50, damping: 14, mass: 1 },
-          strokeDashoffset: { duration: 0.6, repeat: Infinity, ease: "linear" }
+          d: { type: "spring", stiffness: 50, damping: 14, mass: 1 },
+          strokeDashoffset: { duration: 1.5, repeat: Infinity, ease: "linear" }
         }}
       />
     </motion.g>
@@ -178,6 +215,7 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
 }
 
 export default function HeroDiagramCarousel() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -208,44 +246,9 @@ export default function HeroDiagramCarousel() {
   const phase = PHASES[activeIdx];
 
   return (
-    <div className="diagram-card relative w-full h-full flex flex-col overflow-hidden select-none">
-      
-      {/* --- Ambient Blobs --- */}
-      <motion.div
-        className="absolute pointer-events-none rounded-full blur-[90px] opacity-20"
-        animate={{
-          backgroundColor: phase.accent,
-          scale: [1, 1.2, 0.9, 1],
-          x: [0, 60, -30, 0],
-          y: [0, -40, 50, 0],
-        }}
-        transition={{
-          backgroundColor: { duration: 1.5 },
-          scale: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-          x: { duration: 15, repeat: Infinity, ease: "easeInOut" },
-          y: { duration: 18, repeat: Infinity, ease: "easeInOut" },
-        }}
-        style={{ width: 350, height: 350, top: '10%', left: '20%' }}
-      />
-      <motion.div
-        className="absolute pointer-events-none rounded-full blur-[90px] opacity-10"
-        animate={{
-          backgroundColor: phase.accent,
-          scale: [0.9, 1.3, 1, 0.9],
-          x: [0, -50, 40, 0],
-          y: [0, 60, -30, 0],
-        }}
-        transition={{
-          backgroundColor: { duration: 1.5 },
-          scale: { duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 },
-          x: { duration: 17, repeat: Infinity, ease: "easeInOut", delay: 1 },
-          y: { duration: 13, repeat: Infinity, ease: "easeInOut", delay: 3 },
-        }}
-        style={{ width: 300, height: 300, bottom: '5%', right: '15%' }}
-      />
-
+    <div className="relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center border border-slate-200/60 rounded-3xl">
       {/* --- Header Content --- */}
-      <div className="absolute top-6 left-8 z-10">
+      <div className="absolute top-6 left-8 z-10 pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
             key={phase.id}
@@ -254,70 +257,67 @@ export default function HeroDiagramCarousel() {
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.5 }}
             className="flex flex-col"
+            style={{ WebkitFontSmoothing: "antialiased" }}
           >
             <div className="flex items-center gap-2 mb-1.5">
-              <span 
-                className="phase-badge text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
-              >
+              <span className="phase-badge text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500">
                 {phase.phaseLabel}
               </span>
             </div>
-            <h3 className="diagram-title text-xl font-bold">{phase.title}</h3>
-            <p className="diagram-subtitle text-xs font-mono mt-1">{phase.subtitle}</p>
+            <h3 className="diagram-title text-2xl font-bold tracking-tight text-slate-700">{phase.title}</h3>
+            <p className="diagram-subtitle text-[13px] font-medium font-mono mt-0.5 tracking-wide" style={{ color: phase.accent }}>
+              {phase.subtitle}
+            </p>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* --- Dynamic SVG Canvas --- */}
-      <motion.div 
-        className="absolute inset-0 z-0"
-        animate={{ y: [-5, 5, -5] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg viewBox="0 0 700 450" className="w-full h-full overflow-visible">
-          {/* Grid Pattern Removed -> Replaced by .diagram-card background */}
+      <div className="relative w-[700px] h-[450px]">
+        {/* --- LAYER 1: Background --- */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <svg viewBox="0 0 700 450" className="w-full h-full overflow-visible">
+            {/* Kubernetes Cluster Box for MLOps */}
+            <motion.g animate={{ opacity: phase.k8s.opacity }} transition={{ duration: 0.6 }}>
+              <motion.rect
+                animate={{ x: phase.k8s.x, y: phase.k8s.y, width: phase.k8s.w, height: phase.k8s.h }}
+                rx={16} fill="rgba(20, 184, 166, 0.05)" stroke="#14b8a6" strokeWidth={1.5} strokeDasharray="6 6"
+                transition={{ type: "spring", stiffness: 50, damping: 14 }}
+              />
+              <motion.text
+                animate={{ x: phase.k8s.x + 16, y: phase.k8s.y + 24 }}
+                fill="#14b8a6" fontSize={12} fontWeight={600} fontFamily="Inter, sans-serif"
+                transition={{ type: "spring", stiffness: 50, damping: 14 }}
+              >
+                ⎈ Kubernetes Cluster
+              </motion.text>
+            </motion.g>
+          </svg>
+        </div>
 
-          {/* Kubernetes Cluster Box */}
-          <motion.g animate={{ opacity: phase.k8s.opacity }} transition={{ duration: 0.6 }}>
-            <motion.rect
-              animate={{ x: phase.k8s.x, y: phase.k8s.y, width: phase.k8s.w, height: phase.k8s.h }}
-              rx={16}
-              fill="rgba(20, 184, 166, 0.04)"
-              stroke="#14b8a6" 
-              strokeWidth={1.5} 
-              strokeDasharray="6 6"
-              transition={{ type: "spring", stiffness: 50, damping: 14 }}
-            />
-            <motion.text
-              animate={{ x: phase.k8s.x + 16, y: phase.k8s.y + 24 }}
-              fill="#0d9488" 
-              fontSize={12} 
-              fontWeight={600} 
-              fontFamily="Inter, sans-serif"
-              transition={{ type: "spring", stiffness: 50, damping: 14 }}
-            >
-              ⎈ Kubernetes Cluster
-            </motion.text>
-          </motion.g>
+        {/* --- LAYER 2: Connections --- */}
+        <div className="absolute inset-0 pointer-events-none z-10">
+          <svg viewBox="0 0 700 450" className="w-full h-full overflow-visible">
+            {ALL_CONN_IDS.map(id => (
+              <ConnectionComponent key={id} conn={phase.conns[id]} nodes={phase.nodes} activeColor={phase.accent} />
+            ))}
+          </svg>
+        </div>
 
-          {/* Connections (Rendered below nodes) */}
-          {ALL_CONN_IDS.map(id => (
-            <ConnectionComponent key={id} conn={phase.conns[id]} nodes={phase.nodes} activeColor={phase.accent} />
-          ))}
-
-          {/* Nodes */}
+        {/* --- LAYER 3: Floating Cinematic Nodes --- */}
+        <div className="absolute inset-0 pointer-events-none z-20">
           {ALL_NODE_IDS.map(id => (
-            <NodeComponent key={id} node={phase.nodes[id]} />
+            <NodeComponent key={id} id={id} node={phase.nodes[id]} />
           ))}
-        </svg>
-      </motion.div>
+        </div>
+
+      </div>
 
       {/* --- Progress Indicator --- */}
       <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 z-10">
         {PHASES.map((p, i) => (
-          <div 
-            key={p.id} 
-            className="flex flex-col items-center gap-2 cursor-pointer p-2" 
+          <div
+            key={p.id}
+            className="flex flex-col items-center gap-2 cursor-pointer p-2"
             onClick={() => { setActiveIdx(i); setProgress(0); }}
           >
             <div className="h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden relative">

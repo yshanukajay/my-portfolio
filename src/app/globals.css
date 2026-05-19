@@ -51,14 +51,7 @@
   background-image: linear-gradient(to right, #0284c7, #2563eb); /* sky-600 to blue-600 */
 }
 
-/* Diagram card container */
-.diagram-card {
-  background-color: #ffffff !important;
-  background-image: radial-gradient(circle, rgba(56, 132, 220, 0.2) 1px, transparent 1px) !important;
-  background-size: 22px 22px !important;
-  border: 0.5px solid #85b7eb !important;
-  border-radius: 16px !important;
-}
+/* diagram-card removed for organic flow map */
 
 /* Phase badge */
 .phase-badge {
