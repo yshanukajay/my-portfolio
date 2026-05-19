@@ -246,7 +246,10 @@ export default function HeroDiagramCarousel() {
   const phase = PHASES[activeIdx];
 
   return (
-    <div className="relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center border border-slate-200/60 rounded-3xl">
+    <div className="relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center">
+
+
+
       {/* --- Header Content --- */}
       <div className="absolute top-6 left-8 z-10 pointer-events-none">
         <AnimatePresence mode="wait">
@@ -273,6 +276,19 @@ export default function HeroDiagramCarousel() {
       </div>
 
       <div className="relative w-[700px] h-[450px]">
+        {/* --- LAYER 0.5: Frosted Blur — only behind the diagram canvas --- */}
+        <div
+          className="absolute inset-0 pointer-events-none rounded-2xl"
+          style={{
+            zIndex: 0,
+            backdropFilter: "blur(14px) saturate(1.3)",
+            WebkitBackdropFilter: "blur(14px) saturate(1.3)",
+            background: "rgba(255,255,255,0.55)",
+            maskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 55%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 55%, transparent 100%)",
+          }}
+        />
+
         {/* --- LAYER 1: Background --- */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <svg viewBox="0 0 700 450" className="w-full h-full overflow-visible">
