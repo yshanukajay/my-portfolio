@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ArrowRight, Download } from "lucide-react";
-import { DataEngineeringDiagram, MLPipelineDiagram, MLOpsDeployDiagram } from "./DiagramSlides";
+import HeroDiagramCarousel from "./HeroDiagramCarousel";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
 const GithubIcon = ({ size = 24 }: { size?: number }) => (
@@ -20,35 +20,14 @@ const titles = [
   "ML Systems Developer",
 ];
 
-/* ─── Diagram slides config ───────────────────────────────────────────────── */
+/* ─── Diagram slides config (for phase chips only) ───────────────────────── */
 const SLIDES = [
-  {
-    id: "data",
-    phase: "Phase 1",
-    title: "Data Engineering Pipeline",
-    subtitle: "Kafka · Spark · Airflow · Data Lake",
-    color: "#0ea5e9",
-    Diagram: DataEngineeringDiagram,
-  },
-  {
-    id: "ml",
-    phase: "Phase 2",
-    title: "Machine Learning Pipeline",
-    subtitle: "TensorFlow · PyTorch · MLflow · Feature Store",
-    color: "#818cf8",
-    Diagram: MLPipelineDiagram,
-  },
-  {
-    id: "mlops",
-    phase: "Phase 3",
-    title: "MLOps Deployment Pipeline",
-    subtitle: "Docker · Kubernetes · FastAPI · Monitoring",
-    color: "#2dd4bf",
-    Diagram: MLOpsDeployDiagram,
-  },
+  { id: "data", phase: "Phase 1", color: "#0ea5e9" },
+  { id: "ml", phase: "Phase 2", color: "#818cf8" },
+  { id: "mlops", phase: "Phase 3", color: "#2dd4bf" },
 ];
 
-const SLIDE_DURATION = 8; // seconds per slide
+const SLIDE_DURATION = 7; // seconds per slide
 
 /* ─── Interactive Animated Grid ───────────────────────────────── */
 function AnimatedGrid() {
@@ -153,11 +132,52 @@ function AnimatedGrid() {
   );
 }
 
+/* ─── Premium Magnetic Button ─────────────────────────────────────────────── */
+function MagneticButton({ children, className, href, target, rel }: any) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15, mass: 0.5 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15, mass: 0.5 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!ref.current) return;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    x.set((e.clientX - centerX) * 0.25);
+    y.set((e.clientY - centerY) * 0.25);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.a
+      ref={ref}
+      href={href}
+      target={target}
+      rel={rel}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: mouseXSpring, y: mouseYSpring }}
+      className={className}
+    >
+      {children}
+    </motion.a>
+  );
+}
+
 /* ─── Main component ──────────────────────────────────────────────────────── */
 export default function HeroSection() {
   const [titleIndex, setTitleIndex] = useState(0);
   const [slideIndex, setSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  // The HeroDiagramCarousel manages its own slideIndex/progress internally.
+  // We still keep a lightweight local timer to sync the phase chips + title color.
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -237,135 +257,60 @@ export default function HeroSection() {
             pipelines, and cloud-ready ML systems.
           </p>
 
-          {/* Phase indicator chips */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {SLIDES.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => setSlideIndex(i)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300"
-                style={{
-                  borderColor: i === slideIndex ? s.color : "rgba(15,23,42,0.1)",
-                  color: i === slideIndex ? s.color : "#94a3b8",
-                  background: i === slideIndex ? `${s.color}10` : "transparent",
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: i === slideIndex ? s.color : "#cbd5e1" }}
-                />
-                {s.phase}
-              </button>
-            ))}
-          </div>
-
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <a
+            {/* View Projects - Premium Animated Border Button */}
+            <MagneticButton
               href="#projects"
-              className="px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-sky-600 transition-colors flex items-center gap-2"
+              className="group relative rounded-[14px] p-[1px] overflow-hidden shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all duration-300 block"
             >
-              View Projects <ArrowRight size={18} />
-            </a>
-            <a
+              {/* Spinning gradient border */}
+              <motion.div
+                className="absolute inset-[-100%] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: 'conic-gradient(from 0deg, transparent 20%, #0ea5e9 40%, #6366f1 60%, #2dd4bf 80%, transparent 100%)' }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              />
+              <div className="absolute inset-0 bg-slate-900 rounded-[14px] group-hover:opacity-0 transition-opacity duration-300" />
+
+              {/* Button inner face */}
+              <div className="relative flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-900 rounded-[13px] text-white font-medium hover:bg-slate-800/90 transition-colors overflow-hidden">
+                {/* Shimmer sweep */}
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out" />
+                <span className="relative z-10">View Projects</span>
+                <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-300" />
+              </div>
+            </MagneticButton>
+
+            {/* Secondary Buttons */}
+            <MagneticButton
               href="#"
-              className="px-6 py-3 bg-white border border-slate-200 text-slate-800 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center gap-2 shadow-sm"
+              className="group relative px-6 py-3.5 bg-white border border-slate-200 text-slate-700 rounded-[13px] font-medium hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.1)] transition-all flex items-center gap-2"
             >
-              Download Resume <Download size={18} />
-            </a>
-            <a
+              <span className="relative z-10">Download Resume</span>
+              <Download size={18} className="relative z-10 group-hover:-translate-y-1 transition-transform duration-300" />
+            </MagneticButton>
+
+            <MagneticButton
               href="https://github.com/yshanukajay"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-white border border-slate-200 text-slate-800 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+              className="group relative p-3.5 bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.1)] transition-all flex items-center justify-center"
             >
-              <GithubIcon size={20} />
-            </a>
+              <div className="relative z-10 group-hover:scale-110 transition-transform duration-300">
+                <GithubIcon size={20} />
+              </div>
+            </MagneticButton>
           </div>
         </motion.div>
 
-        {/* ── RIGHT: Diagram Carousel ── */}
+        {/* ── RIGHT: Premium 3-Diagram Depth Carousel ── */}
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
+          initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative hidden lg:flex flex-col gap-4 h-[520px] w-full"
+          transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
+          className="relative hidden lg:flex flex-col h-[540px] w-full"
         >
-          {/* Card container */}
-          <div className="relative flex-1 rounded-2xl overflow-hidden shadow-2xl"
-            style={{ background: "#080d14", border: "1px solid rgba(148,163,184,0.12)" }}>
-
-            {/* Live animated diagram */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={slideIndex}
-                initial={{ opacity: 0, scale: 1.02 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="absolute inset-0 flex items-center justify-center p-4"
-              >
-                <slide.Diagram />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Slide label */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`label-${slideIndex}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                className="absolute bottom-0 left-0 right-0 p-4"
-                style={{ background: "linear-gradient(to top, #080d14 60%, transparent)" }}
-              >
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span
-                    className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-                    style={{ background: `${slide.color}20`, color: slide.color, border: `1px solid ${slide.color}40` }}
-                  >
-                    {slide.phase}
-                  </span>
-                </div>
-                <p className="text-white font-bold text-sm" style={{ opacity: 0.9 }}>{slide.title}</p>
-                <p className="text-xs font-mono mt-0.5" style={{ color: slide.color, opacity: 0.7 }}>{slide.subtitle}</p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Progress bar */}
-          <div className="flex items-center gap-3">
-            {SLIDES.map((s, i) => (
-              <div
-                key={s.id}
-                className="flex-1 h-0.5 rounded-full bg-slate-100 overflow-hidden cursor-pointer"
-                onClick={() => setSlideIndex(i)}
-              >
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{ background: s.color }}
-                  animate={{ width: i === slideIndex ? `${progress}%` : i < slideIndex ? "100%" : "0%" }}
-                  transition={{ duration: 0.1, ease: "linear" }}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Dot indicators */}
-          <div className="flex items-center justify-center gap-2">
-            {SLIDES.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => setSlideIndex(i)}
-                className="rounded-full transition-all duration-300"
-                style={{
-                  width: i === slideIndex ? 20 : 6,
-                  height: 6,
-                  background: i === slideIndex ? s.color : "#e2e8f0",
-                }}
-              />
-            ))}
-          </div>
+          <HeroDiagramCarousel />
         </motion.div>
 
       </div>

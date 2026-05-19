@@ -50,3 +50,52 @@
   color: transparent;
   background-image: linear-gradient(to right, #0284c7, #2563eb); /* sky-600 to blue-600 */
 }
+
+/* Diagram card container */
+.diagram-card {
+  background-color: #ffffff !important;
+  background-image: radial-gradient(circle, rgba(56, 132, 220, 0.2) 1px, transparent 1px) !important;
+  background-size: 22px 22px !important;
+  border: 0.5px solid #85b7eb !important;
+  border-radius: 16px !important;
+}
+
+/* Phase badge */
+.phase-badge {
+  background: #b5d4f4 !important;
+  color: #185fa5 !important;
+  border: none !important;
+}
+
+/* Title & subtitle */
+.diagram-title {
+  color: #042c53 !important;
+}
+
+.diagram-subtitle {
+  color: #185fa5 !important;
+}
+
+/* Node cards */
+.node {
+  fill: #ffffff;
+  stroke: #85b7eb;
+  stroke-width: 0.5px;
+}
+
+.node-title {
+  fill: #042c53;
+}
+
+.node-subtitle {
+  fill: #185fa5;
+}
+
+/* Connector arrows/dashes */
+.connector-base {
+  stroke: rgba(55,138,221,0.3);
+}
+
+.connector-active {
+  stroke: #378add;
+}
