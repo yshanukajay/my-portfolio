@@ -229,32 +229,136 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* Core Expertise — full-width band (site background tone) */}
-      <div className="w-full bg-slate-50 border-y border-slate-100 py-24">
+      {/* Core Expertise — full-bleed with side decorations */}
+      <div className="w-full bg-slate-50 border-y border-slate-100 py-24 overflow-hidden">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-6xl mx-auto">
+
+          {/* Section header */}
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-xs font-bold tracking-[0.25em] text-indigo-500 uppercase mb-3">
+              Engineering Focus
+            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Core Expertise</h2>
+            <div className="w-16 h-1 bg-indigo-500 mx-auto rounded-full mb-5" />
+            <p className="text-slate-500 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
+              Three focused areas — each with a clear pipeline and the capabilities I bring to production systems.
+            </p>
+          </motion.div>
+
+          {/* Full-bleed 5-column layout: left accent | cards | right accent */}
+          <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-6 items-start">
+
+            {/* ── Left accent panel ── */}
             <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
+              className="hidden lg:flex flex-col gap-4"
             >
-              <p className="text-xs font-bold tracking-[0.25em] text-indigo-500 uppercase mb-3">
-                Engineering Focus
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Core Expertise</h2>
-              <div className="w-16 h-1 bg-indigo-500 mx-auto rounded-full mb-5" />
-              <p className="text-slate-500 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
-                Three focused areas — each with a clear pipeline and the capabilities I bring to production systems.
-              </p>
+              {/* System stats */}
+              {[
+                { label: "Models Deployed", value: "12+", color: "#818cf8" },
+                { label: "Pipeline Uptime", value: "99.9%", color: "#10b981" },
+                { label: "Avg Latency",     value: "< 100ms", color: "#0ea5e9" },
+                { label: "Data Processed",  value: "10TB+",  color: "#f59e0b" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
+                  className="rounded-2xl p-4 border border-slate-200 bg-white shadow-sm"
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                    {stat.label}
+                  </div>
+                  <div className="text-xl font-extrabold font-mono" style={{ color: stat.color }}>
+                    {stat.value}
+                  </div>
+                </motion.div>
+              ))}
+
+              {/* Decorative dot grid */}
+              <div className="mt-2 opacity-30">
+                <svg width="100%" viewBox="0 0 180 80">
+                  {Array.from({ length: 6 }).map((_, row) =>
+                    Array.from({ length: 10 }).map((_, col) => (
+                      <motion.circle
+                        key={`${row}-${col}`}
+                        cx={col * 18 + 9} cy={row * 14 + 7} r={1.8}
+                        fill="#6366f1"
+                        animate={{ opacity: [0.2, 0.7, 0.2] }}
+                        transition={{ duration: 2 + (row + col) * 0.3, repeat: Infinity, delay: (row + col) * 0.15 }}
+                      />
+                    ))
+                  )}
+                </svg>
+              </div>
             </motion.div>
 
+            {/* ── Center: 3 domain cards ── */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {domains.map((domain, i) => (
                 <DomainCard key={domain.title} domain={domain} index={i} />
               ))}
             </div>
+
+            {/* ── Right accent panel ── */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
+              className="hidden lg:flex flex-col gap-4"
+            >
+              {/* Mini pipeline steps */}
+              <div className="rounded-2xl p-4 border border-slate-200 bg-white shadow-sm">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3">
+                  ML Lifecycle
+                </div>
+                {["Data Ingest", "Feature Eng", "Training", "Evaluation", "Deployment", "Monitoring"].map((step, i) => (
+                  <div key={step} className="flex items-center gap-2 mb-2 last:mb-0">
+                    <motion.div
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{ background: ["#f59e0b","#818cf8","#818cf8","#10b981","#0ea5e9","#f97316"][i] }}
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 1.8, delay: i * 0.25, repeat: Infinity }}
+                    />
+                    <span className="text-xs font-semibold text-slate-600">{step}</span>
+                    {i < 5 && <div className="ml-auto w-4 h-px bg-slate-200" />}
+                  </div>
+                ))}
+              </div>
+
+              {/* Stack highlight */}
+              {[
+                { tech: "Kafka", role: "Ingest",  color: "#f59e0b" },
+                { tech: "Spark", role: "Process", color: "#0ea5e9" },
+                { tech: "MLflow",role: "Track",   color: "#10b981" },
+                { tech: "K8s",   role: "Deploy",  color: "#2dd4bf" },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.tech}
+                  initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 + i * 0.07 }}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-slate-200 bg-white shadow-sm"
+                >
+                  <motion.span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ background: item.color }}
+                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    transition={{ duration: 1.6, delay: i * 0.3, repeat: Infinity }}
+                  />
+                  <span className="text-sm font-bold text-slate-800">{item.tech}</span>
+                  <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    {item.role}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+
           </div>
         </div>
       </div>

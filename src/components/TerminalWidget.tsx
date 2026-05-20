@@ -27,6 +27,7 @@ const COMMANDS: Record<
         line("success", "│  projects    → View projects            │"),
         line("success", "│  skills      → Tech stack               │"),
         line("success", "│  pipelines   → MLOps pipelines          │"),
+        line("success", "│  research    → Publications & research  │"),
         line("success", "│  contact     → Get in touch             │"),
         line("success", "│  certifications → Certifications        │"),
         line("info", "├─────────────────────────────────────────┤"),
@@ -84,6 +85,17 @@ const COMMANDS: Record<
         line("output", "  Ingestion → Processing → Training → Serving"),
       ],
       scrollTo: "pipelines",
+    }),
+  },
+  research: {
+    description: "Navigate to Research section",
+    action: () => ({
+      lines: [
+        line("success", "→ Navigating to /research"),
+        line("output", "  Fetching publication data..."),
+        line("output", "  [✓] Real-Time Cattle Monitoring IoT collar research paper"),
+      ],
+      scrollTo: "research",
     }),
   },
   contact: {

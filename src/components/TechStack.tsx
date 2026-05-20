@@ -5,11 +5,6 @@ import { useState } from "react";
 /* ─── Data ──────────────────────────────────────────────────────── */
 const categories = [
   {
-    id: "all",
-    label: "All",
-    color: "#94a3b8",
-  },
-  {
     id: "ml",
     label: "Machine Learning",
     color: "#818cf8",
@@ -85,13 +80,6 @@ const categories = [
   },
 ];
 
-/* Build a flat list with category metadata for "All" view */
-const allTools = categories
-  .filter((c) => c.id !== "all" && c.tools)
-  .flatMap((c) =>
-    (c.tools ?? []).map((t) => ({ ...t, catId: c.id, catLabel: c.label, color: c.color }))
-  );
-
 /* ─── Radial progress ring ──────────────────────────────────────── */
 function Ring({ pct, color, size = 44 }: { pct: number; color: string; size?: number }) {
   const r = (size - 6) / 2;
@@ -99,7 +87,7 @@ function Ring({ pct, color, size = 44 }: { pct: number; color: string; size?: nu
   return (
     <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none"
-        stroke="rgba(255,255,255,0.07)" strokeWidth={3} />
+        stroke="#e2e8f0" strokeWidth={3} />
       <motion.circle
         cx={size / 2} cy={size / 2} r={r} fill="none"
         stroke={color} strokeWidth={3}
@@ -128,15 +116,11 @@ function ToolCard({
       exit={{ opacity: 0, scale: 0.88 }}
       transition={{ duration: 0.3, delay }}
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className="group relative flex items-center gap-3 px-4 py-3.5 rounded-xl border cursor-default select-none"
-      style={{
-        background: "#0d1117",
-        borderColor: `${color}28`,
-      }}
+      className="group relative flex items-center gap-3 px-4 py-3.5 rounded-xl border border-slate-200 bg-white cursor-default select-none shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200"
     >
-      {/* Hover glow */}
+      {/* Hover accent */}
       <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{ boxShadow: `0 0 22px ${color}25, inset 0 0 0 1px ${color}40` }} />
+        style={{ boxShadow: `0 4px 20px ${color}18`, border: `1px solid ${color}35` }} />
 
       {/* Ring */}
       <div className="relative flex-shrink-0">
@@ -149,7 +133,7 @@ function ToolCard({
 
       {/* Name + badge */}
       <div className="flex-1 min-w-0">
-        <span className="text-sm font-semibold text-slate-200 truncate block">{name}</span>
+        <span className="text-sm font-semibold text-slate-800 truncate block">{name}</span>
         {learning && (
           <span className="inline-flex items-center gap-1 mt-0.5 text-[9px] font-bold uppercase tracking-wider"
             style={{ color }}>
@@ -169,29 +153,28 @@ function ToolCard({
 
 /* ─── Main Section ──────────────────────────────────────────────── */
 export default function TechStack() {
-  const [activeId, setActiveId] = useState("all");
+  const [activeId, setActiveId] = useState("ml");
 
   const activeCat = categories.find((c) => c.id === activeId);
-  const displayTools =
-    activeId === "all"
-      ? allTools
-      : (activeCat?.tools ?? []).map((t) => ({
-          ...t, catId: activeId, catLabel: activeCat?.label ?? "", color: activeCat?.color ?? "#fff",
-        }));
+  const displayTools = (activeCat?.tools ?? []).map((t) => ({
+    ...t,
+    catId: activeId,
+    catLabel: activeCat?.label ?? "",
+    color: activeCat?.color ?? "#fff",
+  }));
 
   return (
     <section
       id="stack"
-      className="py-24 relative overflow-hidden border-y border-slate-800/60"
-      style={{ background: "#080d14" }}
+      className="py-24 relative overflow-hidden bg-white border-y border-slate-100"
     >
-      {/* Background glow blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-10"
-          style={{ background: "radial-gradient(circle, #818cf8, transparent)" }} />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full blur-3xl opacity-10"
-          style={{ background: "radial-gradient(circle, #f59e0b, transparent)" }} />
-      </div>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 15% 20%, rgba(99,102,241,0.05) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(14,165,233,0.05) 0%, transparent 45%)",
+        }}
+      />
 
       <div className="container mx-auto px-6 lg:px-12 relative">
 
@@ -201,15 +184,14 @@ export default function TechStack() {
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-bold tracking-[0.25em] text-sky-400 uppercase mb-3">
+          <p className="text-xs font-bold tracking-[0.25em] text-sky-600 uppercase mb-3">
             Tools &amp; Frameworks
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Technology Ecosystem
           </h2>
-          <div className="w-20 h-1 mx-auto rounded-full mb-6"
-            style={{ background: "linear-gradient(to right, #0ea5e9, #818cf8)" }} />
-          <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+          <div className="w-20 h-1 bg-sky-500 mx-auto rounded-full mb-6" />
+          <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">
             A curated stack I use to build scalable ML systems, data pipelines, and cloud-native infrastructure.
           </p>
         </motion.div>
@@ -228,10 +210,10 @@ export default function TechStack() {
                 onClick={() => setActiveId(cat.id)}
                 className="relative px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200"
                 style={{
-                  color: isActive ? "#fff" : "#64748b",
-                  background: isActive ? `${cat.color}22` : "transparent",
-                  border: `1px solid ${isActive ? cat.color : "rgba(255,255,255,0.08)"}`,
-                  boxShadow: isActive ? `0 0 14px ${cat.color}35` : "none",
+                  color: isActive ? cat.color : "#64748b",
+                  background: isActive ? `${cat.color}12` : "transparent",
+                  border: `1px solid ${isActive ? `${cat.color}50` : "#e2e8f0"}`,
+                  boxShadow: isActive ? `0 2px 12px ${cat.color}20` : "none",
                 }}
               >
                 {cat.label}
@@ -251,7 +233,7 @@ export default function TechStack() {
         {/* Legend */}
         <div className="flex items-center justify-center gap-6 mb-10 text-xs text-slate-500">
           <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-slate-600 inline-block" />
+            <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
             Proficient
           </span>
           <span className="flex items-center gap-2">
@@ -286,7 +268,7 @@ export default function TechStack() {
 
         {/* Footer note */}
         <motion.p
-          className="text-center text-xs text-slate-600 mt-10 font-mono"
+          className="text-center text-xs text-slate-400 mt-10 font-mono"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           viewport={{ once: true }} transition={{ delay: 0.4 }}
         >

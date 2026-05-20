@@ -4,10 +4,11 @@ import TechStrip from "@/components/TechStrip";
 import AboutSection from "@/components/AboutSection";
 import TechStack from "@/components/TechStack";
 import Projects from "@/components/Projects";
-import Certifications from "@/components/Certifications";
 import MLOpsPipelines from "@/components/MLOpsPipelines";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import CurrentlyBuilding from "@/components/CurrentlyBuilding";
+import Certifications from "@/components/Certifications";
+import Research from "@/components/Research";
 import EngineeringPhilosophy from "@/components/EngineeringPhilosophy";
 import ContactSection from "@/components/ContactSection";
 import TerminalWidget from "@/components/TerminalWidget";
@@ -42,7 +43,10 @@ export default function Home() {
       {/* 8. Certifications */}
       <Certifications />
 
-      {/* 9. Engineering Philosophy */}
+      {/* 9. Research & Publications */}
+      <Research />
+
+      {/* 10. Engineering Philosophy */}
       <EngineeringPhilosophy />
 
       {/* 10. Contact */}
