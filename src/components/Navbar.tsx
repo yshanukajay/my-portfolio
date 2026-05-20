@@ -7,9 +7,9 @@ import { Menu, X } from "lucide-react";
 const navLinks = [
   { name: "About", href: "#about" },
   { name: "Tech Stack", href: "#stack" },
+  { name: "Projects", href: "#projects" },
   { name: "Pipelines", href: "#pipelines" },
   { name: "Architecture", href: "#architecture" },
-  { name: "Projects", href: "#projects" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -49,21 +49,13 @@ export default function Navbar() {
               {link.name}
             </a>
           ))}
-          <div className="w-px h-6 bg-slate-200 mx-2"></div>
-          <a
-            href="https://github.com/yshanukajay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-full hover:bg-sky-600 transition-colors shadow-sm"
-          >
-            GitHub
-          </a>
         </div>
 
         {/* Mobile Menu Toggle */}
         <button
-          className="md:hidden text-slate-600 hover:text-slate-900"
+          className="md:hidden text-slate-600 hover:text-slate-900 p-1"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -89,15 +81,6 @@ export default function Navbar() {
                   {link.name}
                 </a>
               ))}
-              <a
-                href="https://github.com/yshanukajay"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-3 bg-slate-900 text-white font-medium rounded-lg hover:bg-sky-600 transition-colors"
-              >
-                View GitHub
-              </a>
             </div>
           </motion.div>
         )}

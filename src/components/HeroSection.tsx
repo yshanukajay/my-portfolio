@@ -2,12 +2,12 @@
 
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState, useRef, useMemo } from "react";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Download, Database, Wind, Layers, Network, type LucideIcon } from "lucide-react";
 import HeroDiagramCarousel from "./HeroDiagramCarousel";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
-const GithubIcon = ({ size = 24 }: { size?: number }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const GithubIcon = ({ size = 24, className = "" }: { size?: number; className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
   </svg>
 );
@@ -30,6 +30,19 @@ const SLIDES = [
 ];
 
 const SLIDE_DURATION = 7; // seconds per slide
+
+const HERO_METRICS: {
+  label: string;
+  tag: string;
+  color: string;
+  href: string;
+  icon: LucideIcon;
+}[] = [
+  { label: "Kafka Streaming", tag: "Realtime Ingestion", color: "#f97316", icon: Database, href: "#pipelines" },
+  { label: "Airflow DAGs", tag: "Workflow Orchestration", color: "#ef4444", icon: Wind, href: "#pipelines" },
+  { label: "Dockerized ML Systems", tag: "Container Deployments", color: "#3b82f6", icon: Layers, href: "#architecture" },
+  { label: "Distributed Pipelines", tag: "Cloud-Native Arch", color: "#6366f1", icon: Network, href: "#architecture" },
+];
 
 /* ─── Interactive Geometric System Background (Mandala / Rangoli Inspired) ─── */
 function InteractiveGeometricBackground() {
@@ -371,39 +384,65 @@ export default function HeroSection() {
           </p>
 
           {/* ── Mini Metrics Panel ── */}
-          <div className="grid grid-cols-2 gap-3 max-w-sm">
-            {[
-              { label: "Kafka Streaming", tag: "Realtime Ingestion", color: "#f97316" },
-              { label: "Airflow DAGs", tag: "Workflow Orchestration", color: "#0ea5e9" },
-              { label: "Dockerized ML Systems", tag: "Container Deployments", color: "#6366f1" },
-              { label: "Distributed Pipelines", tag: "Cloud-Native Arch", color: "#10b981" },
-            ].map((metric) => (
-              <div
-                key={metric.label}
-                className="group flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl border border-slate-200/80 bg-white/60 hover:border-slate-300 hover:bg-white hover:shadow-sm transition-all duration-200"
-              >
-                {/* Pulsing status dot */}
-                <span className="relative flex-shrink-0 mt-[3px]">
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md"
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+          >
+            {HERO_METRICS.map((metric) => {
+              const Icon = metric.icon;
+              return (
+                <motion.a
+                  key={metric.label}
+                  href={metric.href}
+                  variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+                  className="group flex items-start gap-3 px-3.5 py-3 rounded-xl border border-slate-200/80 bg-white/70 backdrop-blur-sm hover:bg-white transition-all duration-200"
+                  style={
+                    {
+                      "--metric": metric.color,
+                    } as React.CSSProperties
+                  }
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.borderColor = `color-mix(in srgb, ${metric.color} 35%, transparent)`;
+                    el.style.boxShadow = `0 4px 20px color-mix(in srgb, ${metric.color} 14%, transparent)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.borderColor = "";
+                    el.style.boxShadow = "";
+                  }}
+                >
                   <span
-                    className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping"
-                    style={{ backgroundColor: metric.color }}
-                  />
-                  <span
-                    className="relative inline-flex w-2 h-2 rounded-full"
-                    style={{ backgroundColor: metric.color }}
-                  />
-                </span>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[13px] font-semibold text-slate-700 leading-tight truncate">
-                    {metric.label}
+                    className="relative flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200"
+                    style={{ backgroundColor: `${metric.color}14`, color: metric.color }}
+                  >
+                    <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 animate-ping"
+                      style={{ backgroundColor: `${metric.color}20` }} />
+                    <Icon size={15} className="relative z-10" strokeWidth={2.25} />
                   </span>
-                  <span className="text-[10px] font-medium text-slate-400 tracking-wide uppercase mt-0.5">
-                    {metric.tag}
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="text-[13px] font-semibold text-slate-800 leading-tight group-hover:text-slate-900">
+                      {metric.label}
+                    </span>
+                    <span
+                      className="text-[10px] font-semibold tracking-wide uppercase mt-0.5"
+                      style={{ color: metric.color }}
+                    >
+                      {metric.tag}
+                    </span>
+                  </div>
+                  <span className="relative flex-shrink-0 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span
+                      className="block w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: metric.color }}
+                    />
                   </span>
-                </div>
-              </div>
-            ))}
-          </div>
+                </motion.a>
+              );
+            })}
+          </motion.div>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
             {/* View Projects - Premium Animated Border Button */}
@@ -442,11 +481,10 @@ export default function HeroSection() {
               href="https://github.com/yshanukajay"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative p-3.5 bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.1)] transition-all flex items-center justify-center"
+              className="group relative px-6 py-3.5 bg-slate-900 border border-slate-800 text-white rounded-[13px] font-medium hover:bg-slate-800 hover:border-sky-500/40 hover:shadow-[0_0_24px_rgba(14,165,233,0.2)] transition-all flex items-center gap-2"
             >
-              <div className="relative z-10 group-hover:scale-110 transition-transform duration-300">
-                <GithubIcon size={20} />
-              </div>
+              <GithubIcon size={18} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
+              <span className="relative z-10">GitHub</span>
             </MagneticButton>
           </div>
         </motion.div>
