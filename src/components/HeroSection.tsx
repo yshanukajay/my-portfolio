@@ -54,14 +54,14 @@ const SLIDE_DURATION = 8; // seconds per slide (matches carousel DURATION)
 const getTagStyles = (tag: string) => {
   switch (tag) {
     case "SYS": return "bg-slate-800/80 text-slate-300 border border-slate-700/40";
-    case "DB":  return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+    case "DB": return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
     case "KFK": return "bg-orange-500/10 text-orange-400 border border-orange-500/20";
     case "SPK": return "bg-sky-500/10 text-sky-400 border border-sky-500/20";
     case "MDL": return "bg-violet-500/10 text-violet-400 border border-violet-500/20";
     case "DKR": return "bg-blue-500/10 text-blue-400 border border-blue-500/20";
     case "K8S": return "bg-teal-500/10 text-teal-400 border border-teal-500/20";
     case "GTW": return "bg-pink-500/10 text-pink-400 border border-pink-500/20";
-    default:    return "bg-slate-800 text-slate-400";
+    default: return "bg-slate-800 text-slate-400";
   }
 };
 
@@ -76,7 +76,7 @@ interface LogLine {
 const PIPELINE_LOGS: LogLine[] = [
   { time: "18:45:21", tag: "SYS", msg: "python run_pipeline.py --env prod", color: "text-slate-400 font-semibold", delay: 100 },
   { time: "18:45:21", tag: "SYS", msg: "checking database connection pools...", color: "text-slate-400/80", delay: 350 },
-  { time: "18:45:21", tag: "DB",  msg: "connection pool established [16 active]", color: "text-emerald-400", delay: 200 },
+  { time: "18:45:21", tag: "DB", msg: "connection pool established [16 active]", color: "text-emerald-400", delay: 200 },
   { time: "18:45:22", tag: "KFK", msg: "bootstrap servers: kafka-cluster.prod:9092", color: "text-slate-500", delay: 150 },
   { time: "18:45:22", tag: "KFK", msg: "listening on 'user-events' [partition 0-7]", color: "text-cyan-400", delay: 250 },
   { time: "18:45:23", tag: "KFK", msg: "message stream: ACTIVE (1.2M msg/sec)", color: "text-emerald-400 font-semibold", delay: 400 },
@@ -432,7 +432,7 @@ export default function HeroSection() {
       </div>
 
       {/* ── CONTENT GRID ─────────────────────────────────────────── */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-1 items-center">
 
         {/* ── LEFT: Text ── */}
         <motion.div
@@ -475,13 +475,13 @@ export default function HeroSection() {
           {/* ── Simulated Pipeline Micro-Terminal Console ── */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
-            animate={{ 
-              opacity: 1, 
+            animate={{
+              opacity: 1,
               y: 0,
               borderColor: `${slide.color}25`,
               boxShadow: `0 20px 50px rgba(0,0,0,0.35), 0 0 25px ${slide.color}15`,
             }}
-            transition={{ 
+            transition={{
               opacity: { duration: 0.7, delay: 0.15 },
               y: { duration: 0.7, delay: 0.15 },
               borderColor: { duration: 0.8 },
@@ -490,8 +490,8 @@ export default function HeroSection() {
             className="w-full max-w-[420px] bg-slate-950/85 backdrop-blur-md border rounded-2xl flex flex-col overflow-hidden font-mono text-[10.5px] leading-relaxed relative"
           >
             {/* Top delicate neon light glow effect */}
-            <div 
-              className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-sky-500/40 to-transparent transition-colors duration-500" 
+            <div
+              className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-sky-500/40 to-transparent transition-colors duration-500"
               style={{ background: `linear-gradient(90deg, transparent, ${slide.color}60, transparent)` }}
             />
 
@@ -528,7 +528,7 @@ export default function HeroSection() {
 
             {/* Tab header bar */}
             <div className="flex items-center bg-slate-950/60 border-b border-slate-900/60 text-[9px] text-slate-500 select-none">
-              <div 
+              <div
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950 border-r border-slate-900 text-slate-300 border-t"
                 style={{ borderTopColor: slide.color }}
               >
@@ -567,7 +567,7 @@ export default function HeroSection() {
                   </span>
                 </div>
               ))}
-              
+
               {isPlaying && logIndex < PIPELINE_LOGS.length && (
                 <div className="flex items-center gap-2 py-0.5 leading-relaxed font-mono select-none">
                   <span className="text-slate-600 text-[9px] shrink-0">{PIPELINE_LOGS[logIndex]?.time}</span>
@@ -575,7 +575,7 @@ export default function HeroSection() {
                     {PIPELINE_LOGS[logIndex]?.tag}
                   </span>
                   <span className="text-slate-500 animate-pulse text-[10px] italic">executing...</span>
-                  <motion.span 
+                  <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 0.8, repeat: Infinity }}
                     className="w-1.5 h-3.5"

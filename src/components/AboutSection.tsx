@@ -238,8 +238,8 @@ export default function AboutSection() {
                 />
 
                 {/* Blob 3: Subtle Central Cloud Glow */}
-                <div 
-                  className="absolute inset-0 blur-xl pointer-events-none opacity-60" 
+                <div
+                  className="absolute inset-0 blur-xl pointer-events-none opacity-60"
                   style={{
                     backgroundImage: "radial-gradient(circle at center, rgba(99,102,241,0.15) 0%, transparent 70%)"
                   }}
@@ -352,7 +352,7 @@ export default function AboutSection() {
                     WebkitMaskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
                   }}
                 />
-                
+
                 {/* Top border accent line */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
 
@@ -555,7 +555,7 @@ export default function AboutSection() {
                     className="rounded-3xl p-6 md:p-8 bg-white border border-slate-200 shadow-md hover:shadow-lg transition-shadow duration-300 relative overflow-hidden"
                   >
                     {/* Corner gradient glow matching active tab color */}
-                    <div 
+                    <div
                       className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[40px] pointer-events-none opacity-20"
                       style={{ backgroundColor: activeDomain.color }}
                     />
@@ -571,7 +571,7 @@ export default function AboutSection() {
                             <DomainIcon size={22} strokeWidth={2.25} />
                           </div>
                           <div>
-                            <span 
+                            <span
                               className="text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-0.5 rounded"
                               style={{ backgroundColor: `${activeDomain.color}0c`, color: activeDomain.color }}
                             >
@@ -654,7 +654,7 @@ export default function AboutSection() {
                             </p>
                           </div>
                           <div className="text-right">
-                            <span 
+                            <span
                               className="text-lg font-black tracking-tight font-mono px-3 py-1 rounded-xl bg-white border border-slate-200 shadow-sm"
                               style={{ color: activeDomain.color }}
                             >

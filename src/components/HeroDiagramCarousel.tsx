@@ -202,9 +202,9 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
         fill="none"
         strokeLinecap="round"
         strokeDasharray={flowDash}
-        style={{ 
+        style={{
           stroke: activeColor,
-          filter: `drop-shadow(0px 0px 8px ${activeColor})` 
+          filter: `drop-shadow(0px 0px 8px ${activeColor})`
         }}
         animate={{
           d,
