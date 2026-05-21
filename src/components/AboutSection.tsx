@@ -15,6 +15,15 @@ type Domain = {
   capabilities: string[];
 };
 
+const interests = [
+  { icon: GitMerge, text: "MLOps & Automation", accent: "#f43f5e", glow: "rgba(244,63,94,0.35)" },
+  { icon: Terminal, text: "Data Engineering Pipelines", accent: "#38bdf8", glow: "rgba(56,189,248,0.35)" },
+  { icon: Cpu, text: "Machine Learning Systems", accent: "#818cf8", glow: "rgba(129,140,248,0.35)" },
+  { icon: Cloud, text: "Cloud-Based Systems", accent: "#34d399", glow: "rgba(52,211,153,0.35)" },
+  { icon: Database, text: "Distributed Data Processing", accent: "#fbbf24", glow: "rgba(251,191,36,0.35)" },
+  { icon: Zap, text: "Backend Infrastructure", accent: "#22d3ee", glow: "rgba(34,211,238,0.35)" },
+] as const;
+
 const domains: Domain[] = [
   {
     icon: Cpu,
@@ -289,39 +298,102 @@ export default function AboutSection() {
                 </p>
               </div>
 
-              {/* Dynamic Interest Areas */}
-              <div className="mt-8 pt-8 border-t border-slate-100">
-                <div className="flex items-center gap-2 mb-5">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Particularly Interested In
-                  </span>
+              {/* Particularly Interested In — dark panel */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="mt-10 relative rounded-3xl overflow-hidden"
+                style={{
+                  background: "linear-gradient(145deg, #0a0f1a 0%, #0d1117 45%, #111827 100%)",
+                  boxShadow:
+                    "0 0 0 1px rgba(255,255,255,0.06), 0 24px 48px -12px rgba(0,0,0,0.45), 0 0 80px -20px rgba(99,102,241,0.25)",
+                }}
+              >
+                {/* Ambient glow layers */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 80% 60% at 0% 100%, rgba(99,102,241,0.18) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 100% 0%, rgba(14,165,233,0.12) 0%, transparent 50%)",
+                  }}
+                />
+                <div
+                  className="absolute inset-0 opacity-[0.35] pointer-events-none"
+                  style={{
+                    backgroundImage: "radial-gradient(rgba(148,163,184,0.15) 1px, transparent 1px)",
+                    backgroundSize: "22px 22px",
+                    maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+                    WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+                  }}
+                />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+
+                <div className="relative px-6 py-7 md:px-8 md:py-8">
+                  <div className="flex items-center justify-between gap-4 mb-6">
+                    <div className="flex items-center gap-3">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+                      </span>
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+                        Particularly Interested In
+                      </span>
+                    </div>
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 border border-white/10 bg-white/5">
+                      <span className="w-1 h-1 rounded-full bg-indigo-400" />
+                      Focus areas
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {interests.map((item, i) => (
+                      <motion.div
+                        key={item.text}
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.35, delay: 0.08 + i * 0.05 }}
+                        whileHover={{ y: -2 }}
+                        className="group relative flex items-center gap-4 p-4 rounded-2xl cursor-default transition-all duration-300"
+                        style={{
+                          background: "rgba(255,255,255,0.03)",
+                          border: "1px solid rgba(255,255,255,0.07)",
+                        }}
+                      >
+                        <div
+                          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                          style={{
+                            background: `radial-gradient(ellipse at left center, ${item.glow} 0%, transparent 70%)`,
+                            boxShadow: `inset 0 0 0 1px ${item.accent}30`,
+                          }}
+                        />
+                        <div
+                          className="relative w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105"
+                          style={{
+                            background: `${item.accent}18`,
+                            color: item.accent,
+                            boxShadow: `0 0 20px -4px ${item.glow}`,
+                          }}
+                        >
+                          <item.icon size={18} strokeWidth={2.25} />
+                        </div>
+                        <span className="relative text-sm font-semibold text-slate-200 group-hover:text-white transition-colors duration-300">
+                          {item.text}
+                        </span>
+                        <span
+                          className="relative ml-auto w-1.5 h-1.5 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+                          style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}` }}
+                          aria-hidden="true"
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    { icon: GitMerge, text: "MLOps & Automation", color: "text-rose-500", bg: "bg-rose-500/10" },
-                    { icon: Terminal, text: "Data Engineering Pipelines", color: "text-sky-500", bg: "bg-sky-500/10" },
-                    { icon: Cpu, text: "Machine Learning Systems", color: "text-indigo-500", bg: "bg-indigo-500/10" },
-                    { icon: Cloud, text: "Cloud-Based Systems", color: "text-emerald-500", bg: "bg-emerald-500/10" },
-                    { icon: Database, text: "Distributed Data Processing", color: "text-amber-500", bg: "bg-amber-500/10" },
-                    { icon: Zap, text: "Backend Infrastructure", color: "text-cyan-500", bg: "bg-cyan-500/10" },
-                  ].map((item, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: i * 0.05 }}
-                      className="flex items-center gap-4 p-3 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 hover:border-slate-200 transition-all duration-300"
-                    >
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${item.bg} ${item.color}`}>
-                        <item.icon size={16} strokeWidth={2.5} />
-                      </div>
-                      <span className="text-slate-700 font-semibold text-sm">{item.text}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-600/30 to-transparent" />
+              </motion.div>
             </motion.div>
           </div>
         </div>
