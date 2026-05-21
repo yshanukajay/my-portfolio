@@ -9,7 +9,21 @@
   
   --color-accent-primary: #0ea5e9;
   --color-accent-secondary: #3b82f6;
+  
+  --animate-scan: scan 6s ease-in-out infinite;
 }
+
+@keyframes scan {
+  0%, 100% {
+    top: 0%;
+    opacity: 0.1;
+  }
+  50% {
+    top: 100%;
+    opacity: 0.45;
+  }
+}
+
 
 @layer base {
   body {

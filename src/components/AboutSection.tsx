@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { Terminal, Cpu, Cloud, GitMerge, Database, Zap, type LucideIcon } from "lucide-react";
 
+
+
 type Domain = {
   icon: LucideIcon;
   title: string;
@@ -156,56 +158,146 @@ export default function AboutSection() {
           }}
         />
         <div className="container mx-auto px-6 lg:px-12 relative">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="lg:col-span-7"
-          >
-            <div className="flex items-center space-x-2 mb-6">
-              <span className="h-px w-8 bg-indigo-500" />
-              <p className="text-sm font-bold tracking-[0.2em] text-indigo-500 uppercase">
-                Engineering Mindset
-              </p>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight">
-              Building{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-sky-500">
-                Scalable
-              </span>{" "}
-              ML &amp; Data Systems.
-            </h2>
-            <div className="text-slate-600">
-              <p className="leading-relaxed font-medium text-slate-800 text-xl">
-                I focus on building intelligent systems at the intersection of machine learning and data engineering, 
-                designing high-throughput distributed pipelines and deploying production-ready models that solve complex real-world challenges.
-              </p>
-              <p className="leading-relaxed mt-4">
-                My goal is to develop production-ready machine learning workflows supported by reliable
-                data infrastructure, modern backend systems, and scalable cloud architectures.
-              </p>
-            </div>
-          </motion.div>
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left Column: Premium Developer Profile Card with Soft Floating Glow Background */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-5 relative"
+            >
+              <div className="relative mx-auto max-w-[360px] lg:max-w-none group">
+                {/* 1. SOFT FLOATING GLOW BACKGROUND (Blurred Circles / Gradient Blobs) */}
+                {/* Blob 1: Indigo/Purple, top-left, pulsing */}
+                <motion.div
+                  animate={{
+                    x: [0, 15, -10, 0],
+                    y: [0, -20, 15, 0],
+                    scale: [1, 1.1, 0.95, 1],
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute -top-12 -left-12 w-64 h-64 bg-gradient-to-tr from-indigo-500/20 to-purple-500/15 rounded-full blur-[50px] pointer-events-none mix-blend-screen"
+                />
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="lg:col-span-5"
-          >
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:border-indigo-200 transition-colors duration-500">
-              <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-colors duration-500" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-2 mb-6">
+                {/* Blob 2: Cyan/Blue, bottom-right, pulsing */}
+                <motion.div
+                  animate={{
+                    x: [0, -20, 15, 0],
+                    y: [0, 15, -20, 0],
+                    scale: [1, 0.9, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
+                  className="absolute -bottom-16 -right-16 w-72 h-72 bg-gradient-to-br from-sky-400/25 to-blue-600/15 rounded-full blur-[60px] pointer-events-none mix-blend-screen"
+                />
+
+                {/* Blob 3: Subtle Central Cloud Glow */}
+                <div 
+                  className="absolute inset-0 blur-xl pointer-events-none opacity-60" 
+                  style={{
+                    backgroundImage: "radial-gradient(circle at center, rgba(99,102,241,0.15) 0%, transparent 70%)"
+                  }}
+                />
+
+                {/* 2. ROTATING CLOUD RINGS */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-visible">
+                  {/* Outer Cloud Ring */}
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    className="absolute w-[440px] h-[440px] rounded-full border border-dashed border-indigo-500/15 opacity-60"
+                  />
+                  {/* Middle Data Orbit */}
+                  <motion.div
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+                    className="absolute w-[380px] h-[380px] rounded-full border border-indigo-400/10 opacity-50"
+                    style={{ borderStyle: "double", borderWidth: "3px" }}
+                  />
+                  {/* Inner Cloud/Feedback Ring */}
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+                    className="absolute w-[320px] h-[320px] rounded-full border border-dashed border-cyan-400/20 opacity-70"
+                  />
+                </div>
+
+                {/* 3. GRID / DOTTED MATRIX OVERLAY */}
+                <div
+                  className="absolute -inset-8 opacity-[0.22] pointer-events-none select-none"
+                  style={{
+                    backgroundImage: "radial-gradient(rgba(99,102,241,0.2) 1.5px, transparent 1.5px)",
+                    backgroundSize: "20px 20px",
+                    maskImage: "radial-gradient(circle at 50% 50%, black 65%, transparent 100%)",
+                    WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 65%, transparent 100%)",
+                  }}
+                />
+                {/* 6. MAIN CARICATURE WRAPPER (NO FRAME) */}
+                <div className="relative transition-all duration-500 group-hover:-translate-y-2 z-10">
+                  {/* Image - clean and frameless */}
+                  <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden">
+                    <img
+                      src="/avatar.png"
+                      alt="Yohan Shanuka"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] opacity-95 group-hover:opacity-100"
+                    />
+                  </div>
+                </div>
+
+
+              </div>
+            </motion.div>
+
+            {/* Right Column: Bio & Core Interests */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="lg:col-span-7"
+            >
+              <div className="flex items-center space-x-2 mb-6">
+                <span className="h-px w-8 bg-indigo-500" />
+                <p className="text-sm font-bold tracking-[0.2em] text-indigo-500 uppercase">
+                  Engineering Mindset
+                </p>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight">
+                Building{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-sky-500">
+                  Scalable
+                </span>{" "}
+                ML &amp; Data Systems.
+              </h2>
+              <div className="text-slate-600 space-y-4">
+                <p className="leading-relaxed font-medium text-slate-800 text-xl">
+                  I focus on building intelligent systems at the intersection of machine learning and data engineering,
+                  designing high-throughput distributed pipelines and deploying production-ready models that solve complex real-world challenges.
+                </p>
+                <p className="leading-relaxed">
+                  My goal is to develop production-ready machine learning workflows supported by reliable
+                  data infrastructure, modern backend systems, and scalable cloud architectures.
+                </p>
+              </div>
+
+              {/* Dynamic Interest Areas */}
+              <div className="mt-8 pt-8 border-t border-slate-100">
+                <div className="flex items-center gap-2 mb-5">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Particularly Interested In
                   </span>
                 </div>
-                <ul className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { icon: GitMerge, text: "MLOps & Automation", color: "text-rose-500", bg: "bg-rose-500/10" },
                     { icon: Terminal, text: "Data Engineering Pipelines", color: "text-sky-500", bg: "bg-sky-500/10" },
@@ -214,17 +306,23 @@ export default function AboutSection() {
                     { icon: Database, text: "Distributed Data Processing", color: "text-amber-500", bg: "bg-amber-500/10" },
                     { icon: Zap, text: "Backend Infrastructure", color: "text-cyan-500", bg: "bg-cyan-500/10" },
                   ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-4">
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: i * 0.05 }}
+                      className="flex items-center gap-4 p-3 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 hover:border-slate-200 transition-all duration-300"
+                    >
                       <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${item.bg} ${item.color}`}>
                         <item.icon size={16} strokeWidth={2.5} />
                       </div>
                       <span className="text-slate-700 font-semibold text-sm">{item.text}</span>
-                    </li>
+                    </motion.div>
                   ))}
-                </ul>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -274,8 +372,8 @@ export default function AboutSection() {
               {[
                 { label: "Models Deployed", value: "12+", color: "#818cf8" },
                 { label: "Pipeline Uptime", value: "99.9%", color: "#10b981" },
-                { label: "Avg Latency",     value: "< 100ms", color: "#0ea5e9" },
-                { label: "Data Processed",  value: "10TB+",  color: "#f59e0b" },
+                { label: "Avg Latency", value: "< 100ms", color: "#0ea5e9" },
+                { label: "Data Processed", value: "10TB+", color: "#f59e0b" },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}
@@ -332,7 +430,7 @@ export default function AboutSection() {
                   <div key={step} className="flex items-center gap-2 mb-2 last:mb-0">
                     <motion.div
                       className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{ background: ["#f59e0b","#818cf8","#818cf8","#10b981","#0ea5e9","#f97316"][i] }}
+                      style={{ background: ["#f59e0b", "#818cf8", "#818cf8", "#10b981", "#0ea5e9", "#f97316"][i] }}
                       animate={{ opacity: [0.4, 1, 0.4] }}
                       transition={{ duration: 1.8, delay: i * 0.25, repeat: Infinity }}
                     />
@@ -344,10 +442,10 @@ export default function AboutSection() {
 
               {/* Stack highlight */}
               {[
-                { tech: "Kafka", role: "Ingest",  color: "#f59e0b" },
+                { tech: "Kafka", role: "Ingest", color: "#f59e0b" },
                 { tech: "Spark", role: "Process", color: "#0ea5e9" },
-                { tech: "MLflow",role: "Track",   color: "#10b981" },
-                { tech: "K8s",   role: "Deploy",  color: "#2dd4bf" },
+                { tech: "MLflow", role: "Track", color: "#10b981" },
+                { tech: "K8s", role: "Deploy", color: "#2dd4bf" },
               ].map((item, i) => (
                 <motion.div
                   key={item.tech}
