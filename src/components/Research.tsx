@@ -9,7 +9,7 @@ const publications = [
     authors: ["Yohan Shanuka, J.A.D", "et al."],
     venue: "Digital Research Repository — University of Vavuniya",
     venueShort: "DRR · VAU",
-    url: "http://drr.vau.ac.lk/",
+    url: "http://drr.vau.ac.lk/handle/123456789/1355",
     year: "2024",
     type: "Research Paper",
     abstract:
@@ -21,7 +21,7 @@ const publications = [
 
 export default function Research() {
   return (
-    <section id="research" className="py-24 bg-white relative overflow-hidden">
+    <section id="publications" className="py-24 bg-white relative overflow-hidden">
       {/* Subtle background */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -44,7 +44,7 @@ export default function Research() {
             Academic Contribution
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Research
+            Publications
           </h2>
           <div className="w-20 h-1 bg-sky-500 mx-auto rounded-full mb-6" />
           <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">

@@ -3,6 +3,15 @@
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send } from "lucide-react";
 
+/* ─── LinkedIn icon ───────────────────────────────────────────────────────── */
+const LinkedinIcon = ({ size = 24, className = "" }: { size?: number; className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
 export default function ContactSection() {
   return (
     <section id="contact" className="py-24 bg-white relative">
@@ -38,6 +47,16 @@ export default function ContactSection() {
                     <div>
                       <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Location</p>
                       <p className="text-sm font-medium">Available Worldwide (Remote)</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center shrink-0">
+                      <LinkedinIcon size={18} className="text-sky-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">LinkedIn</p>
+                      <a href="https://www.linkedin.com/in/yohanshanukajay/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-sky-400 transition-colors">yohanshanukajay</a>
                     </div>
                   </div>
                 </div>

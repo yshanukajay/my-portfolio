@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useLenis } from "lenis/react";
 
 const navLinks = [
   { name: "About", href: "#about" },
   { name: "Tech Stack", href: "#stack" },
   { name: "Projects", href: "#projects" },
-  { name: "Research", href: "#research" },
+  { name: "Publications", href: "#publications" },
   { name: "Architecture", href: "#architecture" },
   { name: "Contact", href: "#contact" },
 ];
@@ -16,6 +17,7 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +26,17 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#") && lenis) {
+      e.preventDefault();
+      const targetId = href.replace("#", "");
+      const element = document.getElementById(targetId);
+      if (element) {
+        lenis.scrollTo(element, { offset: -80, duration: 1.2 });
+      }
+    }
+  };
 
   return (
     <nav
@@ -44,6 +57,7 @@ export default function Navbar() {
             <a
               key={link.name}
               href={link.href}
+              onClick={(e) => handleNavLinkClick(e, link.href)}
               className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-sky-600 hover:bg-white rounded-full transition-all"
             >
               {link.name}
@@ -75,7 +89,10 @@ export default function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    setMobileMenuOpen(false);
+                    handleNavLinkClick(e, link.href);
+                  }}
                   className="text-slate-600 font-medium hover:text-sky-600 transition-colors"
                 >
                   {link.name}

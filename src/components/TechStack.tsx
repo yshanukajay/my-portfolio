@@ -1,6 +1,6 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 /* ─── Data ──────────────────────────────────────────────────────── */
 const categories = [
@@ -110,12 +110,10 @@ function ToolCard({
 }) {
   return (
     <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.92 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.88 }}
-      transition={{ duration: 0.3, delay }}
-      whileHover={{ y: -3, transition: { duration: 0.2 } }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, delay }}
+      whileHover={{ y: -3, transition: { duration: 0.15 } }}
       className="group relative flex items-center gap-3 px-4 py-3.5 rounded-xl border border-slate-200 bg-white cursor-default select-none shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200"
     >
       {/* Hover accent */}
@@ -168,6 +166,19 @@ export default function TechStack() {
       id="stack"
       className="py-24 relative overflow-hidden bg-white border-y border-slate-100"
     >
+      {/* Subtle engineering grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none select-none transition-all duration-700 ease-in-out"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, ${activeCat?.color || "#0ea5e9"}1a 1.2px, transparent 1.2px),
+            linear-gradient(to bottom, ${activeCat?.color || "#0ea5e9"}1a 1.2px, transparent 1.2px)
+          `,
+          backgroundSize: "36px 36px",
+          maskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 90%)",
+          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 90%)",
+        }}
+      />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -248,23 +259,20 @@ export default function TechStack() {
         </div>
 
         {/* Tool grid */}
-        <motion.div
-          layout
+        <div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-5xl mx-auto"
         >
-          <AnimatePresence mode="popLayout">
-            {displayTools.map((tool, i) => (
-              <ToolCard
-                key={`${tool.catId ?? "all"}-${tool.name}`}
-                name={tool.name}
-                level={tool.level}
-                color={tool.color}
-                learning={tool.learning}
-                delay={i * 0.03}
-              />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+          {displayTools.map((tool, i) => (
+            <ToolCard
+              key={`${activeId}-${tool.name}`}
+              name={tool.name}
+              level={tool.level}
+              color={tool.color}
+              learning={tool.learning}
+              delay={i * 0.02}
+            />
+          ))}
+        </div>
 
         {/* Footer note */}
         <motion.p

@@ -2,13 +2,33 @@
 
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState, useRef, useMemo } from "react";
-import { ArrowRight, Download, Database, Wind, Layers, Network, type LucideIcon } from "lucide-react";
+import { ArrowRight, Database, Wind, Layers, Network, type LucideIcon } from "lucide-react";
 import HeroDiagramCarousel from "./HeroDiagramCarousel";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
 const GithubIcon = ({ size = 24, className = "" }: { size?: number; className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+  </svg>
+);
+
+/* ─── LinkedIn icon ───────────────────────────────────────────────────────── */
+const LinkedinIcon = ({ size = 24, className = "" }: { size?: number; className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
+/* ─── CV icon ─────────────────────────────────────────────────────────────── */
+const CvIcon = ({ size = 24, className = "" }: { size?: number; className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+    <path d="M10 9H8" />
+    <path d="M16 13H8" />
+    <path d="M16 17H8" />
   </svg>
 );
 
@@ -468,23 +488,32 @@ export default function HeroSection() {
               </div>
             </MagneticButton>
 
-            {/* Secondary Buttons */}
             <MagneticButton
               href="#"
-              className="group relative px-6 py-3.5 bg-white border border-slate-200 text-slate-700 rounded-[13px] font-medium hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.1)] transition-all flex items-center gap-2"
+              className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-emerald-600 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all"
+              aria-label="View Resume"
             >
-              <span className="relative z-10">Download Resume</span>
-              <Download size={18} className="relative z-10 group-hover:-translate-y-1 transition-transform duration-300" />
+              <CvIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>
 
             <MagneticButton
               href="https://github.com/yshanukajay"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative px-6 py-3.5 bg-slate-900 border border-slate-800 text-white rounded-[13px] font-medium hover:bg-slate-800 hover:border-sky-500/40 hover:shadow-[0_0_24px_rgba(14,165,233,0.2)] transition-all flex items-center gap-2"
+              className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(15,23,42,0.08)] transition-all"
+              aria-label="GitHub Profile"
             >
-              <GithubIcon size={18} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
-              <span className="relative z-10">GitHub</span>
+              <GithubIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
+            </MagneticButton>
+
+            <MagneticButton
+              href="https://www.linkedin.com/in/yohanshanukajay/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-[#0077b5] hover:border-slate-300 hover:shadow-[0_0_20px_rgba(0,119,181,0.15)] transition-all"
+              aria-label="LinkedIn Profile"
+            >
+              <LinkedinIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>
           </div>
         </motion.div>

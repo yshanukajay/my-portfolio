@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Terminal } from "lucide-react";
+import { useLenis } from "lenis/react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface HistoryLine {
@@ -26,9 +27,10 @@ const COMMANDS: Record<
         line("success", "│  about       → About me                 │"),
         line("success", "│  projects    → View projects            │"),
         line("success", "│  skills      → Tech stack               │"),
-        line("success", "│  research    → Publications & research  │"),
+        line("success", "│  publications → Research publications    │"),
         line("success", "│  contact     → Get in touch             │"),
         line("success", "│  certifications → Certifications        │"),
+        line("success", "│  linkedin    → Open LinkedIn profile    │"),
         line("info", "├─────────────────────────────────────────┤"),
         line("output", "│  clear       → Clear terminal           │"),
         line("output", "│  whoami      → Who am I?                │"),
@@ -76,15 +78,26 @@ const COMMANDS: Record<
       scrollTo: "stack",
     }),
   },
-  research: {
-    description: "Navigate to Research section",
+  publications: {
+    description: "Navigate to Publications section",
     action: () => ({
       lines: [
-        line("success", "→ Navigating to /research"),
+        line("success", "→ Navigating to /publications"),
         line("output", "  Fetching publication data..."),
         line("output", "  [✓] Real-Time Cattle Monitoring IoT collar research paper"),
       ],
-      scrollTo: "research",
+      scrollTo: "publications",
+    }),
+  },
+  research: {
+    description: "Navigate to Publications section",
+    action: () => ({
+      lines: [
+        line("success", "→ Navigating to /publications"),
+        line("output", "  Fetching publication data..."),
+        line("output", "  [✓] Real-Time Cattle Monitoring IoT collar research paper"),
+      ],
+      scrollTo: "publications",
     }),
   },
   contact: {
@@ -107,6 +120,20 @@ const COMMANDS: Record<
       ],
       scrollTo: "certifications",
     }),
+  },
+  linkedin: {
+    description: "Open LinkedIn profile",
+    action: () => {
+      if (typeof window !== "undefined") {
+        window.open("https://www.linkedin.com/in/yohanshanukajay/", "_blank", "noopener,noreferrer");
+      }
+      return {
+        lines: [
+          line("success", "→ Opening LinkedIn profile in a new tab..."),
+          line("output", "  https://www.linkedin.com/in/yohanshanukajay/"),
+        ],
+      };
+    },
   },
   whoami: {
     description: "Who is this?",
@@ -143,6 +170,7 @@ const BOOT_LINES: HistoryLine[] = [
 
 // ── Component ────────────────────────────────────────────────────────────────
 export default function TerminalWidget() {
+  const lenis = useLenis();
   const [open, setOpen] = useState(false);
   const [minimised, setMinimised] = useState(false);
   const [input, setInput] = useState("");
@@ -185,9 +213,14 @@ export default function TerminalWidget() {
 
   const scrollToSection = useCallback((id: string) => {
     setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const element = document.getElementById(id);
+      if (element && lenis) {
+        lenis.scrollTo(element, { offset: -80, duration: 1.2 });
+      } else {
+        element?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }, 300);
-  }, []);
+  }, [lenis]);
 
   const runCommand = useCallback(
     (raw: string) => {

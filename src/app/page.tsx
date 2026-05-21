@@ -50,8 +50,13 @@ export default function Home() {
 
       <TerminalWidget />
 
-      <footer className="py-8 bg-white border-t border-slate-100 text-center text-slate-500 text-sm">
+      <footer className="py-8 bg-white border-t border-slate-100 text-center text-slate-500 text-sm flex flex-col items-center gap-2">
         <p>&copy; {new Date().getFullYear()} Yohan Shanuka — Engineering intelligent systems.</p>
+        <div className="flex items-center gap-4 mt-1">
+          <a href="https://github.com/yshanukajay" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors font-medium">GitHub</a>
+          <span className="text-slate-300">|</span>
+          <a href="https://www.linkedin.com/in/yohanshanukajay/" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors font-medium">LinkedIn</a>
+        </div>
       </footer>
     </main>
   );

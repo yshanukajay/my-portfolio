@@ -246,7 +246,7 @@ export default function HeroDiagramCarousel() {
   const phase = PHASES[activeIdx];
 
   return (
-    <div className="relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center">
+    <div className="group relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center">
 
 
 
@@ -331,7 +331,7 @@ export default function HeroDiagramCarousel() {
       </div>
 
       {/* --- Progress Indicator --- */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 z-10">
+      <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-4 z-20 py-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300 ease-in-out cursor-pointer">
         {PHASES.map((p, i) => (
           <div
             key={p.id}

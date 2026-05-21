@@ -230,8 +230,18 @@ export default function AboutSection() {
       </div>
 
       {/* Core Expertise — full-bleed with side decorations */}
-      <div className="w-full bg-slate-50 border-y border-slate-100 py-24 overflow-hidden">
-        <div className="container mx-auto px-6 lg:px-12">
+      <div className="w-full bg-slate-50 border-y border-slate-100 py-24 overflow-hidden relative">
+        {/* Subtle engineering dot pattern background */}
+        <div
+          className="absolute inset-0 pointer-events-none select-none opacity-[0.18]"
+          style={{
+            backgroundImage: "radial-gradient(#6366f1 1.5px, transparent 1.5px)",
+            backgroundSize: "24px 24px",
+            maskImage: "radial-gradient(circle at 50% 50%, black, transparent 85%)",
+            WebkitMaskImage: "radial-gradient(circle at 50% 50%, black, transparent 85%)",
+          }}
+        />
+        <div className="container mx-auto px-6 lg:px-12 relative z-10">
 
           {/* Section header */}
           <motion.div
