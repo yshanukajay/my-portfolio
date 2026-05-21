@@ -147,11 +147,11 @@ function NodeComponent({ node, id }: { node: NodeDef; id: string }) {
       />
       {/* Floating Free Text */}
       <div className="absolute top-6 flex flex-col items-center w-[160px] text-center" style={{ WebkitFontSmoothing: "antialiased" }}>
-        <span className="text-slate-600 font-bold text-[14px] leading-tight tracking-wide drop-shadow-sm">
+        <span className="text-slate-700 font-bold text-[14px] leading-tight tracking-wide drop-shadow-sm">
           {node.label}
         </span>
         <span
-          className="text-[10px] font-bold font-mono leading-none mt-1 uppercase tracking-widest opacity-90 drop-shadow-sm"
+          className="text-[10px] font-bold font-mono leading-none mt-1 uppercase tracking-widest opacity-95 drop-shadow-sm"
           style={{ color: node.color }}
         >
           {node.sub}
@@ -172,6 +172,7 @@ function getPath(x1: number, y1: number, x2: number, y2: number) {
 }
 
 function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; nodes: Record<string, NodeDef>; activeColor: string }) {
+  if (!conn) return null;
   const fromNode = nodes[conn.from];
   const toNode = nodes[conn.to];
 
@@ -190,6 +191,7 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
         className="connector-base"
         strokeWidth={1.5}
         fill="none"
+        style={{ stroke: `${activeColor}20` }}
         animate={{ d }}
         transition={{ type: "spring", stiffness: 50, damping: 14, mass: 1 }}
       />
@@ -200,7 +202,10 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
         fill="none"
         strokeLinecap="round"
         strokeDasharray={flowDash}
-        style={{ filter: `drop-shadow(0px 0px 8px ${activeColor})` }}
+        style={{ 
+          stroke: activeColor,
+          filter: `drop-shadow(0px 0px 8px ${activeColor})` 
+        }}
         animate={{
           d,
           strokeDashoffset: flowOffset
@@ -214,41 +219,60 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
   );
 }
 
-export default function HeroDiagramCarousel() {
+interface HeroDiagramCarouselProps {
+  activeIdx?: number;
+  setActiveIdx?: (val: number | ((prev: number) => number)) => void;
+  progress?: number;
+  setProgress?: (val: number | ((prev: number) => number)) => void;
+}
+
+export default function HeroDiagramCarousel({
+  activeIdx: controlledActiveIdx,
+  setActiveIdx: controlledSetActiveIdx,
+  progress: controlledProgress,
+  setProgress: controlledSetProgress
+}: HeroDiagramCarouselProps = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [progress, setProgress] = useState(0);
+
+  const [localActiveIdx, localSetActiveIdx] = useState(0);
+  const [localProgress, localSetProgress] = useState(0);
+
+  const activeIdx = controlledActiveIdx !== undefined ? controlledActiveIdx : localActiveIdx;
+  const setActiveIdx = controlledSetActiveIdx || localSetActiveIdx;
+  const progress = controlledProgress !== undefined ? controlledProgress : localProgress;
+  const setProgress = controlledSetProgress || localSetProgress;
+
   const DURATION = 8000;
 
   useEffect(() => {
+    if (controlledActiveIdx !== undefined) return;
+
+    const startTimer = () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      setProgress(0);
+      const tick = 50;
+      const steps = DURATION / tick;
+      let step = 0;
+      timerRef.current = setInterval(() => {
+        step++;
+        setProgress((step / steps) * 100);
+        if (step >= steps) {
+          setActiveIdx((prev) => (prev + 1) % PHASES.length);
+        }
+      }, tick);
+    };
+
     startTimer();
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [activeIdx]);
-
-  const startTimer = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    setProgress(0);
-    const tick = 50;
-    const steps = DURATION / tick;
-    let step = 0;
-    timerRef.current = setInterval(() => {
-      step++;
-      setProgress((step / steps) * 100);
-      if (step >= steps) {
-        setActiveIdx((prev) => (prev + 1) % PHASES.length);
-      }
-    }, tick);
-  };
+  }, [activeIdx, controlledActiveIdx, setActiveIdx, setProgress]);
 
   const phase = PHASES[activeIdx];
 
   return (
     <div className="group relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center">
-
-
 
       {/* --- Header Content --- */}
       <div className="absolute top-6 left-8 z-10 pointer-events-none">

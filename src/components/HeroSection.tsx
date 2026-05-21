@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState, useRef, useMemo } from "react";
-import { ArrowRight, Database, Wind, Layers, Network, type LucideIcon } from "lucide-react";
+import { ArrowRight, Database, Wind, Layers, Network, Play, Pause, RotateCcw, Terminal, type LucideIcon } from "lucide-react";
 import HeroDiagramCarousel from "./HeroDiagramCarousel";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
@@ -45,23 +45,56 @@ const titles = [
 /* ─── Diagram slides config (for phase chips only) ───────────────────────── */
 const SLIDES = [
   { id: "data", phase: "Phase 1", color: "#0ea5e9" },
-  { id: "ml", phase: "Phase 2", color: "#818cf8" },
-  { id: "mlops", phase: "Phase 3", color: "#2dd4bf" },
+  { id: "ml", phase: "Phase 2", color: "#6366f1" },
+  { id: "mlops", phase: "Phase 3", color: "#14b8a6" },
 ];
 
-const SLIDE_DURATION = 7; // seconds per slide
+const SLIDE_DURATION = 8; // seconds per slide (matches carousel DURATION)
 
-const HERO_METRICS: {
-  label: string;
+const getTagStyles = (tag: string) => {
+  switch (tag) {
+    case "SYS": return "bg-slate-800/80 text-slate-300 border border-slate-700/40";
+    case "DB":  return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+    case "KFK": return "bg-orange-500/10 text-orange-400 border border-orange-500/20";
+    case "SPK": return "bg-sky-500/10 text-sky-400 border border-sky-500/20";
+    case "MDL": return "bg-violet-500/10 text-violet-400 border border-violet-500/20";
+    case "DKR": return "bg-blue-500/10 text-blue-400 border border-blue-500/20";
+    case "K8S": return "bg-teal-500/10 text-teal-400 border border-teal-500/20";
+    case "GTW": return "bg-pink-500/10 text-pink-400 border border-pink-500/20";
+    default:    return "bg-slate-800 text-slate-400";
+  }
+};
+
+interface LogLine {
+  time: string;
   tag: string;
+  msg: string;
   color: string;
-  href: string;
-  icon: LucideIcon;
-}[] = [
-  { label: "Kafka Streaming", tag: "Realtime Ingestion", color: "#f97316", icon: Database, href: "#stack" },
-  { label: "Airflow DAGs", tag: "Workflow Orchestration", color: "#ef4444", icon: Wind, href: "#stack" },
-  { label: "Dockerized ML Systems", tag: "Container Deployments", color: "#3b82f6", icon: Layers, href: "#architecture" },
-  { label: "Distributed Pipelines", tag: "Cloud-Native Arch", color: "#6366f1", icon: Network, href: "#architecture" },
+  delay: number;
+}
+
+const PIPELINE_LOGS: LogLine[] = [
+  { time: "18:45:21", tag: "SYS", msg: "python run_pipeline.py --env prod", color: "text-slate-400 font-semibold", delay: 100 },
+  { time: "18:45:21", tag: "SYS", msg: "checking database connection pools...", color: "text-slate-400/80", delay: 350 },
+  { time: "18:45:21", tag: "DB",  msg: "connection pool established [16 active]", color: "text-emerald-400", delay: 200 },
+  { time: "18:45:22", tag: "KFK", msg: "bootstrap servers: kafka-cluster.prod:9092", color: "text-slate-500", delay: 150 },
+  { time: "18:45:22", tag: "KFK", msg: "listening on 'user-events' [partition 0-7]", color: "text-cyan-400", delay: 250 },
+  { time: "18:45:23", tag: "KFK", msg: "message stream: ACTIVE (1.2M msg/sec)", color: "text-emerald-400 font-semibold", delay: 400 },
+  { time: "18:45:23", tag: "SPK", msg: "initializing Spark session ID: spark-ml-executor", color: "text-slate-500", delay: 200 },
+  { time: "18:45:24", tag: "SPK", msg: "reading batch #812,042 [Delta Lake, 12.4 GB]", color: "text-slate-300", delay: 350 },
+  { time: "18:45:24", tag: "SPK", msg: "feature scaling & outlier removal: OK", color: "text-slate-300", delay: 250 },
+  { time: "18:45:25", tag: "SPK", msg: "cache hit: feature store populated (latency < 2ms)", color: "text-emerald-400", delay: 300 },
+  { time: "18:45:25", tag: "MDL", msg: "training: gradient boosted trees...", color: "text-indigo-400 font-semibold", delay: 450 },
+  { time: "18:45:26", tag: "MDL", msg: "epoch 1/3: train_loss: 0.284 | val_loss: 0.312", color: "text-amber-500 font-mono", delay: 450 },
+  { time: "18:45:26", tag: "MDL", msg: "epoch 2/3: train_loss: 0.198 | val_loss: 0.204", color: "text-amber-500 font-mono", delay: 400 },
+  { time: "18:45:27", tag: "MDL", msg: "epoch 3/3: train_loss: 0.082 | val_loss: 0.091", color: "text-amber-500 font-mono", delay: 400 },
+  { time: "18:45:27", tag: "MDL", msg: "metrics: Accuracy: 98.42% | ROC-AUC: 0.991", color: "text-emerald-400 font-bold", delay: 350 },
+  { time: "18:45:28", tag: "DKR", msg: "building container image: ml-service:v2.4.1", color: "text-blue-400", delay: 250 },
+  { time: "18:45:28", tag: "DKR", msg: "pushing to ECR registry... Done.", color: "text-slate-400/80", delay: 300 },
+  { time: "18:45:29", tag: "K8S", msg: "rolling update: deployment/ml-service [3 replicas]", color: "text-teal-400", delay: 400 },
+  { time: "18:45:29", tag: "K8S", msg: "health checks: SUCCESS (canary routing 100%)", color: "text-emerald-400 font-semibold", delay: 450 },
+  { time: "18:45:30", tag: "GTW", msg: "latency p95: 18ms | status: ACTIVE", color: "text-cyan-400 font-semibold", delay: 300 },
+  { time: "18:45:30", tag: "SYS", msg: "PIPELINE SUCCEEDED. MONITORING ALIVE.", color: "text-emerald-400 font-bold", delay: 400 }
 ];
 
 /* ─── Interactive Geometric System Background (Mandala / Rangoli Inspired) ─── */
@@ -326,6 +359,42 @@ export default function HeroSection() {
   // The HeroDiagramCarousel manages its own slideIndex/progress internally.
   // We still keep a lightweight local timer to sync the phase chips + title color.
 
+  const [displayedLogs, setDisplayedLogs] = useState<LogLine[]>([]);
+  const [logIndex, setLogIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [speed, setSpeed] = useState<1 | 2 | 5>(1);
+  const terminalBodyRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom of terminal container only (avoids page scroll hijacking)
+  useEffect(() => {
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+    }
+  }, [displayedLogs]);
+
+  // Log streaming typing simulation effect
+  useEffect(() => {
+    if (!isPlaying) return;
+    if (logIndex >= PIPELINE_LOGS.length) {
+      // Pause at the end for a few seconds before restarting loop
+      const timeout = setTimeout(() => {
+        setDisplayedLogs([]);
+        setLogIndex(0);
+      }, 4000);
+      return () => clearTimeout(timeout);
+    }
+
+    const currentLog = PIPELINE_LOGS[logIndex];
+    const scaledDelay = currentLog.delay / speed;
+
+    const timer = setTimeout(() => {
+      setDisplayedLogs((prev) => [...prev, currentLog]);
+      setLogIndex((prev) => prev + 1);
+    }, scaledDelay);
+
+    return () => clearTimeout(timer);
+  }, [logIndex, isPlaying, speed]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTitleIndex((p) => (p + 1) % titles.length);
@@ -403,65 +472,173 @@ export default function HeroSection() {
             Engineering scalable data pipelines, MLOps workflows, and cloud-native ML systems.
           </p>
 
-          {/* ── Mini Metrics Panel ── */}
+          {/* ── Simulated Pipeline Micro-Terminal Console ── */}
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md"
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0,
+              borderColor: `${slide.color}25`,
+              boxShadow: `0 20px 50px rgba(0,0,0,0.35), 0 0 25px ${slide.color}15`,
+            }}
+            transition={{ 
+              opacity: { duration: 0.7, delay: 0.15 },
+              y: { duration: 0.7, delay: 0.15 },
+              borderColor: { duration: 0.8 },
+              boxShadow: { duration: 0.8 }
+            }}
+            className="w-full max-w-[420px] bg-slate-950/85 backdrop-blur-md border rounded-2xl flex flex-col overflow-hidden font-mono text-[10.5px] leading-relaxed relative"
           >
-            {HERO_METRICS.map((metric) => {
-              const Icon = metric.icon;
-              return (
-                <motion.a
-                  key={metric.label}
-                  href={metric.href}
-                  variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
-                  className="group flex items-start gap-3 px-3.5 py-3 rounded-xl border border-slate-200/80 bg-white/70 backdrop-blur-sm hover:bg-white transition-all duration-200"
-                  style={
-                    {
-                      "--metric": metric.color,
-                    } as React.CSSProperties
-                  }
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget;
-                    el.style.borderColor = `color-mix(in srgb, ${metric.color} 35%, transparent)`;
-                    el.style.boxShadow = `0 4px 20px color-mix(in srgb, ${metric.color} 14%, transparent)`;
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget;
-                    el.style.borderColor = "";
-                    el.style.boxShadow = "";
-                  }}
-                >
-                  <span
-                    className="relative flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200"
-                    style={{ backgroundColor: `${metric.color}14`, color: metric.color }}
+            {/* Top delicate neon light glow effect */}
+            <div 
+              className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-sky-500/40 to-transparent transition-colors duration-500" 
+              style={{ background: `linear-gradient(90deg, transparent, ${slide.color}60, transparent)` }}
+            />
+
+            {/* Terminal Header Chrome */}
+            <div className="flex items-center justify-between px-3.5 py-2 border-b border-slate-900/60 bg-slate-950/40 select-none">
+              {/* Left: window dots */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-[#ff5f56]/90 shadow-[0_0_6px_rgba(255,95,86,0.4)]" />
+                <div className="w-2 h-2 rounded-full bg-[#ffbd2e]/90 shadow-[0_0_6px_rgba(255,189,46,0.4)]" />
+                <div className="w-2 h-2 rounded-full bg-[#27c93f]/90 shadow-[0_0_6px_rgba(39,201,63,0.4)]" />
+              </div>
+              {/* Center: title */}
+              <div className="text-slate-400 font-medium text-[9px] tracking-wide flex items-center gap-1.5">
+                <Terminal size={10} className="opacity-80" style={{ color: slide.color }} />
+                <span>pipeline-runner</span>
+              </div>
+              {/* Right: status indicator */}
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  {isPlaying && logIndex < PIPELINE_LOGS.length ? (
+                    <>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: slide.color }} />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: slide.color }} />
+                    </>
+                  ) : (
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" />
+                  )}
+                </span>
+                <span className="text-[8.5px] font-bold uppercase tracking-wider transition-colors duration-500" style={{ color: isPlaying && logIndex < PIPELINE_LOGS.length ? slide.color : "#f59e0b" }}>
+                  {logIndex >= PIPELINE_LOGS.length ? "IDLE" : isPlaying ? "RUNNING" : "PAUSED"}
+                </span>
+              </div>
+            </div>
+
+            {/* Tab header bar */}
+            <div className="flex items-center bg-slate-950/60 border-b border-slate-900/60 text-[9px] text-slate-500 select-none">
+              <div 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950 border-r border-slate-900 text-slate-300 border-t"
+                style={{ borderTopColor: slide.color }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>pipeline.py</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 border-r border-slate-900 hover:bg-slate-900/40 hover:text-slate-400 cursor-pointer">
+                <span>canary_monitor.log</span>
+              </div>
+              <div className="flex-1" />
+            </div>
+
+            {/* Loop progress line */}
+            <div className="w-full h-[1px] bg-slate-900 relative select-none">
+              <motion.div
+                className="absolute top-0 left-0 bottom-0"
+                style={{ backgroundColor: slide.color }}
+                animate={{ width: `${(logIndex / PIPELINE_LOGS.length) * 100}%` }}
+                transition={{ duration: 0.1, ease: "linear" }}
+              />
+            </div>
+
+            {/* Terminal Body */}
+            <div ref={terminalBodyRef} className="h-44 overflow-y-auto px-3.5 py-2.5 space-y-1.5 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+              {displayedLogs.map((log, idx) => (
+                <div key={idx} className="flex items-start gap-2 py-0.5 leading-relaxed font-mono">
+                  {/* Timestamp */}
+                  <span className="text-slate-600 select-none text-[9px] shrink-0">{log.time}</span>
+                  {/* Tag badge */}
+                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider select-none shrink-0 ${getTagStyles(log.tag)}`}>
+                    {log.tag}
+                  </span>
+                  {/* Message */}
+                  <span className={`text-[10px] break-all ${log.color}`}>
+                    {log.msg}
+                  </span>
+                </div>
+              ))}
+              
+              {isPlaying && logIndex < PIPELINE_LOGS.length && (
+                <div className="flex items-center gap-2 py-0.5 leading-relaxed font-mono select-none">
+                  <span className="text-slate-600 text-[9px] shrink-0">{PIPELINE_LOGS[logIndex]?.time}</span>
+                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider shrink-0 ${getTagStyles(PIPELINE_LOGS[logIndex]?.tag)}`}>
+                    {PIPELINE_LOGS[logIndex]?.tag}
+                  </span>
+                  <span className="text-slate-500 animate-pulse text-[10px] italic">executing...</span>
+                  <motion.span 
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ duration: 0.8, repeat: Infinity }}
+                    className="w-1.5 h-3.5"
+                    style={{ backgroundColor: slide.color }}
+                  />
+                </div>
+              )}
+              {logIndex >= PIPELINE_LOGS.length && (
+                <div className="text-slate-500 italic text-[9.5px] pt-1 flex items-center gap-2 select-none">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-slate-500" />
+                  </span>
+                  <span>Restarting execution loop in 4s...</span>
+                </div>
+              )}
+            </div>
+
+            {/* Terminal Control Footer Strip */}
+            <div className="flex items-center justify-between px-3.5 py-1.5 border-t border-slate-900 bg-slate-950/20 select-none">
+              {/* Play / Pause Toggle */}
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 transition-all duration-300 text-[9px]"
+                title={isPlaying ? "Pause Stream" : "Resume Stream"}
+              >
+                {isPlaying ? <Pause size={9} style={{ color: slide.color }} /> : <Play size={9} style={{ color: slide.color }} />}
+                <span>{isPlaying ? "Pause" : "Resume"}</span>
+              </button>
+
+              {/* Speed Multiplier */}
+              <div className="flex items-center gap-1 text-[9px]">
+                <span className="text-slate-500 mr-1 select-none">Speed:</span>
+                {([1, 2, 5] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSpeed(s)}
+                    className="px-1.5 py-0.5 rounded transition-all font-semibold"
+                    style={{
+                      backgroundColor: speed === s ? `${slide.color}15` : "transparent",
+                      color: speed === s ? slide.color : "#64748b",
+                      border: speed === s ? `1px solid ${slide.color}30` : "1px solid transparent"
+                    }}
                   >
-                    <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 animate-ping"
-                      style={{ backgroundColor: `${metric.color}20` }} />
-                    <Icon size={15} className="relative z-10" strokeWidth={2.25} />
-                  </span>
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <span className="text-[13px] font-semibold text-slate-800 leading-tight group-hover:text-slate-900">
-                      {metric.label}
-                    </span>
-                    <span
-                      className="text-[10px] font-semibold tracking-wide uppercase mt-0.5"
-                      style={{ color: metric.color }}
-                    >
-                      {metric.tag}
-                    </span>
-                  </div>
-                  <span className="relative flex-shrink-0 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span
-                      className="block w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: metric.color }}
-                    />
-                  </span>
-                </motion.a>
-              );
-            })}
+                    {s}x
+                  </button>
+                ))}
+              </div>
+
+              {/* Restart Button */}
+              <button
+                onClick={() => {
+                  setDisplayedLogs([]);
+                  setLogIndex(0);
+                  setIsPlaying(true);
+                }}
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 transition-all duration-300 text-[9px]"
+                title="Restart Pipeline"
+              >
+                <RotateCcw size={9} style={{ color: slide.color }} />
+                <span>Restart</span>
+              </button>
+            </div>
           </motion.div>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -525,7 +702,12 @@ export default function HeroSection() {
           transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
           className="relative hidden lg:flex flex-col h-[540px] w-full"
         >
-          <HeroDiagramCarousel />
+          <HeroDiagramCarousel
+            activeIdx={slideIndex}
+            setActiveIdx={setSlideIndex}
+            progress={progress}
+            setProgress={setProgress}
+          />
         </motion.div>
 
       </div>

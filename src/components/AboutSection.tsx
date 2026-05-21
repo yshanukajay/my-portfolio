@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, Cpu, Cloud, GitMerge, Database, Zap, type LucideIcon } from "lucide-react";
 
 
@@ -16,12 +17,12 @@ type Domain = {
 };
 
 const interests = [
-  { icon: GitMerge, text: "MLOps & Automation", accent: "#f43f5e", glow: "rgba(244,63,94,0.35)" },
-  { icon: Terminal, text: "Data Engineering Pipelines", accent: "#38bdf8", glow: "rgba(56,189,248,0.35)" },
-  { icon: Cpu, text: "Machine Learning Systems", accent: "#818cf8", glow: "rgba(129,140,248,0.35)" },
-  { icon: Cloud, text: "Cloud-Based Systems", accent: "#34d399", glow: "rgba(52,211,153,0.35)" },
-  { icon: Database, text: "Distributed Data Processing", accent: "#fbbf24", glow: "rgba(251,191,36,0.35)" },
-  { icon: Zap, text: "Backend Infrastructure", accent: "#22d3ee", glow: "rgba(34,211,238,0.35)" },
+  { icon: GitMerge, text: "MLOps & Automation", accent: "#f43f5e" },
+  { icon: Terminal, text: "Data Engineering Pipelines", accent: "#0ea5e9" },
+  { icon: Cpu, text: "Machine Learning Systems", accent: "#6366f1" },
+  { icon: Cloud, text: "Cloud-Based Systems", accent: "#10b981" },
+  { icon: Database, text: "Distributed Data Processing", accent: "#f59e0b" },
+  { icon: Zap, text: "Backend Infrastructure", accent: "#06b6d4" },
 ] as const;
 
 const domains: Domain[] = [
@@ -155,6 +156,33 @@ function DomainCard({ domain, index }: { domain: Domain; index: number }) {
 }
 
 export default function AboutSection() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const DURATION = 6000; // 6 seconds per expertise tab
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const tick = 50; // ms
+    const increment = (tick / DURATION) * 100;
+
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          setActiveTab((curr) => (curr + 1) % domains.length);
+          return 0;
+        }
+        return prev + increment;
+      });
+    }, tick);
+
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  const activeDomain = domains[activeTab];
+  const DomainIcon = activeDomain.icon;
+
   return (
     <section id="about" className="relative">
       {/* Engineering Mindset — white */}
@@ -298,56 +326,52 @@ export default function AboutSection() {
                 </p>
               </div>
 
-              {/* Particularly Interested In — dark panel */}
+              {/* Particularly Interested In — premium light panel */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="mt-10 relative rounded-3xl overflow-hidden"
-                style={{
-                  background: "linear-gradient(145deg, #0a0f1a 0%, #0d1117 45%, #111827 100%)",
-                  boxShadow:
-                    "0 0 0 1px rgba(255,255,255,0.06), 0 24px 48px -12px rgba(0,0,0,0.45), 0 0 80px -20px rgba(99,102,241,0.25)",
-                }}
+                className="mt-10 relative rounded-3xl overflow-hidden bg-slate-50/60 border border-slate-200/80 shadow-sm"
               >
-                {/* Ambient glow layers */}
+                {/* Soft ambient gradient overlay */}
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
                     background:
-                      "radial-gradient(ellipse 80% 60% at 0% 100%, rgba(99,102,241,0.18) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 100% 0%, rgba(14,165,233,0.12) 0%, transparent 50%)",
+                      "radial-gradient(ellipse 60% 50% at 0% 100%, rgba(99,102,241,0.03) 0%, transparent 100%), radial-gradient(ellipse 50% 40% at 100% 0%, rgba(14,165,233,0.03) 0%, transparent 100%)",
                   }}
                 />
+                {/* Technical dot matrix background pattern */}
                 <div
-                  className="absolute inset-0 opacity-[0.35] pointer-events-none"
+                  className="absolute inset-0 opacity-[0.08] pointer-events-none"
                   style={{
-                    backgroundImage: "radial-gradient(rgba(148,163,184,0.15) 1px, transparent 1px)",
-                    backgroundSize: "22px 22px",
-                    maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
-                    WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+                    backgroundImage: "radial-gradient(rgba(71,85,105,0.15) 1.5px, transparent 1.5px)",
+                    backgroundSize: "20px 20px",
+                    maskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
+                    WebkitMaskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
                   }}
                 />
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+                
+                {/* Top border accent line */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
 
                 <div className="relative px-6 py-7 md:px-8 md:py-8">
                   <div className="flex items-center justify-between gap-4 mb-6">
-                    <div className="flex items-center gap-3">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
-                      </span>
-                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+                    <div className="flex items-center gap-2.5">
+                      {/* Professional status dot (no neon pulse, clean state) */}
+                      <span className="flex h-2 w-2 rounded-full bg-indigo-500" />
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
                         Particularly Interested In
                       </span>
                     </div>
-                    <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 border border-white/10 bg-white/5">
-                      <span className="w-1 h-1 rounded-full bg-indigo-400" />
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 border border-slate-200 bg-slate-100/80">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
                       Focus areas
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                     {interests.map((item, i) => (
                       <motion.div
                         key={item.text}
@@ -356,43 +380,38 @@ export default function AboutSection() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.35, delay: 0.08 + i * 0.05 }}
                         whileHover={{ y: -2 }}
-                        className="group relative flex items-center gap-4 p-4 rounded-2xl cursor-default transition-all duration-300"
-                        style={{
-                          background: "rgba(255,255,255,0.03)",
-                          border: "1px solid rgba(255,255,255,0.07)",
-                        }}
+                        className="group relative flex items-center gap-4 p-4 rounded-2xl cursor-default transition-all duration-300 bg-white border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-slate-300/80"
                       >
+                        {/* Hover subtle background accent indicator */}
                         <div
-                          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-[0.02] transition-opacity duration-300 pointer-events-none"
                           style={{
-                            background: `radial-gradient(ellipse at left center, ${item.glow} 0%, transparent 70%)`,
-                            boxShadow: `inset 0 0 0 1px ${item.accent}30`,
+                            backgroundColor: item.accent,
                           }}
                         />
+                        {/* Icon Wrapper */}
                         <div
-                          className="relative w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105"
+                          className="relative w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-105"
                           style={{
-                            background: `${item.accent}18`,
+                            background: `${item.accent}0a`, // ~4% opacity
                             color: item.accent,
-                            boxShadow: `0 0 20px -4px ${item.glow}`,
                           }}
                         >
                           <item.icon size={18} strokeWidth={2.25} />
                         </div>
-                        <span className="relative text-sm font-semibold text-slate-200 group-hover:text-white transition-colors duration-300">
+                        <span className="relative text-sm font-semibold text-slate-700 group-hover:text-slate-900 transition-colors duration-300">
                           {item.text}
                         </span>
+                        {/* Soft right status indicator dot */}
                         <span
-                          className="relative ml-auto w-1.5 h-1.5 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
-                          style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}` }}
+                          className="relative ml-auto w-1.5 h-1.5 rounded-full opacity-30 group-hover:opacity-100 transition-opacity duration-300"
+                          style={{ backgroundColor: item.accent }}
                           aria-hidden="true"
                         />
                       </motion.div>
                     ))}
                   </div>
                 </div>
-
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-600/30 to-transparent" />
               </motion.div>
             </motion.div>
           </div>
@@ -480,11 +499,175 @@ export default function AboutSection() {
               </div>
             </motion.div>
 
-            {/* ── Center: 3 domain cards ── */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {domains.map((domain, i) => (
-                <DomainCard key={domain.title} domain={domain} index={i} />
-              ))}
+            {/* ── Center: Active Domain Tab Panel ── */}
+            <div className="flex flex-col">
+              {/* Tab Bar */}
+              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8 bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200/50 max-w-xl mx-auto w-full select-none">
+                {domains.map((dom, idx) => {
+                  const DomIcon = dom.icon;
+                  const isActive = activeTab === idx;
+                  return (
+                    <button
+                      key={dom.title}
+                      onClick={() => {
+                        setActiveTab(idx);
+                        setProgress(0);
+                      }}
+                      className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all duration-300 select-none z-10 flex-1 justify-center"
+                      style={{
+                        color: isActive ? dom.color : "#64748b"
+                      }}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeExpertiseTab"
+                          className="absolute inset-0 bg-white rounded-xl shadow-sm border border-slate-200/40 z-[-1] overflow-hidden"
+                          transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                        >
+                          <motion.div
+                            className="absolute bottom-0 left-0 h-[2.5px]"
+                            style={{ backgroundColor: dom.color }}
+                            animate={{ width: `${progress}%` }}
+                            transition={{ duration: 0.05, ease: "linear" }}
+                          />
+                        </motion.div>
+                      )}
+                      <DomIcon size={16} strokeWidth={2.25} />
+                      <span>{dom.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Card Body */}
+              <div
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                className="relative min-h-[380px] md:min-h-[290px]"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -15, scale: 0.98 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className="rounded-3xl p-6 md:p-8 bg-white border border-slate-200 shadow-md hover:shadow-lg transition-shadow duration-300 relative overflow-hidden"
+                  >
+                    {/* Corner gradient glow matching active tab color */}
+                    <div 
+                      className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[40px] pointer-events-none opacity-20"
+                      style={{ backgroundColor: activeDomain.color }}
+                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
+                      {/* Left half: Info & Pipeline Flow (7 cols) */}
+                      <div className="md:col-span-7 flex flex-col space-y-6">
+                        <div className="flex items-start gap-4">
+                          <div
+                            className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                            style={{ backgroundColor: `${activeDomain.color}12`, color: activeDomain.color }}
+                          >
+                            <DomainIcon size={22} strokeWidth={2.25} />
+                          </div>
+                          <div>
+                            <span 
+                              className="text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-0.5 rounded"
+                              style={{ backgroundColor: `${activeDomain.color}0c`, color: activeDomain.color }}
+                            >
+                              Domain Focus
+                            </span>
+                            <h3 className="font-extrabold text-slate-900 text-2xl mt-1 leading-none">{activeDomain.title}</h3>
+                            <p className="text-sm text-slate-500 mt-2.5 leading-relaxed">{activeDomain.summary}</p>
+                          </div>
+                        </div>
+
+                        {/* Pipeline Section */}
+                        <div className="pt-2">
+                          <div className="flex items-center gap-1.5 mb-3">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                              System Lifecycle Flow
+                            </span>
+                            <span className="h-px bg-slate-200 flex-1" />
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {activeDomain.flow.map((step, idx) => (
+                              <div key={step} className="flex items-center gap-2">
+                                <span
+                                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-colors duration-300"
+                                  style={{
+                                    backgroundColor: `${activeDomain.color}05`,
+                                    borderColor: `${activeDomain.color}25`,
+                                    color: activeDomain.color,
+                                  }}
+                                >
+                                  {step}
+                                </span>
+                                {idx < activeDomain.flow.length - 1 && (
+                                  <svg className="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                  </svg>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right half: Capabilities & Key Metric (5 cols) */}
+                      <div className="md:col-span-5 flex flex-col justify-between h-full space-y-6 md:space-y-0 md:h-[220px]">
+                        {/* Capabilities */}
+                        <div>
+                          <div className="flex items-center gap-1.5 mb-3">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                              Core Capabilities
+                            </span>
+                            <span className="h-px bg-slate-200 flex-1" />
+                          </div>
+                          <ul className="grid grid-cols-1 gap-2.5">
+                            {activeDomain.capabilities.map((cap) => (
+                              <li key={cap} className="flex items-center gap-2.5 text-xs font-semibold text-slate-700">
+                                <span
+                                  className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                  style={{ backgroundColor: activeDomain.color }}
+                                />
+                                {cap}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Metric Block */}
+                        <div
+                          className="flex items-center justify-between p-4 rounded-2xl border transition-colors duration-300 md:mt-auto"
+                          style={{
+                            backgroundColor: `${activeDomain.color}03`,
+                            borderColor: `${activeDomain.color}15`,
+                          }}
+                        >
+                          <div>
+                            <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-slate-400">
+                              Key Performance Index
+                            </p>
+                            <p className="text-xs font-bold text-slate-700 mt-0.5">
+                              {activeDomain.metric.label}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <span 
+                              className="text-lg font-black tracking-tight font-mono px-3 py-1 rounded-xl bg-white border border-slate-200 shadow-sm"
+                              style={{ color: activeDomain.color }}
+                            >
+                              {activeDomain.metric.value}
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* ── Right accent panel ── */}
