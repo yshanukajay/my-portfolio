@@ -44,7 +44,7 @@ export default function Research() {
             Academic Contribution
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Research &amp; Publications
+            Research
           </h2>
           <div className="w-20 h-1 bg-sky-500 mx-auto rounded-full mb-6" />
           <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">

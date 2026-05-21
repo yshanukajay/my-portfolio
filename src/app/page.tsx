@@ -4,7 +4,6 @@ import TechStrip from "@/components/TechStrip";
 import AboutSection from "@/components/AboutSection";
 import TechStack from "@/components/TechStack";
 import Projects from "@/components/Projects";
-import MLOpsPipelines from "@/components/MLOpsPipelines";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import CurrentlyBuilding from "@/components/CurrentlyBuilding";
 import Certifications from "@/components/Certifications";
@@ -31,8 +30,8 @@ export default function Home() {
       {/* 4. Production AI Systems */}
       <Projects />
 
-      {/* 5. MLOps & Data Pipelines */}
-      <MLOpsPipelines />
+      {/* 5. Research & Publications */}
+      <Research />
 
       {/* 6. Scalable Architecture */}
       <SystemArchitecture />
@@ -43,10 +42,7 @@ export default function Home() {
       {/* 8. Certifications */}
       <Certifications />
 
-      {/* 9. Research & Publications */}
-      <Research />
-
-      {/* 10. Engineering Philosophy */}
+      {/* 9. Engineering Philosophy */}
       <EngineeringPhilosophy />
 
       {/* 10. Contact */}

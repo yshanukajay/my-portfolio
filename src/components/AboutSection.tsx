@@ -179,8 +179,8 @@ export default function AboutSection() {
             </h2>
             <div className="text-slate-600">
               <p className="leading-relaxed font-medium text-slate-800 text-xl">
-                I focus on building intelligent data systems that combine machine learning,
-                distributed data pipelines, and cloud technologies to solve real-world problems efficiently.
+                I focus on building intelligent systems at the intersection of machine learning and data engineering, 
+                designing high-throughput distributed pipelines and deploying production-ready models that solve complex real-world challenges.
               </p>
               <p className="leading-relaxed mt-4">
                 My goal is to develop production-ready machine learning workflows supported by reliable

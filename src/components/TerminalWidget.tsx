@@ -26,7 +26,6 @@ const COMMANDS: Record<
         line("success", "│  about       → About me                 │"),
         line("success", "│  projects    → View projects            │"),
         line("success", "│  skills      → Tech stack               │"),
-        line("success", "│  pipelines   → MLOps pipelines          │"),
         line("success", "│  research    → Publications & research  │"),
         line("success", "│  contact     → Get in touch             │"),
         line("success", "│  certifications → Certifications        │"),
@@ -75,16 +74,6 @@ const COMMANDS: Record<
         line("output", "  MLflow · Docker · Kubernetes · AWS"),
       ],
       scrollTo: "stack",
-    }),
-  },
-  pipelines: {
-    description: "Navigate to MLOps Pipelines section",
-    action: () => ({
-      lines: [
-        line("success", "→ Navigating to /pipelines"),
-        line("output", "  Ingestion → Processing → Training → Serving"),
-      ],
-      scrollTo: "pipelines",
     }),
   },
   research: {

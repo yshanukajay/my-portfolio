@@ -38,8 +38,8 @@ const HERO_METRICS: {
   href: string;
   icon: LucideIcon;
 }[] = [
-  { label: "Kafka Streaming", tag: "Realtime Ingestion", color: "#f97316", icon: Database, href: "#pipelines" },
-  { label: "Airflow DAGs", tag: "Workflow Orchestration", color: "#ef4444", icon: Wind, href: "#pipelines" },
+  { label: "Kafka Streaming", tag: "Realtime Ingestion", color: "#f97316", icon: Database, href: "#stack" },
+  { label: "Airflow DAGs", tag: "Workflow Orchestration", color: "#ef4444", icon: Wind, href: "#stack" },
   { label: "Dockerized ML Systems", tag: "Container Deployments", color: "#3b82f6", icon: Layers, href: "#architecture" },
   { label: "Distributed Pipelines", tag: "Cloud-Native Arch", color: "#6366f1", icon: Network, href: "#architecture" },
 ];
