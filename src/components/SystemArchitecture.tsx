@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Cpu } from "lucide-react";
 
 const architectures = [
   {
@@ -161,12 +162,125 @@ const nodeSpecs: Record<string, { desc: string; spec: string; logs: string[] }> 
   }
 };
 
-function BlueprintCard({ arch, delay }: { arch: typeof architectures[0]; delay: number }) {
-  // Default to the first main node in the architecture
-  const [selectedNode, setSelectedNode] = useState<string>(arch.nodes[0].label);
+/* ─── Node Modal Component ────────────────────────────────────── */
+function NodeModal({
+  nodeName,
+  color,
+  onClose,
+}: {
+  nodeName: string;
+  color: string;
+  onClose: () => void;
+}) {
+  const nodeData = nodeSpecs[nodeName];
 
-  const nodeData = nodeSpecs[selectedNode];
+  useEffect(() => {
+    // Disable body scroll while modal is active
+    document.body.style.overflow = "hidden";
 
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [onClose]);
+
+  if (!nodeData) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+      />
+
+      {/* Modal Container */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        className="relative w-full max-w-md rounded-2xl border overflow-hidden shadow-2xl z-10"
+        style={{ background: "#0d1117", borderColor: `${color}38` }}
+      >
+        {/* Color stripe */}
+        <div className="h-[3px]" style={{ background: `linear-gradient(to right, transparent, ${color}, transparent)` }} />
+
+        {/* Header */}
+        <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ background: color }} />
+            <div>
+              <h3 className="text-sm font-bold text-white tracking-wide uppercase font-mono">{nodeName}</h3>
+              <span className="text-[10px] text-slate-500 font-mono">System Telemetry Specs</span>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5 text-left">
+          {/* Section: Function */}
+          <div>
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5 font-mono">Overview:</h4>
+            <p className="text-sm text-slate-300 leading-relaxed font-sans">{nodeData.desc}</p>
+          </div>
+
+          {/* Section: Config */}
+          <div>
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5 font-mono">Configuration:</h4>
+            <div className="p-3 rounded-xl bg-slate-950/40 border border-slate-900 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${color}15`, color }}>
+                <Cpu size={16} />
+              </div>
+              <div className="font-mono text-xs text-slate-200">{nodeData.spec}</div>
+            </div>
+          </div>
+
+          {/* Section: logs */}
+          <div>
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5 font-mono">Diagnostic Logs:</h4>
+            <div className="space-y-1 bg-black/60 p-3 rounded-xl border border-slate-900 font-mono text-[10px] max-h-[140px] overflow-y-auto">
+              {nodeData.logs.map((log, lIdx) => (
+                <div key={lIdx} className="flex gap-2 text-slate-400">
+                  <span className="text-slate-600 flex-shrink-0">LOG</span>
+                  <span className="text-slate-200 select-all truncate">{log}</span>
+                </div>
+              ))}
+              <div className="flex items-center gap-1.5 text-slate-500 mt-2">
+                <span className="w-1 h-3 bg-slate-500/80 animate-pulse" />
+                <span className="text-[9px] uppercase tracking-wider">Listening...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─── Blueprint Card Component ───────────────────────────────── */
+function BlueprintCard({
+  arch,
+  delay,
+  onClickNode,
+}: {
+  arch: typeof architectures[0];
+  delay: number;
+  onClickNode: (nodeName: string, color: string) => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
@@ -188,7 +302,7 @@ function BlueprintCard({ arch, delay }: { arch: typeof architectures[0]; delay: 
               <div className="text-[10px] text-slate-500">{arch.subtitle}</div>
             </div>
           </div>
-          <span className="text-[10px] font-mono text-slate-500 animate-pulse">● Live Telemetry</span>
+          <span className="text-[9px] font-mono text-slate-500 uppercase tracking-wide">Interactive Blueprint</span>
         </div>
       </div>
 
@@ -203,78 +317,72 @@ function BlueprintCard({ arch, delay }: { arch: typeof architectures[0]; delay: 
           <rect width={100} height={90} fill={`url(#bg-${arch.title.slice(0,4)})`} />
 
           {/* Main nodes */}
-          {arch.nodes.map((n, i) => {
-            const isSelected = selectedNode === n.label;
-            return (
-              <g key={n.label} className="group/node" style={{ cursor: "pointer" }} onClick={() => setSelectedNode(n.label)}>
-                <motion.rect
-                  x={n.x - 10} y={n.y - 8} width={20} height={16} rx={3}
-                  fill={isSelected ? `${arch.color}33` : `${arch.color}12`}
-                  stroke={isSelected ? "#ffffff" : arch.color}
-                  strokeWidth={isSelected ? 1.2 : 0.7}
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  transition={{ duration: 0.4, delay: delay + i * 0.12 }} />
-                
-                {/* Glow ring on hover/selected */}
-                {isSelected && (
-                  <motion.circle
-                    cx={n.x - 6}
-                    cy={n.y}
-                    r={3.5}
-                    fill="transparent"
-                    stroke={arch.color}
-                    strokeWidth={0.5}
-                    animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
-                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
-                    style={{ transformOrigin: `${n.x - 6}px ${n.y}px` }}
-                  />
-                )}
+          {arch.nodes.map((n, i) => (
+            <g
+              key={n.label}
+              className="group/node"
+              style={{ cursor: "pointer" }}
+              onClick={() => onClickNode(n.label, arch.color)}
+            >
+              <motion.rect
+                x={n.x - 10} y={n.y - 8} width={20} height={16} rx={3}
+                fill={`${arch.color}12`}
+                stroke={arch.color}
+                strokeWidth={0.7}
+                whileHover={{ fill: `${arch.color}25`, stroke: "#ffffff", strokeWidth: 1 }}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: delay + i * 0.12 }} />
+              
+              <motion.circle cx={n.x - 6} cy={n.y} r={1.5} fill={arch.color}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }} />
+              
+              <text x={n.x + 2} y={n.y - 1} fontSize={2.8} fontWeight="700"
+                fill="rgba(255,255,255,0.9)" fontFamily="monospace" textAnchor="middle"
+                className="group-hover/node:fill-white transition-colors duration-150">{n.label}</text>
+              <text x={n.x + 2} y={n.y + 3.5} fontSize={2} fill={arch.color}
+                fontFamily="monospace" textAnchor="middle" opacity={0.7}
+                className="group-hover/node:opacity-100 transition-opacity duration-150">{n.sub}</text>
 
-                <motion.circle cx={n.x - 6} cy={n.y} r={1.5} fill={isSelected ? "#ffffff" : arch.color}
-                  animate={isSelected ? { scale: [1, 1.4, 1] } : { opacity: [0.4, 1, 0.4] }}
-                  transition={isSelected ? { duration: 1, repeat: Infinity } : { duration: 2, delay: i * 0.3, repeat: Infinity }} />
-                
-                <text x={n.x + 2} y={n.y - 1} fontSize={2.8} fontWeight="700"
-                  fill={isSelected ? "#ffffff" : "rgba(255,255,255,0.9)"} fontFamily="monospace" textAnchor="middle">{n.label}</text>
-                <text x={n.x + 2} y={n.y + 3.5} fontSize={2} fill={isSelected ? "#ffffff" : arch.color}
-                  fontFamily="monospace" textAnchor="middle" opacity={isSelected ? 1 : 0.7}>{n.sub}</text>
-
-                {/* Arrow & Flow Pulse between main nodes */}
-                {i < arch.nodes.length - 1 && arch.nodes[i].y === arch.nodes[i + 1].y && (
-                  <g>
-                    <line
-                      x1={n.x + 10} y1={n.y} x2={arch.nodes[i + 1].x - 10} y2={arch.nodes[i + 1].y}
-                      stroke={arch.color} strokeWidth={0.6} opacity={0.3} />
-                    <motion.line
-                      x1={n.x + 10} y1={n.y} x2={arch.nodes[i + 1].x - 10} y2={arch.nodes[i + 1].y}
-                      stroke={arch.color} strokeWidth={0.8}
-                      strokeDasharray="2 3"
-                      animate={{ strokeDashoffset: [-12, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                      opacity={0.8} />
-                  </g>
-                )}
-              </g>
-            );
-          })}
+              {/* Arrow & Flow Pulse between main nodes */}
+              {i < arch.nodes.length - 1 && arch.nodes[i].y === arch.nodes[i + 1].y && (
+                <g>
+                  <line
+                    x1={n.x + 10} y1={n.y} x2={arch.nodes[i + 1].x - 10} y2={arch.nodes[i + 1].y}
+                    stroke={arch.color} strokeWidth={0.6} opacity={0.3} />
+                  <motion.line
+                    x1={n.x + 10} y1={n.y} x2={arch.nodes[i + 1].x - 10} y2={arch.nodes[i + 1].y}
+                    stroke={arch.color} strokeWidth={0.8}
+                    strokeDasharray="2 3"
+                    animate={{ strokeDashoffset: [-12, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                    opacity={0.8} />
+                </g>
+              )}
+            </g>
+          ))}
 
           {/* Vertical sub-nodes */}
-          {arch.verticals.map((v, i) => {
-            const isSelected = selectedNode === v.label;
-            return (
-              <g key={v.label} className="group/node" style={{ cursor: "pointer" }} onClick={() => setSelectedNode(v.label)}>
-                <motion.rect
-                  x={v.x - 9} y={v.y - 6} width={18} height={12} rx={2}
-                  fill={isSelected ? `${v.color}25` : `${v.color}0f`}
-                  stroke={isSelected ? "#ffffff" : v.color}
-                  strokeWidth={isSelected ? 1.0 : 0.5}
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  transition={{ duration: 0.4, delay: delay + 0.6 + i * 0.1 }} />
-                <text x={v.x} y={v.y + 1.5} fontSize={2.4} fontWeight="700"
-                  fill={isSelected ? "#ffffff" : v.color} fontFamily="monospace" textAnchor="middle">{v.label}</text>
-              </g>
-            );
-          })}
+          {arch.verticals.map((v, i) => (
+            <g
+              key={v.label}
+              className="group/node"
+              style={{ cursor: "pointer" }}
+              onClick={() => onClickNode(v.label, v.color)}
+            >
+              <motion.rect
+                x={v.x - 9} y={v.y - 6} width={18} height={12} rx={2}
+                fill={`${v.color}0f`}
+                stroke={v.color}
+                strokeWidth={0.5}
+                whileHover={{ fill: `${v.color}20`, stroke: "#ffffff", strokeWidth: 0.8 }}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: delay + 0.6 + i * 0.1 }} />
+              <text x={v.x} y={v.y + 1.5} fontSize={2.4} fontWeight="700"
+                fill={v.color} fontFamily="monospace" textAnchor="middle"
+                className="group-hover/node:fill-white transition-colors duration-150">{v.label}</text>
+            </g>
+          ))}
 
           {/* Comment */}
           <text x={2} y={88} fontSize={2.2} fill="rgba(148,163,184,0.4)"
@@ -282,51 +390,14 @@ function BlueprintCard({ arch, delay }: { arch: typeof architectures[0]; delay: 
         </svg>
       </div>
 
-      {/* Terminal Node Inspector */}
-      <div className="border-t p-4 font-mono text-left" style={{ background: "#020509", borderColor: "rgba(255,255,255,0.06)" }}>
-        <div className="flex items-center justify-between border-b pb-2 mb-3" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: arch.color }} />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide font-mono">inspect: {selectedNode}</span>
-          </div>
-          <span className="text-[9px] text-slate-600 uppercase font-mono">Status: Active</span>
-        </div>
-
-        {nodeData ? (
-          <div className="space-y-3">
-            <div>
-              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">{nodeData.desc}</p>
-              <div className="text-[10px] text-slate-400 mt-1.5 flex items-center gap-2">
-                <span className="text-slate-600 font-bold font-mono text-[9px] uppercase">Telemetry Conf:</span>
-                <span className="font-bold font-mono" style={{ color: arch.color }}>{nodeData.spec}</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="space-y-1 bg-black/40 p-2.5 rounded-lg border border-slate-900 font-mono text-[10px]">
-                {nodeData.logs.map((log, lIdx) => (
-                  <div key={lIdx} className="flex gap-2 text-slate-400 truncate">
-                    <span className="text-slate-600 flex-shrink-0">LOG</span>
-                    <span className="text-slate-200 select-all truncate">{log}</span>
-                  </div>
-                ))}
-                <div className="flex items-center gap-1.5 text-slate-500 mt-1">
-                  <span className="w-1 h-3.5 bg-slate-400/80 animate-pulse" />
-                  <span className="text-[9px]">Listening...</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="text-[10px] text-slate-600">Select a component to inspect...</div>
-        )}
-      </div>
-
     </motion.div>
   );
 }
 
+/* ─── Main Section Component ─────────────────────────────────── */
 export default function SystemArchitecture() {
+  const [activeModal, setActiveModal] = useState<{ nodeName: string; color: string } | null>(null);
+
   return (
     <section id="architecture" className="py-24 bg-slate-50 relative border-y border-slate-100">
       <div className="container mx-auto px-6 lg:px-12">
@@ -343,10 +414,26 @@ export default function SystemArchitecture() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {architectures.map((arch, i) => (
-            <BlueprintCard key={arch.title} arch={arch} delay={i * 0.15} />
+            <BlueprintCard
+              key={arch.title}
+              arch={arch}
+              delay={i * 0.15}
+              onClickNode={(nodeName, color) => setActiveModal({ nodeName, color })}
+            />
           ))}
         </div>
       </div>
+
+      {/* Backdrop & Modal */}
+      <AnimatePresence>
+        {activeModal && (
+          <NodeModal
+            nodeName={activeModal.nodeName}
+            color={activeModal.color}
+            onClose={() => setActiveModal(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
