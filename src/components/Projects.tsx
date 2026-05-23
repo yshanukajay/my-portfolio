@@ -1,6 +1,7 @@
 "use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Eye, Workflow, TrendingUp, AlertTriangle } from "lucide-react";
 
 /* ─── GitHub icon ─────────────────────────────────────────────── */
 const GithubIcon = () => (
@@ -8,42 +9,6 @@ const GithubIcon = () => (
     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
   </svg>
 );
-
-/* ─── Horizontal pipeline flow ───────────────────────────────── */
-function PipelineFlow({ steps, color }: { steps: string[]; color: string }) {
-  return (
-    <div className="flex flex-wrap items-center gap-1">
-      {steps.map((step, i) => (
-        <span key={step} className="flex items-center gap-1">
-          <motion.span
-            className="px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono border"
-            style={{
-              background: `${color}10`,
-              borderColor: `${color}30`,
-              color,
-            }}
-            initial={{ opacity: 0, x: -8 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, delay: i * 0.08 }}
-          >
-            {step}
-          </motion.span>
-          {i < steps.length - 1 && (
-            <motion.span
-              className="text-[10px]"
-              style={{ color: `${color}60` }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.5, delay: i * 0.2, repeat: Infinity }}
-            >
-              →
-            </motion.span>
-          )}
-        </span>
-      ))}
-    </div>
-  );
-}
 
 /* ─── Project data ────────────────────────────────────────────── */
 const projects = [
@@ -55,10 +20,25 @@ const projects = [
       "End-to-end streaming pipeline handling high-throughput event data with sub-500ms latency. Replaced legacy batch jobs that caused 24-hour reporting delays.",
     problem: "24-hour delays in critical metric reporting due to batch processing.",
     dataset: "10TB+ clickstream events via Kafka",
-    accuracy: "10k events/sec throughput",
     impact: "24h → < 500ms latency",
-    stack: ["Kafka", "Spark Streaming", "MongoDB", "FastAPI", "Docker"],
-    flow: ["Kafka Ingest", "Spark Stream", "Aggregation", "MongoDB Store", "Dashboard"],
+    stack: {
+      infra: ["Kafka", "Spark Streaming", "MongoDB", "Docker"],
+      languages: ["Python", "FastAPI"]
+    },
+    flow: [
+      { name: "Kafka Ingest", desc: "High-throughput event queue" },
+      { name: "Spark Stream", desc: "Real-time stateful transformations" },
+      { name: "Aggregation", desc: "Sliding window metrics aggregation" },
+      { name: "MongoDB Store", desc: "Low-latency document store write" },
+      { name: "Dashboard UI", desc: "Instant WebSockets visualization" }
+    ],
+    metrics: {
+      type: "streaming",
+      throughput: "10,000/s",
+      volume: "10TB+",
+      latencyBefore: "24h",
+      latencyAfter: "500ms"
+    },
     color: "#0ea5e9",
     tags: ["Real-Time", "Distributed", "MLOps Enabled"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
@@ -71,10 +51,25 @@ const projects = [
       "IoT-driven pipeline combining streaming sensor ingestion with ML prediction to monitor livestock health patterns and trigger real-time alerts.",
     problem: "Manual monitoring caused late disease detection and yield loss.",
     dataset: "IoT Sensor Data (Temp, Motion, Heart Rate)",
-    accuracy: "94% prediction accuracy",
     impact: "30% reduction in severe illness cases",
-    stack: ["Python", "MongoDB", "FastAPI", "TensorFlow", "Kafka"],
-    flow: ["IoT Sensors", "Ingestion API", "Preprocessing", "ML Predict", "Alert Engine"],
+    stack: {
+      infra: ["MongoDB", "FastAPI", "Kafka", "Docker"],
+      languages: ["Python", "TensorFlow"]
+    },
+    flow: [
+      { name: "IoT Sensors", desc: "Continuous collar telemetry data" },
+      { name: "Ingestion API", desc: "FastAPI ingestion gateway" },
+      { name: "Preprocessing", desc: "Noise filter & sequence scaling" },
+      { name: "ML Prediction", desc: "LSTM neural network classification" },
+      { name: "Alert Engine", desc: "Real-time SMS/Web notification" }
+    ],
+    metrics: {
+      type: "ml_classification",
+      accuracy: 94,
+      metricLabel: "Accuracy",
+      reduction: "30%",
+      sensors: "Temp, Motion, HR"
+    },
     color: "#10b981",
     tags: ["Edge AI", "API Integrated", "Computer Vision"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
@@ -87,15 +82,74 @@ const projects = [
       "Production-grade CNN microservice for automated crop disease diagnosis. Sub-100ms inference latency with a fully containerized deployment pipeline.",
     problem: "Farmers needed reliable automated API for rapid field image diagnosis.",
     dataset: "PlantVillage: 50,000+ labeled images",
-    accuracy: "98% F1 Score",
     impact: "< 100ms API inference latency",
-    stack: ["TensorFlow", "FastAPI", "Docker", "OpenCV", "React"],
-    flow: ["PlantVillage", "CNN Training", "Evaluation", "FastAPI Serve", "React UI"],
+    stack: {
+      infra: ["FastAPI", "Docker", "React", "OpenCV"],
+      languages: ["Python", "TensorFlow"]
+    },
+    flow: [
+      { name: "PlantVillage Set", desc: "50k+ labeled disease images" },
+      { name: "CNN Model", desc: "Custom ConvNet with transfer learning" },
+      { name: "Validation", desc: "F1 Score & confusion matrix evaluation" },
+      { name: "FastAPI serving", desc: "Containerized serving microservice" },
+      { name: "React Web App", desc: "Mobile-friendly image uploader UI" }
+    ],
+    metrics: {
+      type: "ml_classification",
+      accuracy: 98,
+      metricLabel: "F1 Score",
+      latency: "< 100ms",
+      datasetSize: "50,000+"
+    },
     color: "#818cf8",
     tags: ["Computer Vision", "API Integrated", "MLOps Enabled"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
 ];
+
+/* ─── Radial Gauge Helper ─────────────────────────────────────── */
+function RadialGauge({ value, label, color }: { value: number; label: string; color: string }) {
+  const radius = 22;
+  const strokeWidth = 4;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (value / 100) * circumference;
+
+  return (
+    <div className="flex items-center gap-4 bg-slate-950/40 border border-slate-800/40 p-3.5 rounded-xl">
+      <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
+        <svg className="w-full h-full transform -rotate-90">
+          <circle
+            cx="24"
+            cy="24"
+            r={radius}
+            className="stroke-slate-800/60"
+            strokeWidth={strokeWidth}
+            fill="transparent"
+          />
+          <motion.circle
+            cx="24"
+            cy="24"
+            r={radius}
+            stroke={color}
+            strokeWidth={strokeWidth}
+            fill="transparent"
+            strokeDasharray={circumference}
+            initial={{ strokeDashoffset: circumference }}
+            whileInView={{ strokeDashoffset }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="absolute text-[10px] font-bold text-white font-mono">{value}%</span>
+      </div>
+      <div>
+        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</div>
+        <div className="text-xs font-bold text-slate-200 mt-0.5">High Performance</div>
+      </div>
+    </div>
+  );
+}
 
 /* ─── Project card ────────────────────────────────────────────── */
 function ProjectCard({
@@ -108,13 +162,21 @@ function ProjectCard({
   align: "left" | "right";
 }) {
   const p = project;
+  const [activeTab, setActiveTab] = useState<"overview" | "pipeline" | "metrics">("overview");
+
+  const tabs = [
+    { id: "overview", label: "Overview", icon: Eye },
+    { id: "pipeline", label: "Pipeline", icon: Workflow },
+    { id: "metrics", label: "Performance", icon: TrendingUp },
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, x: align === "left" ? -40 : 40 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.65, ease: "easeOut" }}
-      className="group relative rounded-2xl border overflow-hidden"
+      className="group relative rounded-2xl border overflow-hidden min-h-[460px] flex flex-col justify-between"
       style={{ background: "#0d1117", borderColor: `${p.color}28` }}
     >
       {/* Top accent */}
@@ -126,7 +188,7 @@ function ProjectCard({
         style={{ boxShadow: `inset 0 0 0 1px ${p.color}40, 0 0 32px ${p.color}18` }}
       />
 
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-1">
         {/* Header row */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
@@ -160,49 +222,243 @@ function ProjectCard({
           </div>
         </div>
 
-        {/* Description */}
-        <p className="text-slate-400 text-sm leading-relaxed mb-5">{p.description}</p>
-
-        {/* Pipeline flow */}
-        <div className="mb-5">
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-600 mb-2">Pipeline Flow</p>
-          <PipelineFlow steps={p.flow} color={p.color} />
+        {/* Tab switcher */}
+        <div className="flex gap-1 bg-slate-950/60 p-1 rounded-xl border border-slate-800/80 mb-5 relative">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isSelected = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className="flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors relative z-10"
+                style={{
+                  color: isSelected ? "#ffffff" : "#64748b",
+                }}
+              >
+                <Icon size={13} className={isSelected ? "" : "opacity-80"} />
+                <span>{tab.label}</span>
+                {isSelected && (
+                  <motion.div
+                    layoutId={`active-tab-${index}`}
+                    className="absolute inset-0 rounded-lg -z-10"
+                    style={{
+                      background: `linear-gradient(135deg, ${p.color}22 0%, ${p.color}11 100%)`,
+                      border: `1px solid ${p.color}35`,
+                    }}
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Metrics 2x2 */}
-        <div className="grid grid-cols-2 gap-2 mb-5">
-          {[
-            { label: "Problem",  value: p.problem,  c: "#0ea5e9" },
-            { label: "Dataset",  value: p.dataset,  c: "#818cf8" },
-            { label: "Accuracy", value: p.accuracy, c: "#10b981" },
-            { label: "Impact",   value: p.impact,   c: "#f59e0b" },
-          ].map((m) => (
-            <div key={m.label} className="p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: m.c }} />
-                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">{m.label}</span>
+        {/* Tab contents wrapper */}
+        <div className="flex-1 flex flex-col justify-between">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex-1"
+          >
+            {/* Tab: Overview */}
+            {activeTab === "overview" && (
+              <div className="space-y-4">
+                <p className="text-slate-400 text-sm leading-relaxed">{p.description}</p>
+                
+                {/* Problem Statement banner */}
+                <div className="p-3.5 rounded-xl border border-amber-500/10 bg-amber-500/[0.03] flex gap-3">
+                  <AlertTriangle size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-amber-500/80 font-mono">Core Challenge</div>
+                    <p className="text-xs text-slate-400 mt-1 leading-normal">{p.problem}</p>
+                  </div>
+                </div>
+
+                {/* Tech Stack categorization */}
+                <div className="space-y-2 pt-1 border-t border-slate-800/40">
+                  <div className="flex flex-wrap gap-1.5 items-center">
+                    <span className="text-[9px] font-bold font-mono text-slate-500 uppercase mr-1">Infrastructure:</span>
+                    {p.stack.infra.map((s) => (
+                      <span
+                        key={s}
+                        className="px-2 py-0.5 text-[10px] font-bold rounded-md font-mono"
+                        style={{ background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}25` }}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 items-center">
+                    <span className="text-[9px] font-bold font-mono text-slate-500 uppercase mr-1">Languages & ML:</span>
+                    {p.stack.languages.map((s) => (
+                      <span
+                        key={s}
+                        className="px-2 py-0.5 text-[10px] font-bold rounded-md font-mono border border-slate-800 text-slate-400 bg-slate-900/50"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <p className="text-[11px] text-slate-300 font-medium leading-snug">{m.value}</p>
-            </div>
-          ))}
-        </div>
+            )}
 
-        {/* Stack chips */}
-        <div className="flex flex-wrap gap-1.5">
-          {p.stack.map((s) => (
-            <span
-              key={s}
-              className="px-2.5 py-1 text-[10px] font-bold rounded-full font-mono"
-              style={{ background: `${p.color}18`, color: p.color, border: `1px solid ${p.color}30` }}
-            >
-              {s}
-            </span>
-          ))}
-          {p.tags.map((t) => (
-            <span key={t} className="px-2.5 py-1 text-[10px] font-semibold rounded-full border border-slate-700 text-slate-500">
-              {t}
-            </span>
-          ))}
+            {/* Tab: Pipeline */}
+            {activeTab === "pipeline" && (
+              <div className="space-y-4 py-2 px-1">
+                {p.flow.map((step, idx) => (
+                  <div key={step.name} className="flex gap-4 relative group/node">
+                    {/* Node Graphic */}
+                    <div className="flex flex-col items-center shrink-0">
+                      <motion.div
+                        className="w-7 h-7 rounded-full flex items-center justify-center border text-[10px] font-bold"
+                        style={{
+                          background: "#080d14",
+                          borderColor: idx === 0 ? p.color : `${p.color}50`,
+                          color: idx === 0 ? "#ffffff" : p.color,
+                          boxShadow: idx === 0 ? `0 0 10px ${p.color}40` : "none"
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        {String(idx + 1).padStart(2, "0")}
+                      </motion.div>
+                      {idx < p.flow.length - 1 && (
+                        <div className="w-[2px] flex-1 relative min-h-[32px] my-1" style={{ background: `${p.color}25` }}>
+                          <motion.div
+                            className="absolute top-0 left-0 right-0 rounded-full"
+                            style={{ height: 6, background: p.color }}
+                            animate={{ y: ["0%", "450%", "0%"] }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              delay: idx * 0.5,
+                              ease: "easeInOut"
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Node Info */}
+                    <div className="pb-3 flex-1">
+                      <h4 className="text-xs font-bold text-slate-200 group-hover/node:text-white transition-colors duration-200">{step.name}</h4>
+                      <p className="text-[11px] text-slate-400 mt-0.5 leading-normal">{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Tab: Metrics */}
+            {activeTab === "metrics" && (
+              <div className="space-y-4">
+                {p.metrics.type === "streaming" && (
+                  <div className="space-y-4">
+                    {/* Latency Comparison */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">
+                        <span>Latency Performance</span>
+                        <span className="text-emerald-400 font-bold font-mono">99.9% reduction</span>
+                      </div>
+                      <div className="h-8 w-full bg-slate-950/80 border border-slate-800/80 rounded-xl relative overflow-hidden flex items-center px-3.5">
+                        <div className="absolute left-0 top-0 bottom-0 bg-rose-500/10 border-r border-rose-500/30" style={{ width: "95%" }} />
+                        <div className="absolute left-0 top-0 bottom-0 bg-emerald-500/25 border-r border-emerald-500/80 rounded-r-lg" style={{ width: "2%" }} />
+                        <div className="w-full flex justify-between relative z-10 text-[10px] font-bold text-white font-mono">
+                          <span className="text-rose-400/90">Baseline: 24h</span>
+                          <span className="text-emerald-400">Optimized: &lt;500ms</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Metrics Grid */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Throughput</span>
+                        <div className="flex items-baseline gap-1 mt-1">
+                          <span className="text-base font-bold text-white font-mono">{p.metrics.throughput}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Events/sec ingestion</span>
+                      </div>
+                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Volume</span>
+                        <div className="flex items-baseline gap-1 mt-1">
+                          <span className="text-base font-bold text-white font-mono">{p.metrics.volume}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Kafka Clickstream data</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {p.metrics.type === "ml_classification" && p.title === "Cattle Health Monitoring System" && (
+                  <div className="space-y-4">
+                    {/* Gauge row */}
+                    <RadialGauge value={p.metrics.accuracy || 0} label={p.metrics.metricLabel || "Accuracy"} color={p.color} />
+
+                    {/* Stats row */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Illness Cases</span>
+                        <div className="flex items-baseline gap-1 mt-1 text-emerald-400 font-mono">
+                          <span className="text-base font-bold">-{p.metrics.reduction}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Severe case reduction</span>
+                      </div>
+                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Sensor Streams</span>
+                        <div className="flex items-baseline gap-1 mt-1">
+                          <span className="text-xs font-bold text-white font-mono truncate">{p.metrics.sensors}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Real-time edge ingestion</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {p.metrics.type === "ml_classification" && p.title === "Tomato Leaf Disease Classifier" && (
+                  <div className="space-y-4">
+                    {/* Gauge row */}
+                    <RadialGauge value={p.metrics.accuracy || 0} label={p.metrics.metricLabel || "F1 Score"} color={p.color} />
+
+                    {/* Stats row */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">API Latency</span>
+                        <div className="flex items-baseline gap-1 mt-1 text-indigo-400 font-mono">
+                          <span className="text-base font-bold">{p.metrics.latency}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Sub-100ms target met</span>
+                      </div>
+                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Dataset Size</span>
+                        <div className="flex items-baseline gap-1 mt-1">
+                          <span className="text-base font-bold text-white font-mono">{p.metrics.datasetSize}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">PlantVillage training images</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="p-3 bg-slate-950/30 border border-slate-800/40 rounded-xl flex items-center gap-2.5">
+                  <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: p.color }} />
+                  <span className="text-[11px] text-slate-400">Business Impact: <strong className="text-slate-200 font-semibold">{p.impact}</strong></span>
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Tags Footer inside Card */}
+          <div className="flex flex-wrap gap-1.5 mt-6 pt-4 border-t border-slate-800/40">
+            {p.tags.map((t) => (
+              <span key={t} className="px-2 py-0.5 text-[9px] font-semibold rounded-md border border-slate-800 text-slate-500">
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -334,3 +590,4 @@ export default function Projects() {
     </section>
   );
 }
+
