@@ -3,21 +3,24 @@
 @theme {
   --color-background: #F8FAFC;
   --color-foreground: #0F172A;
-  
+
   --font-sans: var(--font-inter), sans-serif;
   --font-heading: var(--font-outfit), sans-serif;
-  
+
   --color-accent-primary: #0ea5e9;
   --color-accent-secondary: #3b82f6;
-  
+
   --animate-scan: scan 6s ease-in-out infinite;
 }
 
 @keyframes scan {
-  0%, 100% {
+
+  0%,
+  100% {
     top: 0%;
     opacity: 0.1;
   }
+
   50% {
     top: 100%;
     opacity: 0.45;
@@ -30,10 +33,17 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-weight: 600;
-    color: #0f172a; /* slate-900 */
+    color: #0f172a;
+    /* slate-900 */
     letter-spacing: -0.025em;
   }
 }
@@ -49,7 +59,8 @@
 
   &:hover {
     background-color: rgb(255 255 255 / 0.8);
-    border-color: #e0f2fe; /* sky-100 */
+    border-color: #e0f2fe;
+    /* sky-100 */
     box-shadow: 0 8px 30px rgb(14 165 233 / 0.1);
     transform: translateY(-0.25rem);
   }
@@ -59,7 +70,8 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  background-image: linear-gradient(to right, #0284c7, #2563eb); /* sky-600 to blue-600 */
+  background-image: linear-gradient(to right, #0284c7, #2563eb);
+  /* sky-600 to blue-600 */
 }
 
 /* diagram-card removed for organic flow map */
@@ -97,7 +109,7 @@
 
 /* Connector arrows/dashes */
 .connector-base {
-  stroke: rgba(55,138,221,0.3);
+  stroke: rgba(55, 138, 221, 0.3);
 }
 
 .connector-active {
