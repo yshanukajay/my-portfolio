@@ -316,18 +316,6 @@ export default function ContactSection() {
                   style={{ background: "radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%)" }} aria-hidden />
 
                 <div className="p-8 md:p-10">
-                  {/* Form header */}
-                  <div className="flex items-center gap-2.5 mb-8">
-                    <div className="flex gap-1.5">
-                      <span className="w-3 h-3 rounded-full bg-red-500/70" />
-                      <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
-                      <span className="w-3 h-3 rounded-full bg-green-500/70" />
-                    </div>
-                    <div className="flex-1 h-6 rounded-md flex items-center px-3"
-                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                      <span className="text-[10px] font-mono text-slate-500">contact.yml — Start a conversation</span>
-                    </div>
-                  </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
