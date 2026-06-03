@@ -229,14 +229,14 @@ const architectures = [
     subtitle: "High-throughput event pipeline",
     color: "#f59e0b",
     nodes: [
-      { id: "kafka", label: "Kafka", sub: "event stream", x: 15, y: 40 },
-      { id: "spark", label: "Spark", sub: "processing",   x: 38, y: 40 },
-      { id: "mongodb", label: "MongoDB", sub: "storage",    x: 61, y: 40 },
-      { id: "dashboard", label: "Dashboard", sub: "analytics",x: 84, y: 40 },
+      { id: "kafka", label: "Kafka", sub: "event stream", x: 16, y: 38 },
+      { id: "spark", label: "Spark", sub: "processing",   x: 38, y: 38 },
+      { id: "mongodb", label: "MongoDB", sub: "storage",    x: 62, y: 38 },
+      { id: "dashboard", label: "Dashboard", sub: "analytics", x: 84, y: 38 },
     ],
     verticals: [
-      { id: "schema", label: "Schema Registry", x: 26, y: 72, color: "#f59e0b" },
-      { id: "dq", label: "DQ Checks",       x: 49, y: 72, color: "#10b981" },
+      { id: "schema", label: "Schema Registry", x: 27, y: 68, color: "#f59e0b" },
+      { id: "dq", label: "DQ Checks",          x: 53, y: 68, color: "#10b981" },
     ],
     connections: [
       { from: "kafka", to: "spark", type: "straight" },
@@ -259,15 +259,15 @@ const architectures = [
     subtitle: "Production serving architecture",
     color: "#0ea5e9",
     nodes: [
-      { id: "github", label: "GitHub Actions", sub: "CI/CD",       x: 15, y: 30 },
-      { id: "docker", label: "Docker",         sub: "container",   x: 15, y: 58 },
-      { id: "registry", label: "Registry",       sub: "ECR/GHCR",    x: 50, y: 44 },
-      { id: "k8s", label: "K8s Cluster",    sub: "orchestrate", x: 82, y: 30 },
-      { id: "fastapi", label: "FastAPI",        sub: "serving",     x: 82, y: 58 },
+      { id: "github", label: "GitHub Actions", sub: "CI/CD",       x: 18, y: 28 },
+      { id: "docker", label: "Docker",         sub: "container",   x: 18, y: 56 },
+      { id: "registry", label: "Registry",     sub: "ECR/GHCR",    x: 50, y: 42 },
+      { id: "k8s",    label: "K8s Cluster",    sub: "orchestrate", x: 80, y: 28 },
+      { id: "fastapi", label: "FastAPI",        sub: "serving",     x: 80, y: 56 },
     ],
     verticals: [
-      { id: "prometheus", label: "Prometheus", x: 65, y: 80, color: "#f59e0b" },
-      { id: "grafana",    label: "Grafana",    x: 82, y: 80, color: "#10b981" },
+      { id: "prometheus", label: "Prometheus", x: 58, y: 74, color: "#f59e0b" },
+      { id: "grafana",    label: "Grafana",    x: 80, y: 74, color: "#10b981" },
     ],
     connections: [
       { from: "github", to: "docker", type: "straight" },
@@ -359,40 +359,63 @@ function TelemetryConsole({
 
   return (
     <div
-      className="w-full h-full flex flex-col justify-between rounded-3xl border p-6 md:p-8 shadow-2xl relative overflow-hidden transition-all duration-300"
+      className="w-full h-full flex flex-col rounded-3xl border p-6 md:p-7 relative overflow-hidden transition-all duration-300"
       style={{
-        background: "#0d1117",
-        borderColor: selectedNode ? `${activeArch.color}25` : "rgba(255, 255, 255, 0.08)",
-        boxShadow: selectedNode ? `0 20px 40px rgba(0,0,0,0.4), inset 0 0 12px ${activeArch.color}0a` : "none",
+        background: "linear-gradient(160deg, #0d1117 0%, #0a0f1a 100%)",
+        borderColor: selectedNode ? activeArch.color : `${activeArch.color}55`,
+        borderWidth: "1.5px",
+        boxShadow: selectedNode
+          ? `0 0 0 1px ${activeArch.color}30, 0 24px 48px rgba(0,0,0,0.5), inset 0 0 40px ${activeArch.color}08`
+          : `0 0 0 1px ${activeArch.color}18, 0 8px 32px rgba(0,0,0,0.3)`,
       }}
     >
-      {/* Delicate border highlight */}
-      {selectedNode && (
-        <div
-          className="absolute top-0 left-0 right-0 h-[2px] transition-all duration-500"
-          style={{
-            background: `linear-gradient(to right, transparent, ${activeArch.color}, transparent)`,
-          }}
-        />
-      )}
+      {/* Always-visible top accent bar */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{
+          background: `linear-gradient(to right, transparent 0%, ${activeArch.color}80 30%, ${activeArch.color} 50%, ${activeArch.color}80 70%, transparent 100%)`,
+        }}
+      />
+
+      {/* Subtle dot-grid texture */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        style={{
+          backgroundImage: `radial-gradient(circle, ${activeArch.color} 1px, transparent 1px)`,
+          backgroundSize: "14px 14px",
+        }}
+      />
 
       {/* Terminal Title Header */}
-      <div className="flex items-center justify-between border-b pb-4 mb-5 border-slate-800/80">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75`} style={{ backgroundColor: activeArch.color }} />
-            <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: activeArch.color }} />
-          </span>
-          <span className="text-[10px] font-mono tracking-widest text-slate-400 uppercase font-bold">
-            Telemetry Console
-          </span>
+      <div className="flex items-center justify-between pb-4 mb-5 relative z-10" style={{ borderBottom: `1px solid ${activeArch.color}25` }}>
+        <div className="flex items-center gap-3">
+          {/* Mac-style window dots */}
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+            <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+          </div>
+          <div className="flex items-center gap-2 ml-1">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: activeArch.color }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: activeArch.color }} />
+            </span>
+            <span className="text-[11px] font-mono tracking-widest uppercase font-bold" style={{ color: activeArch.color }}>
+              Telemetry Console
+            </span>
+          </div>
         </div>
         {selectedNode && (
           <button
             onClick={onClearSelection}
-            className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-slate-300 transition-colors"
+            className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-1 rounded-md transition-all duration-200"
+            style={{
+              color: activeArch.color,
+              border: `1px solid ${activeArch.color}40`,
+              background: `${activeArch.color}10`,
+            }}
           >
-            Reset
+            ✕ Reset
           </button>
         )}
       </div>
@@ -405,51 +428,66 @@ function TelemetryConsole({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="flex-1 flex flex-col justify-between text-left"
+            className="flex-1 flex flex-col gap-4 text-left relative z-10"
           >
-            {/* Component Detail */}
-            <div className="space-y-4">
+            {/* Active Node label */}
+            <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: `${activeArch.color}10`, border: `1px solid ${activeArch.color}30` }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${activeArch.color}20`, color: activeArch.color }}>
+                <Cpu size={16} />
+              </div>
               <div>
-                <span className="text-[9px] font-bold font-mono uppercase tracking-wider text-slate-500">Active Node:</span>
-                <h4 className="text-base font-bold text-white tracking-wide uppercase font-mono mt-0.5" style={{ color: activeArch.color }}>
+                <span className="text-[9px] font-bold font-mono uppercase tracking-widest text-slate-500 block">Active Node</span>
+                <h4 className="text-sm font-bold font-mono tracking-wide" style={{ color: activeArch.color }}>
                   {selectedNode.label}
                 </h4>
               </div>
+            </div>
 
-              <div>
-                <span className="text-[9px] font-bold font-mono uppercase tracking-wider text-slate-500">Functional Description:</span>
-                <p className="text-xs text-slate-300 leading-relaxed font-sans mt-1">
-                  {nodeSpec.desc}
-                </p>
-              </div>
+            {/* Description */}
+            <div>
+              <span className="text-[9px] font-bold font-mono uppercase tracking-widest mb-1 block" style={{ color: `${activeArch.color}aa` }}>
+                ▸ Functional Description
+              </span>
+              <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                {nodeSpec.desc}
+              </p>
+            </div>
 
-              <div>
-                <span className="text-[9px] font-bold font-mono uppercase tracking-wider text-slate-500">Diagnostics Config:</span>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/50 border border-slate-900 mt-1">
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${activeArch.color}15`, color: activeArch.color }}>
-                    <Cpu size={14} />
-                  </div>
-                  <div className="font-mono text-[10px] text-slate-200">{nodeSpec.spec}</div>
-                </div>
+            {/* Diagnostics Config */}
+            <div>
+              <span className="text-[9px] font-bold font-mono uppercase tracking-widest mb-1 block" style={{ color: `${activeArch.color}aa` }}>
+                ▸ Diagnostics Config
+              </span>
+              <div className="p-2.5 rounded-xl font-mono text-[10px] text-slate-200 leading-relaxed"
+                style={{ background: "rgba(0,0,0,0.4)", border: `1px solid ${activeArch.color}25` }}>
+                {nodeSpec.spec}
               </div>
             </div>
 
             {/* Diagnostic Logs Window */}
-            <div className="mt-5 space-y-1.5">
-              <span className="text-[9px] font-bold font-mono uppercase tracking-wider text-slate-500">Live Shell Output:</span>
+            <div className="flex-1 flex flex-col">
+              <span className="text-[9px] font-bold font-mono uppercase tracking-widest mb-1 block" style={{ color: `${activeArch.color}aa` }}>
+                ▸ Live Shell Output
+              </span>
               <div
                 ref={logContainerRef}
-                className="h-[125px] overflow-y-auto bg-black/50 border border-slate-900 p-3 rounded-xl font-mono text-[9px] scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent select-all"
+                className="flex-1 overflow-y-auto p-3 rounded-xl font-mono text-[10px]"
+                style={{
+                  background: "rgba(0,0,0,0.55)",
+                  border: `1px solid ${activeArch.color}20`,
+                  minHeight: "110px",
+                  maxHeight: "140px",
+                }}
               >
                 {displayedLogs.map((log, index) => (
-                  <div key={index} className="flex gap-2 py-0.5 text-slate-300">
-                    <span className="text-slate-600 select-none">SHELL:</span>
-                    <span className="break-all">{log}</span>
+                  <div key={index} className="flex gap-2 py-0.5">
+                    <span className="text-emerald-600 select-none shrink-0">$</span>
+                    <span className="text-emerald-400 break-all">{log}</span>
                   </div>
                 ))}
-                <div className="flex items-center gap-1.5 text-slate-500 mt-2 select-none">
-                  <span className="w-1 h-3 bg-slate-500/80 animate-pulse" />
-                  <span className="text-[8px] uppercase tracking-wider">Listening stream...</span>
+                <div className="flex items-center gap-1.5 mt-2 select-none">
+                  <span className="w-1.5 h-3.5 animate-pulse" style={{ background: activeArch.color }} />
+                  <span className="text-[8px] uppercase tracking-wider" style={{ color: `${activeArch.color}70` }}>stream active...</span>
                 </div>
               </div>
             </div>
@@ -460,29 +498,30 @@ function TelemetryConsole({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex-1 flex flex-col justify-between text-left"
+            className="flex-1 flex flex-col justify-between text-left relative z-10"
           >
             {/* Architecture Summary */}
-            <div className="space-y-5">
-              <div>
-                <span className="text-[9px] font-bold font-mono uppercase tracking-wider text-slate-500">Blueprint Profile:</span>
-                <h4 className="text-base font-bold text-white tracking-wide mt-0.5">
+            <div className="space-y-4">
+              <div className="p-3.5 rounded-xl" style={{ background: `${activeArch.color}0d`, border: `1px solid ${activeArch.color}30` }}>
+                <span className="text-[9px] font-bold font-mono uppercase tracking-widest block mb-1" style={{ color: `${activeArch.color}99` }}>Blueprint Profile</span>
+                <h4 className="text-sm font-bold text-white tracking-wide">
                   {activeArch.title}
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 font-mono font-medium" style={{ color: activeArch.color }}>
+                <p className="text-[10px] font-mono font-medium mt-0.5" style={{ color: activeArch.color }}>
                   {activeArch.subtitle}
                 </p>
               </div>
 
               {/* Grid Metrics */}
-              <div className="grid grid-cols-1 gap-2.5">
+              <div className="grid grid-cols-1 gap-2">
                 {activeArch.stats.map((stat) => (
-                  <div key={stat.label} className="p-3 bg-slate-950/40 border border-slate-900 rounded-xl flex items-center justify-between">
+                  <div key={stat.label} className="p-3 rounded-xl flex items-center justify-between transition-all duration-200"
+                    style={{ background: "rgba(0,0,0,0.35)", border: `1px solid ${activeArch.color}22` }}>
                     <div>
-                      <span className="text-[8px] font-bold uppercase tracking-wider text-slate-500 block">{stat.label}</span>
-                      <span className="text-[9px] text-slate-400 font-sans mt-0.5 block leading-tight">{stat.sub}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-wider block" style={{ color: `${activeArch.color}99` }}>{stat.label}</span>
+                      <span className="text-[10px] text-slate-400 font-sans mt-0.5 block leading-tight">{stat.sub}</span>
                     </div>
-                    <span className="font-mono text-sm font-extrabold text-white" style={{ color: activeArch.color }}>
+                    <span className="font-mono text-sm font-extrabold" style={{ color: activeArch.color }}>
                       {stat.value}
                     </span>
                   </div>
@@ -491,12 +530,13 @@ function TelemetryConsole({
             </div>
 
             {/* Instruction */}
-            <div className="mt-6 p-3.5 rounded-xl border border-dashed border-slate-800 bg-slate-950/20 flex gap-2.5 items-start select-none">
-              <Terminal size={14} className="text-slate-500 shrink-0 mt-0.5" />
+            <div className="mt-4 p-3.5 rounded-xl flex gap-3 items-start select-none"
+              style={{ background: "rgba(0,0,0,0.3)", border: `1px dashed ${activeArch.color}35` }}>
+              <Terminal size={14} className="shrink-0 mt-0.5" style={{ color: activeArch.color }} />
               <div>
-                <div className="text-[9px] font-bold uppercase tracking-wider text-slate-400 font-mono">Interactive Map</div>
-                <p className="text-[10px] text-slate-500 mt-0.5 leading-normal font-sans">
-                  Select any component in the blueprint diagram on the left to initialize logs and specs telemetry.
+                <div className="text-[9px] font-bold uppercase tracking-wider font-mono mb-0.5" style={{ color: activeArch.color }}>Interactive Map</div>
+                <p className="text-[10px] text-slate-400 leading-normal font-sans">
+                  Click any node in the blueprint to stream live logs &amp; diagnostics.
                 </p>
               </div>
             </div>
@@ -619,7 +659,7 @@ export default function SystemArchitecture() {
               <AnimatePresence mode="wait">
                 <motion.svg
                   key={activeArchIdx}
-                  viewBox="0 0 100 90"
+                  viewBox="0 0 100 95"
                   className="w-full h-auto"
                   initial={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -699,6 +739,9 @@ export default function SystemArchitecture() {
                   {/* ── Layer 2: Main Nodes ── */}
                   {activeArch.nodes.map((n, i) => {
                     const isSelected = selectedNodeId === n.id;
+                    const W = 26, H = 18;
+                    // Dynamic font size: shrink for long labels so they always fit
+                    const labelFontSize = Math.min(2.2, (W - 8) / (n.label.length * 0.62));
                     return (
                       <g
                         key={n.id}
@@ -708,10 +751,10 @@ export default function SystemArchitecture() {
                       >
                         {/* Interactive Node Body */}
                         <motion.rect
-                          x={n.x - 10}
-                          y={n.y - 8}
-                          width={20}
-                          height={16}
+                          x={n.x - W / 2}
+                          y={n.y - H / 2}
+                          width={W}
+                          height={H}
                           rx={3.5}
                           fill={isSelected ? `${activeArch.color}1e` : "#0b1118"}
                           stroke={isSelected ? "#ffffff" : activeArch.color}
@@ -725,8 +768,8 @@ export default function SystemArchitecture() {
                           transition={{ duration: 0.2 }}
                         />
 
-                        {/* Status blinking dot */}
-                        <circle cx={n.x - 6} cy={n.y} r={1.2} fill={activeArch.color}>
+                        {/* Status blinking dot — top-left corner */}
+                        <circle cx={n.x - W / 2 + 2.5} cy={n.y - H / 2 + 2.5} r={1} fill={activeArch.color}>
                           <animate
                             attributeName="opacity"
                             values="0.4;1;0.4"
@@ -736,25 +779,26 @@ export default function SystemArchitecture() {
                           />
                         </circle>
 
-                        {/* Node Label Text */}
+                        {/* Node Label Text — dynamically sized, centered */}
                         <text
-                          x={n.x + 2}
-                          y={n.y - 1}
-                          fontSize={2.5}
+                          x={n.x}
+                          y={n.y - 1.5}
+                          fontSize={labelFontSize}
                           fontWeight="800"
                           fill={isSelected ? "#ffffff" : "rgba(255,255,255,0.9)"}
                           fontFamily="monospace"
                           textAnchor="middle"
+                          dominantBaseline="middle"
                           className="group-hover/node:fill-white transition-colors duration-150"
                         >
                           {n.label}
                         </text>
 
-                        {/* Subtitle */}
+                        {/* Subtitle — centered */}
                         <text
-                          x={n.x + 2}
-                          y={n.y + 3.5}
-                          fontSize={1.8}
+                          x={n.x}
+                          y={n.y + 4}
+                          fontSize={1.6}
                           fill={isSelected ? "#ffffff" : activeArch.color}
                           fontFamily="monospace"
                           textAnchor="middle"
@@ -770,6 +814,8 @@ export default function SystemArchitecture() {
                   {/* ── Layer 3: Vertical Supporting Nodes ── */}
                   {activeArch.verticals.map((v, i) => {
                     const isSelected = selectedNodeId === v.id;
+                    const VW = 24, VH = 12;
+                    const vLabelFontSize = Math.min(1.9, (VW - 6) / (v.label.length * 0.62));
                     return (
                       <g
                         key={v.id}
@@ -779,10 +825,10 @@ export default function SystemArchitecture() {
                       >
                         {/* Box container */}
                         <motion.rect
-                          x={v.x - 9}
-                          y={v.y - 6}
-                          width={18}
-                          height={12}
+                          x={v.x - VW / 2}
+                          y={v.y - VH / 2}
+                          width={VW}
+                          height={VH}
                           rx={2.5}
                           fill={isSelected ? `${v.color}18` : "#0b1118"}
                           stroke={isSelected ? "#ffffff" : v.color}
@@ -796,15 +842,16 @@ export default function SystemArchitecture() {
                           transition={{ duration: 0.2 }}
                         />
 
-                        {/* Label text */}
+                        {/* Label text — dynamically sized, centered */}
                         <text
                           x={v.x}
-                          y={v.y + 1.5}
-                          fontSize={2.1}
+                          y={v.y + 0.8}
+                          fontSize={vLabelFontSize}
                           fontWeight="800"
                           fill={isSelected ? "#ffffff" : v.color}
                           fontFamily="monospace"
                           textAnchor="middle"
+                          dominantBaseline="middle"
                           className="group-hover/node:fill-white transition-colors duration-150"
                         >
                           {v.label}

@@ -9,14 +9,6 @@ const commitData = [
 
 const builds = [
   {
-    title: "Cattle Health AI Monitoring",
-    desc: "Real-time IoT sensor ingestion + CNN-based anomaly detection with alerting pipeline.",
-    color: "#10b981",
-    progress: 72,
-    stack: ["Kafka", "TensorFlow", "MongoDB", "FastAPI"],
-    status: "In Progress",
-  },
-  {
     title: "CNN Tomato Disease Classifier",
     desc: "Transfer learning pipeline with automated retraining triggers and model versioning.",
     color: "#818cf8",
@@ -25,11 +17,11 @@ const builds = [
     status: "In Progress",
   },
   {
-    title: "Streaming ML Inference Pipeline",
-    desc: "Sub-100ms inference pipeline serving Kafka-triggered predictions via FastAPI endpoints.",
+    title: "Churn Prediction Pipeline",
+    desc: "End-to-end ML pipeline predicting customer churn with feature engineering, model serving, and drift monitoring.",
     color: "#0ea5e9",
     progress: 55,
-    stack: ["Kafka", "Spark", "FastAPI", "Redis"],
+    stack: ["XGBoost", "MLflow", "FastAPI", "Redis"],
     status: "In Progress",
   },
 
@@ -142,7 +134,7 @@ export default function CurrentlyBuilding() {
             </div>
 
             <div className="space-y-2 text-xs font-mono">
-              {["Real-time cattle health AI", "CNN disease classifier", "Streaming inference pipeline"].map((item, i) => (
+              {["CNN disease classifier", "Streaming inference pipeline"].map((item, i) => (
                 <div key={item} className="flex items-center gap-2 text-slate-400">
                   <motion.span className="text-emerald-400"
                     animate={{ opacity: [0.4, 1, 0.4] }}

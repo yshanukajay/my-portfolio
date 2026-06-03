@@ -378,14 +378,7 @@ export default function TechStack() {
           </div>
         </div>
 
-        {/* Footer note */}
-        <motion.p
-          className="text-center text-xs text-slate-400 mt-12 font-mono"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-          viewport={{ once: true }} transition={{ delay: 0.4 }}
-        >
-          Ring % = self-assessed proficiency · actively expanding the stack
-        </motion.p>
+
       </div>
     </section>
   );
