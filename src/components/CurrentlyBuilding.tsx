@@ -32,14 +32,7 @@ const builds = [
     stack: ["Kafka", "Spark", "FastAPI", "Redis"],
     status: "In Progress",
   },
-  {
-    title: "Kubernetes Model Deployment",
-    desc: "Zero-downtime K8s deployment with Prometheus monitoring and auto-scaling policies.",
-    color: "#f59e0b",
-    progress: 40,
-    stack: ["Kubernetes", "Docker", "Prometheus", "Grafana"],
-    status: "In Progress",
-  },
+
 ];
 
 export default function CurrentlyBuilding() {
@@ -149,7 +142,7 @@ export default function CurrentlyBuilding() {
             </div>
 
             <div className="space-y-2 text-xs font-mono">
-              {["Real-time cattle health AI", "CNN disease classifier", "Streaming inference pipeline", "K8s model deployment"].map((item, i) => (
+              {["Real-time cattle health AI", "CNN disease classifier", "Streaming inference pipeline"].map((item, i) => (
                 <div key={item} className="flex items-center gap-2 text-slate-400">
                   <motion.span className="text-emerald-400"
                     animate={{ opacity: [0.4, 1, 0.4] }}
