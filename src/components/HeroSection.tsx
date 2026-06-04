@@ -313,7 +313,7 @@ function InteractiveGeometricBackground() {
 }
 
 /* ─── Premium Magnetic Button ─────────────────────────────────────────────── */
-function MagneticButton({ children, className, href, target, rel }: any) {
+function MagneticButton({ children, className, href, target, rel, download, "aria-label": ariaLabel }: any) {
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -341,6 +341,8 @@ function MagneticButton({ children, className, href, target, rel }: any) {
       href={href}
       target={target}
       rel={rel}
+      download={download}
+      aria-label={ariaLabel}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ x: mouseXSpring, y: mouseYSpring }}
@@ -666,9 +668,10 @@ export default function HeroSection() {
             </MagneticButton>
 
             <MagneticButton
-              href="#"
+              href="/YohanShanuka_CV.pdf"
+              download="YohanShanuka_CV.pdf"
               className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-emerald-600 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all"
-              aria-label="View Resume"
+              aria-label="Download CV"
             >
               <CvIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>

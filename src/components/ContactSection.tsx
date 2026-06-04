@@ -135,7 +135,7 @@ function ContactCard({ icon, label, value, href, color, delay }: ContactCardProp
 }
 
 /* ─── Trust Chips ────────────────────────────────────────────────── */
-const CHIPS = ["AI Engineering", "Data Engineering", "MLOps", "Cloud Architecture", "ML Systems", "Distributed Systems"];
+const CHIPS = ["ML Engineering", "Data Engineering", "MLOps", "Cloud Architecture", "ML Systems", "Distributed Systems"];
 
 /* ─── Main Component ─────────────────────────────────────────────── */
 export default function ContactSection() {
