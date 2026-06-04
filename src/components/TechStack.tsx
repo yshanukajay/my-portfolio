@@ -229,9 +229,11 @@ export default function TechStack() {
             Technology Ecosystem
           </h2>
           <div className="w-20 h-1 bg-sky-500 mx-auto rounded-full mb-6" />
-          <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">
-            A curated stack I use to build scalable ML systems, data pipelines, and cloud-native infrastructure.
-          </p>
+          <div className="flex justify-center">
+            <span className="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-medium border border-slate-300 bg-white text-slate-700 shadow-sm">
+              A curated stack I use to build scalable ML systems, data pipelines, and cloud-native infrastructure.
+            </span>
+          </div>
         </motion.div>
 
         {/* Category filter tabs */}

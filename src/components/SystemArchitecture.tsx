@@ -578,9 +578,11 @@ export default function SystemArchitecture() {
           <p className="text-xs font-bold tracking-[0.25em] text-emerald-600 uppercase mb-3">System Design</p>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Scalable Architecture</h2>
           <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full mb-6" />
-          <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
-            Blueprint-level architecture diagrams showcasing distributed workflows, ETL patterns, and containerized deployments.
-          </p>
+          <div className="flex justify-center">
+            <span className="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-medium border border-slate-300 bg-white text-slate-700 shadow-sm">
+              Blueprint-level architecture diagrams showcasing distributed workflows, ETL patterns, and containerized deployments.
+            </span>
+          </div>
         </motion.div>
 
         {/* Switcher: Architecture Titles act as Tabs */}
