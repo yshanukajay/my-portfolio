@@ -669,9 +669,10 @@ export default function HeroSection() {
 
             <MagneticButton
               href="/YohanShanuka_CV.pdf"
-              download="YohanShanuka_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-emerald-600 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all"
-              aria-label="Download CV"
+              aria-label="View CV"
             >
               <CvIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>

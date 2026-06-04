@@ -26,23 +26,28 @@ const certifications = [
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="py-24 relative overflow-hidden border-y border-slate-100"
-      style={{ background: "linear-gradient(135deg, #f8faff 0%, #f0fdf8 50%, #f8faff 100%)" }}>
+    <section id="certifications" className="py-24 relative overflow-hidden border-y border-slate-100 bg-white">
 
-      {/* Dot grid pattern */}
-      <div className="absolute inset-0 pointer-events-none"
+      {/* ── Engineering grid background (same as Technology Ecosystem) ── */}
+      <div
+        className="absolute inset-0 pointer-events-none select-none"
         style={{
-          backgroundImage: "radial-gradient(circle, #94a3b820 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }} />
-
-      {/* Soft emerald radial glow top-right */}
-      <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)" }} />
-
-      {/* Soft sky glow bottom-left */}
-      <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(14,165,233,0.07) 0%, transparent 70%)" }} />
+          backgroundImage: `
+            linear-gradient(to right, #10b9811a 1.2px, transparent 1.2px),
+            linear-gradient(to bottom, #10b9811a 1.2px, transparent 1.2px)
+          `,
+          backgroundSize: "36px 36px",
+          maskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 90%)",
+          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 90%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 15% 20%, rgba(16,185,129,0.05) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(5,150,105,0.05) 0%, transparent 45%)",
+        }}
+      />
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="text-center mb-16">

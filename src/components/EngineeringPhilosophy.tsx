@@ -1,26 +1,29 @@
 "use client";
-import { motion } from "framer-motion";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import FluidSimulation, { FluidHandle } from "./FluidSimulation";
 
 /* ─── Data ───────────────────────────────────────────────────────── */
 const pillars = [
   {
     title: "Scalability",
-    color: "#818cf8",
-    border: "rgba(129,140,248,0.25)",
+    color: "#6366f1",
+    border: "rgba(99,102,241,0.22)",
     desc: "Systems that grow with demand. Every pipeline I build is designed to handle 10× the expected load from day one.",
     icon: "⬡",
   },
   {
     title: "Reliability",
     color: "#10b981",
-    border: "rgba(16,185,129,0.25)",
+    border: "rgba(16,185,129,0.22)",
     desc: "99.9% uptime is the baseline. I engineer fault-tolerant architectures with graceful degradation and self-healing capabilities.",
     icon: "◈",
   },
   {
     title: "Observability",
     color: "#f59e0b",
-    border: "rgba(245,158,11,0.25)",
+    border: "rgba(245,158,11,0.22)",
     desc: "You can't improve what you can't measure. Every system ships with metrics, logs, and alerting baked in from the start.",
     icon: "◎",
   },
@@ -33,15 +36,96 @@ const articles = [
   "Batch vs Streaming: When to Use Which",
 ];
 
+/* Light background — warm pearl-white so vivid hues really pop */
+const LIGHT_BG = { r: 253, g: 251, b: 255 };
+
 /* ─── Main Component ──────────────────────────────────────────────── */
 export default function EngineeringPhilosophy() {
+  const prefersReduced = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const fluidRef = useRef<FluidHandle>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  /* ── Soft mouse-spotlight (very subtle on light bg) ── */
+  const [spotStyle, setSpotStyle] = useState("none");
+
+  /* ── Mouse motion values for card levitation ── */
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+
+  const onSectionMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      if (prefersReduced) return;
+      const rect = sectionRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const rx = e.clientX - rect.left;
+      const ry = e.clientY - rect.top;
+
+      if (!isMobile) fluidRef.current?.notifyMove(rx, ry);
+
+      setSpotStyle(
+        `radial-gradient(520px circle at ${rx}px ${ry}px, rgba(99,102,241,0.07) 0%, transparent 70%)`
+      );
+    },
+    [isMobile, prefersReduced]
+  );
+
+  const onSectionMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      const rect = sectionRef.current?.getBoundingClientRect();
+      if (!rect || prefersReduced) return;
+      fluidRef.current?.notifyEnter(e.clientX - rect.left, e.clientY - rect.top);
+    },
+    [prefersReduced]
+  );
+
+  const onSectionMouseLeave = useCallback(() => {
+    setSpotStyle("none");
+    rawX.set(0);
+    rawY.set(0);
+    fluidRef.current?.notifyLeave();
+  }, [rawX, rawY]);
+
+  const springX = useSpring(rawX, { stiffness: 80, damping: 20 });
+  const springY = useSpring(rawY, { stiffness: 80, damping: 20 });
+  void springX; void springY; // used via style if needed
+
   return (
     <section
       id="philosophy"
-      className="py-24 relative overflow-hidden bg-white"
+      ref={sectionRef}
+      onMouseMove={onSectionMouseMove}
+      onMouseEnter={onSectionMouseEnter}
+      onMouseLeave={onSectionMouseLeave}
+      className="py-24 relative overflow-hidden"
     >
-      {/* === Content === */}
+      {/* ── WebGL Fluid — light background, vivid streaks ── */}
+      <FluidSimulation
+        ref={fluidRef}
+        backColor={LIGHT_BG}
+        colorIntensity={1.8}
+        initialSplats={12}
+        hueRange={[0.57, 0.80]}
+        saturation={0.60}
+      />
+
+      {/* ── Subtle mouse spotlight overlay ── */}
+      <div
+        className="absolute inset-0 pointer-events-none transition-[background] duration-100"
+        style={{ background: spotStyle, zIndex: 1 }}
+      />
+
+      {/* ── Content ── */}
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
+
         {/* Header */}
         <motion.div
           className="text-center mb-16"
@@ -50,17 +134,16 @@ export default function EngineeringPhilosophy() {
           viewport={{ once: true }}
           transition={{ duration: 0.65 }}
         >
-          {/* Badge */}
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5 border"
             style={{
-              background: "rgba(99,102,241,0.07)",
-              borderColor: "rgba(99,102,241,0.20)",
+              background: "rgba(99,102,241,0.08)",
+              borderColor: "rgba(99,102,241,0.22)",
               backdropFilter: "blur(8px)",
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-            <p className="text-[11px] font-bold tracking-[0.22em] text-indigo-500 uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+            <p className="text-[11px] font-bold tracking-[0.22em] text-indigo-600 uppercase">
               How I Think
             </p>
           </div>
@@ -72,10 +155,10 @@ export default function EngineeringPhilosophy() {
 
           {/* Main quote */}
           <motion.blockquote
-            className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-slate-700 leading-relaxed pl-6 text-left rounded-2xl p-7 border"
+            className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-slate-700 leading-relaxed text-left rounded-2xl p-7 border"
             style={{
               background: "rgba(255,255,255,0.72)",
-              backdropFilter: "blur(14px)",
+              backdropFilter: "blur(18px)",
               borderColor: "rgba(99,102,241,0.15)",
               borderLeft: "4px solid #6366f1",
               boxShadow: "0 4px 32px rgba(99,102,241,0.08)",
@@ -86,14 +169,16 @@ export default function EngineeringPhilosophy() {
             transition={{ duration: 0.6, delay: 0.15 }}
           >
             I focus on building{" "}
-            <span className="text-indigo-600 font-bold">scalable, production-ready AI systems</span>{" "}
+            <span className="text-indigo-600 font-bold">
+              scalable, production-ready AI systems
+            </span>{" "}
             that combine machine learning, distributed data pipelines, and efficient backend
             infrastructure — not just models, but{" "}
             <span className="text-slate-900 font-bold">intelligent systems</span>.
           </motion.blockquote>
         </motion.div>
 
-        {/* 3 Pillars */}
+        {/* 3 Pillar cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
           {pillars.map((p, i) => (
             <motion.div
@@ -102,18 +187,18 @@ export default function EngineeringPhilosophy() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.12 }}
-              whileHover={{ y: -6, boxShadow: `0 16px 40px ${p.color}20` }}
-              className="rounded-2xl p-7 border transition-all duration-300"
+              whileHover={{ y: -6, boxShadow: `0 18px 40px ${p.color}18` }}
+              className="rounded-2xl p-7 border transition-all duration-300 cursor-default"
               style={{
-                background: "rgba(255,255,255,0.75)",
-                backdropFilter: "blur(14px)",
+                background: "rgba(255,255,255,0.70)",
+                backdropFilter: "blur(18px)",
                 borderColor: p.border,
-                boxShadow: "0 2px 14px rgba(0,0,0,0.04)",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.05)",
               }}
             >
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                style={{ background: `${p.color}15`, border: `1px solid ${p.color}30` }}
+                style={{ background: `${p.color}12`, border: `1px solid ${p.color}28` }}
               >
                 {p.icon}
               </div>
@@ -131,8 +216,8 @@ export default function EngineeringPhilosophy() {
         <motion.div
           className="max-w-5xl mx-auto rounded-2xl p-8 border"
           style={{
-            background: "rgba(255,255,255,0.75)",
-            backdropFilter: "blur(14px)",
+            background: "rgba(255,255,255,0.70)",
+            backdropFilter: "blur(18px)",
             borderColor: "rgba(99,102,241,0.13)",
             boxShadow: "0 4px 28px rgba(99,102,241,0.07)",
           }}
@@ -143,10 +228,7 @@ export default function EngineeringPhilosophy() {
         >
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-bold text-slate-900">Technical Writing</h3>
-            <a
-              href="#"
-              className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 transition-colors"
-            >
+            <a href="#" className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
               View All →
             </a>
           </div>
@@ -167,6 +249,7 @@ export default function EngineeringPhilosophy() {
             ))}
           </div>
         </motion.div>
+
       </div>
     </section>
   );
