@@ -72,7 +72,7 @@ export default function EngineeringPhilosophy() {
       if (!isMobile) fluidRef.current?.notifyMove(rx, ry);
 
       setSpotStyle(
-        `radial-gradient(520px circle at ${rx}px ${ry}px, rgba(99,102,241,0.07) 0%, transparent 70%)`
+        `radial-gradient(12px circle at ${rx}px ${ry}px, rgba(99,102,241,0.22) 0%, transparent 40%)`
       );
     },
     [isMobile, prefersReduced]
