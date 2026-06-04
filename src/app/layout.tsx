@@ -14,19 +14,19 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Yohan Shanuka | ML & Data Engineer",
-  description: "Portfolio of Yohan Shanuka, specializing in scalable Machine Learning systems, Data Engineering, and MLOps.",
+  title: "Yohan Shanuka | ML & Data Engineer · Streaming Data Architecture · Containerized Deployment",
+  description: "Portfolio of Yohan Shanuka — specializing in scalable Machine Learning systems, Streaming Data Architecture, Containerized Deployment pipelines, and MLOps.",
   openGraph: {
-    title: "Yohan Shanuka | ML & Data Engineer",
-    description: "Building scalable machine learning workflows and production-grade data pipelines.",
+    title: "Yohan Shanuka | ML & Data Engineer · Streaming Data Architecture · Containerized Deployment",
+    description: "Building scalable Streaming Data Architectures and Containerized ML Deployment pipelines for production-grade AI systems.",
     url: "https://yohanshanuka.com",
     siteName: "Yohan Shanuka Portfolio",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yohan Shanuka | ML & Data Engineer",
-    description: "Building scalable machine learning workflows and production-grade data pipelines.",
+    title: "Yohan Shanuka | ML & Data Engineer · Streaming Data Architecture · Containerized Deployment",
+    description: "Building scalable Streaming Data Architectures and Containerized ML Deployment pipelines for production-grade AI systems.",
   },
 };
 

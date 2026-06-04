@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cpu, Terminal } from "lucide-react";
+import MagneticParticlesBg from "./MagneticParticlesBg";
 
 // --- Node Specifications Database ---
 const nodeSpecs: Record<string, { desc: string; spec: string; logs: string[] }> = {
@@ -561,16 +562,9 @@ export default function SystemArchitecture() {
   };
 
   return (
-    <section id="architecture" className="py-24 bg-slate-50 relative border-y border-slate-100">
-      {/* Background radial highlight */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 50% 100%, rgba(245,158,11,0.02) 0%, transparent 60%)",
-        }}
-      />
-
+    <section id="architecture" className="py-24 bg-slate-50 relative border-y border-slate-100 overflow-hidden">
+      {/* ── Interactive magnetic particles — white + blue, attracted to cursor ── */}
+      <MagneticParticlesBg opacity={0.9} />
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         
         {/* Section Header */}
