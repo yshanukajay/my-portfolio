@@ -497,9 +497,9 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // Internal mutable store for the imperative API callbacks
   const apiRef = useRef<FluidHandle>({
-    notifyEnter: () => {},
-    notifyMove: () => {},
-    notifyLeave: () => {},
+    notifyEnter: () => { },
+    notifyMove: () => { },
+    notifyLeave: () => { },
   });
 
   useImperativeHandle(ref, () => ({
@@ -581,25 +581,25 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       type: number,
     ): { internalFormat: number; format: number } | null {
       if (!checkFormat(intFmt, fmt, type)) {
-        if (intFmt === gl.R16F)   return getSupportedFormat(gl.RG16F,   gl.RG,   type);
-        if (intFmt === gl.RG16F)  return getSupportedFormat(gl.RGBA16F, gl.RGBA, type);
+        if (intFmt === gl.R16F) return getSupportedFormat(gl.RG16F, gl.RG, type);
+        if (intFmt === gl.RG16F) return getSupportedFormat(gl.RGBA16F, gl.RGBA, type);
         return null;
       }
       return { internalFormat: intFmt, format: fmt };
     }
 
     let fmtRGBA: { internalFormat: number; format: number } | null;
-    let fmtRG:   { internalFormat: number; format: number } | null;
-    let fmtR:    { internalFormat: number; format: number } | null;
+    let fmtRG: { internalFormat: number; format: number } | null;
+    let fmtR: { internalFormat: number; format: number } | null;
 
     if (isWebGL2) {
       fmtRGBA = getSupportedFormat(gl.RGBA16F, gl.RGBA, halfFloatType);
-      fmtRG   = getSupportedFormat(gl.RG16F,   gl.RG,   halfFloatType);
-      fmtR    = getSupportedFormat(gl.R16F,    gl.RED,  halfFloatType);
+      fmtRG = getSupportedFormat(gl.RG16F, gl.RG, halfFloatType);
+      fmtR = getSupportedFormat(gl.R16F, gl.RED, halfFloatType);
     } else {
       fmtRGBA = getSupportedFormat(gl.RGBA, gl.RGBA, halfFloatType);
-      fmtRG   = getSupportedFormat(gl.RGBA, gl.RGBA, halfFloatType);
-      fmtR    = getSupportedFormat(gl.RGBA, gl.RGBA, halfFloatType);
+      fmtRG = getSupportedFormat(gl.RGBA, gl.RGBA, halfFloatType);
+      fmtR = getSupportedFormat(gl.RGBA, gl.RGBA, halfFloatType);
     }
     if (!fmtRGBA || !fmtRG || !fmtR) return; // Unsupported GPU
 
@@ -693,29 +693,29 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
     const baseVS = compileShader(gl.VERTEX_SHADER, BASE_VERTEX_SRC);
     const blurVS = compileShader(gl.VERTEX_SHADER, BLUR_VERTEX_SRC);
 
-    const blurProg         = new Prog(blurVS, compileShader(gl.FRAGMENT_SHADER, BLUR_FRAG_SRC));
-    const copyProg         = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, COPY_FRAG_SRC));
-    const clearProg        = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, CLEAR_FRAG_SRC));
-    const colorProg        = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, COLOR_FRAG_SRC));
-    const bloomPrefilterP  = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, BLOOM_PREFILTER_FRAG_SRC));
-    const bloomBlurP       = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, BLOOM_BLUR_FRAG_SRC));
-    const bloomFinalP      = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, BLOOM_FINAL_FRAG_SRC));
-    const sunraysMaskP     = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, SUNRAYS_MASK_FRAG_SRC));
-    const sunraysP         = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, SUNRAYS_FRAG_SRC));
-    const splatP           = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, SPLAT_FRAG_SRC));
-    const advectionP       = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, ADVECTION_FRAG_SRC, linearFilterExt ? undefined : ["MANUAL_FILTERING"]));
-    const divergenceP      = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, DIVERGENCE_FRAG_SRC));
-    const curlP            = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, CURL_FRAG_SRC));
-    const vorticityP       = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, VORTICITY_FRAG_SRC));
-    const pressureP        = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, PRESSURE_FRAG_SRC));
-    const gradSubtractP    = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, GRAD_SUBTRACT_FRAG_SRC));
-    const displayMat       = new Material(baseVS, DISPLAY_FRAG_SRC);
+    const blurProg = new Prog(blurVS, compileShader(gl.FRAGMENT_SHADER, BLUR_FRAG_SRC));
+    const copyProg = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, COPY_FRAG_SRC));
+    const clearProg = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, CLEAR_FRAG_SRC));
+    const colorProg = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, COLOR_FRAG_SRC));
+    const bloomPrefilterP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, BLOOM_PREFILTER_FRAG_SRC));
+    const bloomBlurP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, BLOOM_BLUR_FRAG_SRC));
+    const bloomFinalP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, BLOOM_FINAL_FRAG_SRC));
+    const sunraysMaskP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, SUNRAYS_MASK_FRAG_SRC));
+    const sunraysP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, SUNRAYS_FRAG_SRC));
+    const splatP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, SPLAT_FRAG_SRC));
+    const advectionP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, ADVECTION_FRAG_SRC, linearFilterExt ? undefined : ["MANUAL_FILTERING"]));
+    const divergenceP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, DIVERGENCE_FRAG_SRC));
+    const curlP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, CURL_FRAG_SRC));
+    const vorticityP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, VORTICITY_FRAG_SRC));
+    const pressureP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, PRESSURE_FRAG_SRC));
+    const gradSubtractP = new Prog(baseVS, compileShader(gl.FRAGMENT_SHADER, GRAD_SUBTRACT_FRAG_SRC));
+    const displayMat = new Material(baseVS, DISPLAY_FRAG_SRC);
 
     /* ── Full-screen quad geometry ───────────────────────────── */
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,-1,1,1,1,1,-1]), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0,1,2,0,2,3]), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(0);
 
@@ -728,7 +728,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
         gl.viewport(0, 0, target.width, target.height);
         gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo);
       }
-      if (clear) { gl.clearColor(0,0,0,1); gl.clear(gl.COLOR_BUFFER_BIT); }
+      if (clear) { gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT); }
       gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
     }
 
@@ -764,7 +764,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       return {
         width: w, height: h,
         texelSizeX: a.texelSizeX, texelSizeY: a.texelSizeY,
-        get read()  { return a; },
+        get read() { return a; },
         get write() { return b; },
         swap() { [a, b] = [b, a]; },
       };
@@ -785,8 +785,8 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       let b = createFBO(w, h, intFmt, fmt, type, filter);
       return {
         width: w, height: h,
-        texelSizeX: 1/w, texelSizeY: 1/h,
-        get read()  { return a; },
+        texelSizeX: 1 / w, texelSizeY: 1 / h,
+        get read() { return a; },
         get write() { return b; },
         swap() { [a, b] = [b, a]; },
       };
@@ -825,7 +825,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 1, 1, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array([255,255,255]));
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 1, 1, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255]));
       return {
         texture: tex, width: 1, height: 1,
         attach(id: number) {
@@ -839,21 +839,21 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
     /* ── Initialise simulation FBOs ──────────────────────────── */
     const linearFilter = linearFilterExt ? gl.LINEAR : gl.NEAREST;
 
-    let simRes  = getResolution(cfg.SIM_RESOLUTION);
-    let dyeRes  = getResolution(cfg.DYE_RESOLUTION);
+    let simRes = getResolution(cfg.SIM_RESOLUTION);
+    let dyeRes = getResolution(cfg.DYE_RESOLUTION);
 
-    let dye      = createDoubleFBO(dyeRes.width, dyeRes.height, fmtRGBA.internalFormat, fmtRGBA.format, halfFloatType, linearFilter);
-    let velocity = createDoubleFBO(simRes.width, simRes.height, fmtRG.internalFormat,   fmtRG.format,   halfFloatType, linearFilter);
+    let dye = createDoubleFBO(dyeRes.width, dyeRes.height, fmtRGBA.internalFormat, fmtRGBA.format, halfFloatType, linearFilter);
+    let velocity = createDoubleFBO(simRes.width, simRes.height, fmtRG.internalFormat, fmtRG.format, halfFloatType, linearFilter);
     let divergence = createFBO(simRes.width, simRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, gl.NEAREST);
-    let curl       = createFBO(simRes.width, simRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, gl.NEAREST);
-    let pressure   = createDoubleFBO(simRes.width, simRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, gl.NEAREST);
+    let curl = createFBO(simRes.width, simRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, gl.NEAREST);
+    let pressure = createDoubleFBO(simRes.width, simRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, gl.NEAREST);
 
     // Bloom FBOs
     const bloomRes = getResolution(cfg.BLOOM_RESOLUTION);
     let bloom = createFBO(bloomRes.width, bloomRes.height, fmtRGBA.internalFormat, fmtRGBA.format, halfFloatType, linearFilter);
     const bloomFBOs: FBO[] = [];
     for (let i = 0; i < cfg.BLOOM_ITERATIONS; i++) {
-      const w = bloomRes.width  >> (i + 1);
+      const w = bloomRes.width >> (i + 1);
       const h = bloomRes.height >> (i + 1);
       if (w < 2 || h < 2) break;
       bloomFBOs.push(createFBO(w, h, fmtRGBA.internalFormat, fmtRGBA.format, halfFloatType, linearFilter));
@@ -861,14 +861,14 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
 
     // Sunrays FBOs
     const srRes = getResolution(cfg.SUNRAYS_RESOLUTION);
-    let sunrays     = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
+    let sunrays = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
     let sunraysTemp = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
 
     /* ── Display material keywords ───────────────────────────── */
     const kws: string[] = [];
-    if (cfg.SHADING)  kws.push("SHADING");
-    if (cfg.BLOOM)    kws.push("BLOOM");
-    if (cfg.SUNRAYS)  kws.push("SUNRAYS");
+    if (cfg.SHADING) kws.push("SHADING");
+    if (cfg.BLOOM) kws.push("BLOOM");
+    if (cfg.SUNRAYS) kws.push("SUNRAYS");
     displayMat.setKeywords(kws);
 
     /* ── Color helpers ───────────────────────────────────────── */
@@ -880,12 +880,12 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       const t = v * (1 - (1 - f) * s);
       let r = 0, g = 0, b = 0;
       switch (i % 6) {
-        case 0: r=v; g=t; b=p; break;
-        case 1: r=q; g=v; b=p; break;
-        case 2: r=p; g=v; b=t; break;
-        case 3: r=p; g=q; b=v; break;
-        case 4: r=t; g=p; b=v; break;
-        default: r=v; g=p; b=q;
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        default: r = v; g = p; b = q;
       }
       return { r, g, b };
     }
@@ -902,8 +902,10 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
 
     /* ── Pointer state ───────────────────────────────────────── */
     function makePtr(): Ptr {
-      return { id:-1, texcoordX:0, texcoordY:0, prevTexcoordX:0, prevTexcoordY:0,
-               deltaX:0, deltaY:0, down:false, moved:false, color:{r:30,g:0,b:300} };
+      return {
+        id: -1, texcoordX: 0, texcoordY: 0, prevTexcoordX: 0, prevTexcoordY: 0,
+        deltaX: 0, deltaY: 0, down: false, moved: false, color: { r: 30, g: 0, b: 300 }
+      };
     }
     const pointers: Ptr[] = [makePtr()];
 
@@ -930,7 +932,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
     }
 
     /* ── Splat ───────────────────────────────────────────────── */
-    function splat(x: number, y: number, dx: number, dy: number, color: {r:number;g:number;b:number}) {
+    function splat(x: number, y: number, dx: number, dy: number, color: { r: number; g: number; b: number }) {
       splatP.bind();
       gl.uniform1i(splatP.uniforms.uTarget, velocity.read.attach(0));
       gl.uniform1f(splatP.uniforms.aspectRatio, cvs.width / cvs.height);
@@ -1025,7 +1027,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       gl.disable(gl.BLEND);
 
       bloomPrefilterP.bind();
-      const knee  = cfg.BLOOM_THRESHOLD * cfg.BLOOM_SOFT_KNEE + 1e-4;
+      const knee = cfg.BLOOM_THRESHOLD * cfg.BLOOM_SOFT_KNEE + 1e-4;
       gl.uniform3f(bloomPrefilterP.uniforms.curve, cfg.BLOOM_THRESHOLD - knee, knee * 2, 0.25 / knee);
       gl.uniform1f(bloomPrefilterP.uniforms.threshold, cfg.BLOOM_THRESHOLD);
       gl.uniform1i(bloomPrefilterP.uniforms.uTexture, src.attach(0));
@@ -1075,8 +1077,8 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
 
     /* ── Full render ─────────────────────────────────────────── */
     function render() {
-      if (cfg.BLOOM)    applyBloom(dye.read, bloom);
-      if (cfg.SUNRAYS)  applySunrays(dye.read, dye.write, sunrays);
+      if (cfg.BLOOM) applyBloom(dye.read, bloom);
+      if (cfg.SUNRAYS) applySunrays(dye.read, dye.write, sunrays);
 
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       gl.enable(gl.BLEND);
@@ -1091,7 +1093,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       const W = gl.drawingBufferWidth;
       const H = gl.drawingBufferHeight;
       displayMat.bind();
-      if (cfg.SHADING) gl.uniform2f(displayMat.uniforms.texelSize, 1/W, 1/H);
+      if (cfg.SHADING) gl.uniform2f(displayMat.uniforms.texelSize, 1 / W, 1 / H);
       gl.uniform1i(displayMat.uniforms.uTexture, dye.read.attach(0));
       if (cfg.BLOOM) {
         gl.uniform1i(displayMat.uniforms.uBloom, bloom.attach(1));
@@ -1108,7 +1110,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
     for (let i = 0; i < numSplats; i++) {
       const c = generateColor(); c.r *= splatMult; c.g *= splatMult; c.b *= splatMult;
       splat(Math.random(), Math.random(),
-            1000 * (Math.random() - 0.5), 1000 * (Math.random() - 0.5), c);
+        1000 * (Math.random() - 0.5), 1000 * (Math.random() - 0.5), c);
     }
 
     /* ── Animation loop ──────────────────────────────────────── */
@@ -1117,18 +1119,18 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
 
     function update() {
       const now = Date.now();
-      const dt  = Math.min((now - lastTime) / 1000, 1/60);
-      lastTime  = now;
+      const dt = Math.min((now - lastTime) / 1000, 1 / 60);
+      lastTime = now;
 
       // Handle resize → rebuild FBOs
       if (resizeCanvas()) {
         simRes = getResolution(cfg.SIM_RESOLUTION);
         dyeRes = getResolution(cfg.DYE_RESOLUTION);
-        dye      = resizeDoubleFBO(dye, dyeRes.width, dyeRes.height, fmtRGBA!.internalFormat, fmtRGBA!.format, halfFloatType, linearFilter);
+        dye = resizeDoubleFBO(dye, dyeRes.width, dyeRes.height, fmtRGBA!.internalFormat, fmtRGBA!.format, halfFloatType, linearFilter);
         velocity = resizeDoubleFBO(velocity, simRes.width, simRes.height, fmtRG!.internalFormat, fmtRG!.format, halfFloatType, linearFilter);
         divergence = createFBO(simRes.width, simRes.height, fmtR!.internalFormat, fmtR!.format, halfFloatType, gl.NEAREST);
-        curl       = createFBO(simRes.width, simRes.height, fmtR!.internalFormat, fmtR!.format, halfFloatType, gl.NEAREST);
-        pressure   = createDoubleFBO(simRes.width, simRes.height, fmtR!.internalFormat, fmtR!.format, halfFloatType, gl.NEAREST);
+        curl = createFBO(simRes.width, simRes.height, fmtR!.internalFormat, fmtR!.format, halfFloatType, gl.NEAREST);
+        pressure = createDoubleFBO(simRes.width, simRes.height, fmtR!.internalFormat, fmtR!.format, halfFloatType, gl.NEAREST);
       }
 
       // Apply pointer-driven splats
@@ -1136,7 +1138,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
         if (ptr.moved) {
           ptr.moved = false;
           splat(ptr.texcoordX, ptr.texcoordY,
-                ptr.deltaX * cfg.SPLAT_FORCE, ptr.deltaY * cfg.SPLAT_FORCE, ptr.color);
+            ptr.deltaX * cfg.SPLAT_FORCE, ptr.deltaY * cfg.SPLAT_FORCE, ptr.color);
         }
       }
 
@@ -1168,7 +1170,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
       while (touches.length >= pointers.length) pointers.push(makePtr());
       for (let i = 0; i < touches.length; i++) {
         ptrDown(pointers[i + 1], touches[i].identifier,
-                scaleByPixelRatio(touches[i].pageX), scaleByPixelRatio(touches[i].pageY));
+          scaleByPixelRatio(touches[i].pageX), scaleByPixelRatio(touches[i].pageY));
       }
     };
 
@@ -1193,8 +1195,8 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
     canvas.addEventListener("mouseover", onMouseOver);
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
-    canvas.addEventListener("touchmove",  onTouchMove,  { passive: false });
-    window.addEventListener("touchend",   onTouchEnd);
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
 
     /* ── Expose imperative API (parent can relay events) ─────── */
     apiRef.current = {
@@ -1212,12 +1214,12 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
     /* ── Cleanup ─────────────────────────────────────────────── */
     return () => {
       cancelAnimationFrame(animId);
-      canvas.removeEventListener("mouseover",   onMouseOver);
-      canvas.removeEventListener("mousemove",   onMouseMove);
-      canvas.removeEventListener("touchstart",  onTouchStart);
-      canvas.removeEventListener("touchmove",   onTouchMove);
-      window.removeEventListener("touchend",    onTouchEnd);
-      apiRef.current = { notifyEnter:()=>{}, notifyMove:()=>{}, notifyLeave:()=>{} };
+      canvas.removeEventListener("mouseover", onMouseOver);
+      canvas.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("touchstart", onTouchStart);
+      canvas.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      apiRef.current = { notifyEnter: () => { }, notifyMove: () => { }, notifyLeave: () => { } };
     };
   }, []);
 

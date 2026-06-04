@@ -16,6 +16,11 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Yohan Shanuka | ML & Data Engineer · Streaming Data Architecture · Containerized Deployment",
   description: "Portfolio of Yohan Shanuka — specializing in scalable Machine Learning systems, Streaming Data Architecture, Containerized Deployment pipelines, and MLOps.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   openGraph: {
     title: "Yohan Shanuka | ML & Data Engineer · Streaming Data Architecture · Containerized Deployment",
     description: "Building scalable Streaming Data Architectures and Containerized ML Deployment pipelines for production-grade AI systems.",
