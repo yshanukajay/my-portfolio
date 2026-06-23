@@ -115,7 +115,6 @@ export default function EngineeringPhilosophy() {
         initialSplats={12}
         hueRange={[0.57, 0.80]}
         saturation={0.60}
-        splatRadius={0.015}
       />
 
       {/* ── Subtle mouse spotlight overlay ── */}
