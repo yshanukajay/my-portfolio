@@ -14,12 +14,12 @@ const categories = [
     highlights: ["CNN & Transfer Learning", "PyTorch & TensorFlow", "Model Optimization"],
     stats: { label: "Average Skill", value: "86%" },
     tools: [
-      { name: "TensorFlow",   level: 90, learning: false },
-      { name: "PyTorch",      level: 85, learning: false },
+      { name: "TensorFlow", level: 90, learning: false },
+      { name: "PyTorch", level: 85, learning: false },
       { name: "Scikit-learn", level: 88, learning: false },
-      { name: "OpenCV",       level: 80, learning: false },
-      { name: "XGBoost",      level: 82, learning: false },
-      { name: "Keras",        level: 86, learning: false },
+      { name: "OpenCV", level: 80, learning: false },
+      { name: "XGBoost", level: 82, learning: false },
+      { name: "Keras", level: 86, learning: false },
     ],
   },
   {
@@ -33,10 +33,10 @@ const categories = [
     tools: [
       { name: "Apache Kafka", level: 85, learning: false },
       { name: "Apache Spark", level: 82, learning: false },
-      { name: "Airflow",      level: 80, learning: false },
-      { name: "Delta Lake",   level: 75, learning: false },
-      { name: "dbt",          level: 60, learning: true  },
-      { name: "Hadoop",       level: 55, learning: true  },
+      { name: "Airflow", level: 80, learning: false },
+      { name: "Delta Lake", level: 75, learning: false },
+      { name: "dbt", level: 60, learning: true },
+      { name: "Hadoop", level: 55, learning: true },
     ],
   },
   {
@@ -48,11 +48,11 @@ const categories = [
     highlights: ["FastAPI Microservices", "High Performance Routers", "Scalable REST Architectures"],
     stats: { label: "P95 Latency", value: "< 20ms" },
     tools: [
-      { name: "FastAPI",   level: 90, learning: false },
-      { name: "Flask",     level: 85, learning: false },
-      { name: "Node.js",   level: 75, learning: false },
+      { name: "FastAPI", level: 90, learning: false },
+      { name: "Flask", level: 85, learning: false },
+      { name: "Node.js", level: 75, learning: false },
       { name: "REST APIs", level: 88, learning: false },
-      { name: "GraphQL",   level: 55, learning: true  },
+      { name: "GraphQL", level: 55, learning: true },
     ],
   },
   {
@@ -64,12 +64,12 @@ const categories = [
     highlights: ["Docker Containerization", "Kubernetes Scaling", "Infrastructure as Code"],
     stats: { label: "Uptime Goal", value: "99.9%" },
     tools: [
-      { name: "Docker",          level: 88, learning: false },
-      { name: "AWS",             level: 78, learning: false },
-      { name: "GitHub Actions",  level: 85, learning: false },
-      { name: "NGINX",           level: 75, learning: false },
-      { name: "Kubernetes",      level: 60, learning: true  },
-      { name: "Terraform",       level: 50, learning: true  },
+      { name: "Docker", level: 88, learning: false },
+      { name: "AWS", level: 78, learning: false },
+      { name: "GitHub Actions", level: 85, learning: false },
+      { name: "NGINX", level: 75, learning: false },
+      { name: "Kubernetes", level: 60, learning: true },
+      { name: "Terraform", level: 50, learning: true },
     ],
   },
   {
@@ -81,10 +81,10 @@ const categories = [
     highlights: ["SQL Query Tuning", "NoSQL Document Stores", "Vector Indexing (Pinecone)"],
     stats: { label: "Data Integrity", value: "ACID Compliant" },
     tools: [
-      { name: "MongoDB",    level: 88, learning: false },
+      { name: "MongoDB", level: 88, learning: false },
       { name: "PostgreSQL", level: 85, learning: false },
-      { name: "Redis",      level: 80, learning: false },
-      { name: "Pinecone",   level: 55, learning: true  },
+      { name: "Redis", level: 80, learning: false },
+      { name: "Pinecone", level: 55, learning: true },
     ],
   },
   {
@@ -96,11 +96,11 @@ const categories = [
     highlights: ["MLflow Experiment Logs", "DVC Data Versioning", "Prometheus & Grafana Alerting"],
     stats: { label: "Feedback Loop", value: "Automated" },
     tools: [
-      { name: "MLflow",     level: 85, learning: false },
-      { name: "DVC",        level: 78, learning: false },
+      { name: "MLflow", level: 85, learning: false },
+      { name: "DVC", level: 78, learning: false },
       { name: "Prometheus", level: 80, learning: false },
-      { name: "Grafana",    level: 75, learning: false },
-      { name: "W&B",        level: 60, learning: true  },
+      { name: "Grafana", level: 75, learning: false },
+      { name: "W&B", level: 60, learning: true },
     ],
   },
 ];
@@ -191,7 +191,7 @@ export default function TechStack() {
   return (
     <section
       id="stack"
-      className="py-24 relative overflow-hidden bg-white border-y border-slate-100"
+      className="py-24 relative overflow-hidden bg-[#FAF7F4] border-y border-[#E8E2DA]"
     >
       {/* Subtle engineering grid background */}
       <div
@@ -295,10 +295,10 @@ export default function TechStack() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
-            className="lg:col-span-5 flex flex-col justify-between p-6 md:p-8 rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden group"
+            className="lg:col-span-5 flex flex-col justify-between p-6 md:p-8 rounded-3xl border border-[#E8E2DA] bg-[#FAF7F4] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden group"
           >
             {/* Soft colored glow inside the card matching category */}
-            <div 
+            <div
               className="absolute -right-16 -top-16 w-48 h-48 rounded-full blur-[60px] opacity-10 transition-all duration-700 pointer-events-none"
               style={{ backgroundColor: activeCat?.color }}
             />
@@ -306,11 +306,11 @@ export default function TechStack() {
             <div>
               {/* Category Icon and Label */}
               <div className="flex items-center gap-4 mb-6">
-                <div 
+                <div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300"
-                  style={{ 
+                  style={{
                     backgroundColor: `${activeCat?.color}12`,
-                    color: activeCat?.color 
+                    color: activeCat?.color
                   }}
                 >
                   {ActiveIcon && <ActiveIcon size={24} />}
@@ -345,7 +345,7 @@ export default function TechStack() {
             </div>
 
             {/* Bottom Stats strip */}
-            <div 
+            <div
               className="pt-6 border-t border-slate-100 flex items-center justify-between"
             >
               <div>

@@ -68,36 +68,39 @@ export default function Research() {
   return (
     <section
       id="publications"
-      className="relative py-28 overflow-hidden bg-slate-950"
+      className="relative py-28 overflow-hidden"
     >
       {/* ── Animated mesh background ── */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Grid lines */}
+        {/* Subtle warm grid lines */}
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
-              "linear-gradient(to right,#94a3b8 1px,transparent 1px),linear-gradient(to bottom,#94a3b8 1px,transparent 1px)",
+              "linear-gradient(to right,#c7b8a8 1px,transparent 1px),linear-gradient(to bottom,#c7b8a8 1px,transparent 1px)",
             backgroundSize: "60px 60px",
+            background: "#FAF7F4",
           }}
         />
+        {/* Warm background fill */}
+        <div className="absolute inset-0" style={{ background: "#FAF7F4" }} />
         {/* Glow orbs */}
         <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.18, 0.28, 0.18] }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.10, 0.18, 0.10] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(14,165,233,0.25) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%)",
           }}
         />
         <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.12, 0.22, 0.12] }}
+          animate={{ scale: [1, 1.1, 1], opacity: [0.08, 0.15, 0.08] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           className="absolute -bottom-20 -right-20 w-[600px] h-[600px] rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)",
           }}
         />
         {/* Floating particles */}
@@ -108,9 +111,9 @@ export default function Research() {
             style={{
               left: `${15 + i * 14}%`,
               top: `${20 + (i % 3) * 25}%`,
-              opacity: 0.3,
+              opacity: 0.25,
             }}
-            animate={{ y: [-8, 8, -8], opacity: [0.2, 0.5, 0.2] }}
+            animate={{ y: [-8, 8, -8], opacity: [0.15, 0.35, 0.15] }}
             transition={{ duration: 3 + i * 0.7, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
           />
         ))}
@@ -139,7 +142,7 @@ export default function Research() {
             </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-5 leading-tight">
             Research &amp;{" "}
             <span className="relative inline-block">
               <span className="text-gradient bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
@@ -157,7 +160,7 @@ export default function Research() {
             </span>
           </h2>
 
-          <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+          <p className="text-slate-600 max-w-xl mx-auto text-sm leading-relaxed">
             Peer-reviewed research at the intersection of IoT systems, edge AI, and
             real-world agricultural engineering challenges.
           </p>
@@ -176,10 +179,10 @@ export default function Research() {
               key={s.label}
               whileHover={{ y: -4, scale: 1.04 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-sm"
+              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-200 bg-white/80 backdrop-blur-sm shadow-sm"
             >
               <s.icon size={18} className="text-sky-400" />
-              <span className="text-base font-bold text-white font-mono">{s.value}</span>
+              <span className="text-base font-bold text-slate-900 font-mono">{s.value}</span>
               <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{s.label}</span>
             </motion.div>
           ))}
@@ -213,7 +216,7 @@ export default function Research() {
                 />
 
                 {/* Card body */}
-                <div className="relative rounded-2xl bg-slate-900 border border-slate-700/60 overflow-hidden">
+                <div className="relative rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-sm">
 
                   {/* Top glowing accent bar */}
                   <div
@@ -248,7 +251,7 @@ export default function Research() {
                         <Award size={11} strokeWidth={2.5} />
                         {pub.impact}
                       </span>
-                      <span className="ml-auto text-xs font-bold font-mono text-slate-500 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                      <span className="ml-auto text-xs font-bold font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
                         {pub.year}
                       </span>
                     </div>
@@ -262,7 +265,7 @@ export default function Research() {
                           style={{ color: pub.accentColor }}
                         />
                       </div>
-                      <h3 className="text-xl md:text-2xl font-bold text-white leading-snug">
+                      <h3 className="text-xl md:text-2xl font-bold text-slate-900 leading-snug">
                         {pub.title}
                       </h3>
                     </div>
@@ -275,7 +278,7 @@ export default function Research() {
                           <p className="text-[10px] uppercase tracking-widest text-slate-600 font-semibold mb-1">Authors</p>
                           <div className="flex flex-wrap gap-1.5">
                             {pub.authors.map((a) => (
-                              <span key={a} className="text-sm font-semibold text-slate-300">{a}</span>
+                              <span key={a} className="text-sm font-semibold text-slate-700">{a}</span>
                             ))}
                           </div>
                         </div>
@@ -295,7 +298,7 @@ export default function Research() {
                           >
                             {pub.venue}
                           </a>
-                          <span className="block mt-1 text-[10px] font-bold text-slate-500 font-mono bg-slate-800 px-2 py-0.5 rounded w-fit border border-slate-700">
+                          <span className="block mt-1 text-[10px] font-bold text-slate-500 font-mono bg-slate-100 px-2 py-0.5 rounded w-fit border border-slate-200">
                             {pub.venueShort}
                           </span>
                         </div>
@@ -320,9 +323,9 @@ export default function Research() {
                         Abstract
                       </p>
                       <div className={`relative overflow-hidden transition-all duration-500 ${expanded ? "" : "max-h-[4.5rem]"}`}>
-                        <p className="text-slate-400 text-sm leading-relaxed">{pub.abstract}</p>
+                        <p className="text-slate-600 text-sm leading-relaxed">{pub.abstract}</p>
                         {!expanded && (
-                          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-900 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
                         )}
                       </div>
                       <button
@@ -343,7 +346,7 @@ export default function Research() {
                         <motion.span
                           key={kw}
                           whileHover={{ scale: 1.08, y: -1 }}
-                          className="px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-slate-700 text-slate-400 bg-slate-800/80 hover:border-sky-500/50 hover:text-sky-400 transition-colors cursor-default"
+                          className="px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-slate-200 text-slate-600 bg-slate-50 hover:border-sky-400/50 hover:text-sky-500 transition-colors cursor-default"
                         >
                           {kw}
                         </motion.span>
@@ -390,7 +393,7 @@ export default function Research() {
 
         {/* ── Bottom note ── */}
         <motion.p
-          className="text-center text-slate-600 text-xs mt-10 font-medium"
+          className="text-center text-slate-500 text-xs mt-10 font-medium"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

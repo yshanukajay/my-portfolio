@@ -30,7 +30,7 @@ const builds = [
 export default function CurrentlyBuilding() {
   return (
     <section id="building" className="py-24 relative overflow-hidden"
-      style={{ background: "#080d14" }}>
+      style={{ background: "#FAF7F4" }}>
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: "radial-gradient(ellipse at 80% 50%, rgba(45,212,191,0.07) 0%, transparent 60%)" }} />
 
@@ -41,11 +41,11 @@ export default function CurrentlyBuilding() {
           <div className="flex items-center justify-center gap-2 mb-3">
             <motion.span className="w-2 h-2 rounded-full bg-emerald-400"
               animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.4, repeat: Infinity }} />
-            <p className="text-xs font-bold tracking-[0.25em] text-emerald-400 uppercase">Active Development</p>
+            <p className="text-xs font-bold tracking-[0.25em] text-emerald-600 uppercase">Active Development</p>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Currently Building</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Currently Building</h2>
           <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full mb-6" />
-          <p className="text-slate-400 max-w-2xl mx-auto">
+          <p className="text-slate-600 max-w-2xl mx-auto">
             Real-time progress on active engineering projects — because great systems are always evolving.
           </p>
         </motion.div>
@@ -58,7 +58,7 @@ export default function CurrentlyBuilding() {
                 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="rounded-2xl p-5 border"
-                style={{ background: "#0d1117", borderColor: "rgba(255,255,255,0.08)" }}>
+                style={{ background: "#FAF7F4", borderColor: "rgba(0,0,0,0.08)" }}>
 
                 {/* Status badge */}
                 <div className="flex items-center justify-between mb-3">
@@ -75,11 +75,11 @@ export default function CurrentlyBuilding() {
                   <span className="text-xs font-bold font-mono" style={{ color: b.color }}>{b.progress}%</span>
                 </div>
 
-                <h3 className="font-bold text-white text-sm mb-2">{b.title}</h3>
+                <h3 className="font-bold text-slate-900 text-sm mb-2">{b.title}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed mb-4">{b.desc}</p>
 
                 {/* Progress bar */}
-                <div className="h-1 bg-slate-800 rounded-full mb-4 overflow-hidden">
+                <div className="h-1 bg-slate-200 rounded-full mb-4 overflow-hidden">
                   <motion.div className="h-full rounded-full"
                     style={{ background: b.color }}
                     initial={{ width: 0 }} whileInView={{ width: `${b.progress}%` }}
@@ -105,14 +105,14 @@ export default function CurrentlyBuilding() {
             initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }}
             className="rounded-2xl p-6 border"
-            style={{ background: "#0d1117", borderColor: "rgba(255,255,255,0.08)" }}>
+            style={{ background: "#FAF7F4", borderColor: "rgba(0,0,0,0.08)" }}>
 
             <div className="flex items-center gap-3 mb-6">
               <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
                 <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
               </svg>
               <div>
-                <h3 className="font-bold text-white text-sm">Commit Activity</h3>
+                <h3 className="font-bold text-slate-900 text-sm">Commit Activity</h3>
                 <p className="text-[10px] text-slate-500">Last 7 months</p>
               </div>
             </div>
@@ -122,7 +122,7 @@ export default function CurrentlyBuilding() {
                 <AreaChart data={commitData}>
                   <defs>
                     <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#10b981" stopOpacity={0.3} />
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
                       <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                   </defs>

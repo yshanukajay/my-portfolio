@@ -26,7 +26,7 @@ const certifications = [
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="py-24 relative overflow-hidden border-y border-slate-100 bg-white">
+    <section id="certifications" className="py-24 relative overflow-hidden border-y border-[#E8E2DA] bg-[#FAF7F4]">
 
       {/* ── Engineering grid background (same as Technology Ecosystem) ── */}
       <div
@@ -69,7 +69,7 @@ export default function Certifications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`bg-white/80 backdrop-blur-sm p-6 rounded-2xl flex flex-col items-center text-center border border-slate-100 shadow-sm transition-all duration-200 ${cert.link !== "#" ? "cursor-pointer hover:shadow-md hover:-translate-y-1 hover:border-emerald-200" : "cursor-default"}`}
+              className={`bg-[#FAF7F4] backdrop-blur-sm p-6 rounded-2xl flex flex-col items-center text-center border border-[#E8E2DA] shadow-sm transition-all duration-200 ${cert.link !== "#" ? "cursor-pointer hover:shadow-md hover:-translate-y-1 hover:border-emerald-200" : "cursor-default"}`}
             >
               <div className="w-14 h-14 bg-emerald-50 rounded-full flex items-center justify-center mb-4 text-emerald-600 border border-emerald-100">
                 <Award size={28} />

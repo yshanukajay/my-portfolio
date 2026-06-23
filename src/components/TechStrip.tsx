@@ -26,7 +26,8 @@ export default function TechStrip() {
   return (
     <div className="w-full bg-white/70 backdrop-blur-xl border-y border-slate-100 py-5 overflow-hidden flex items-center shadow-[0_1px_3px_rgba(0,0,0,0.01)] relative z-20 tech-marquee-container">
       {/* Dynamic Keyframes injected locally */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes tech-marquee {
           0% { transform: translateX(0%); }
           100% { transform: translateX(-50%); }
@@ -42,7 +43,7 @@ export default function TechStrip() {
       {/* Edge gradient overlays for visual depth */}
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
-      
+
       <div className="flex whitespace-nowrap items-center tech-marquee-content">
         {technologies.map((tech, index) => {
           const Icon = tech.icon;
@@ -59,11 +60,11 @@ export default function TechStrip() {
               >
                 {/* Active Pulsing Indicator (color-coded to tech) */}
                 <span className="relative flex h-2 w-2">
-                  <span 
+                  <span
                     className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
                     style={{ backgroundColor: tech.accentColor }}
                   />
-                  <span 
+                  <span
                     className="relative inline-flex rounded-full h-2 w-2"
                     style={{ backgroundColor: tech.accentColor }}
                   />

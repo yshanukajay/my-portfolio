@@ -231,13 +231,13 @@ const architectures = [
     color: "#f59e0b",
     nodes: [
       { id: "kafka", label: "Kafka", sub: "event stream", x: 16, y: 38 },
-      { id: "spark", label: "Spark", sub: "processing",   x: 38, y: 38 },
-      { id: "mongodb", label: "MongoDB", sub: "storage",    x: 62, y: 38 },
+      { id: "spark", label: "Spark", sub: "processing", x: 38, y: 38 },
+      { id: "mongodb", label: "MongoDB", sub: "storage", x: 62, y: 38 },
       { id: "dashboard", label: "Dashboard", sub: "analytics", x: 84, y: 38 },
     ],
     verticals: [
       { id: "schema", label: "Schema Registry", x: 27, y: 68, color: "#f59e0b" },
-      { id: "dq", label: "DQ Checks",          x: 53, y: 68, color: "#10b981" },
+      { id: "dq", label: "DQ Checks", x: 53, y: 68, color: "#10b981" },
     ],
     connections: [
       { from: "kafka", to: "spark", type: "straight" },
@@ -260,15 +260,15 @@ const architectures = [
     subtitle: "Production serving architecture",
     color: "#0ea5e9",
     nodes: [
-      { id: "github", label: "GitHub Actions", sub: "CI/CD",       x: 18, y: 28 },
-      { id: "docker", label: "Docker",         sub: "container",   x: 18, y: 56 },
-      { id: "registry", label: "Registry",     sub: "ECR/GHCR",    x: 50, y: 42 },
-      { id: "k8s",    label: "K8s Cluster",    sub: "orchestrate", x: 80, y: 28 },
-      { id: "fastapi", label: "FastAPI",        sub: "serving",     x: 80, y: 56 },
+      { id: "github", label: "GitHub Actions", sub: "CI/CD", x: 18, y: 28 },
+      { id: "docker", label: "Docker", sub: "container", x: 18, y: 56 },
+      { id: "registry", label: "Registry", sub: "ECR/GHCR", x: 50, y: 42 },
+      { id: "k8s", label: "K8s Cluster", sub: "orchestrate", x: 80, y: 28 },
+      { id: "fastapi", label: "FastAPI", sub: "serving", x: 80, y: 56 },
     ],
     verticals: [
       { id: "prometheus", label: "Prometheus", x: 58, y: 74, color: "#f59e0b" },
-      { id: "grafana",    label: "Grafana",    x: 80, y: 74, color: "#10b981" },
+      { id: "grafana", label: "Grafana", x: 80, y: 74, color: "#10b981" },
     ],
     connections: [
       { from: "github", to: "docker", type: "straight" },
@@ -317,7 +317,7 @@ function TelemetryConsole({
 }: TelemetryConsoleProps) {
   const selectedNode = selectedNodeId
     ? activeArch.nodes.find((n) => n.id === selectedNodeId) ||
-      activeArch.verticals.find((v) => v.id === selectedNodeId)
+    activeArch.verticals.find((v) => v.id === selectedNodeId)
     : null;
 
   const nodeSpec = selectedNode ? nodeSpecs[selectedNode.label] : null;
@@ -562,11 +562,11 @@ export default function SystemArchitecture() {
   };
 
   return (
-    <section id="architecture" className="py-24 bg-slate-50 relative border-y border-slate-100 overflow-hidden">
+    <section id="architecture" className="py-24 bg-[#FAF7F4] relative border-y border-[#E8E2DA] overflow-hidden">
       {/* ── Interactive magnetic particles — white + blue, attracted to cursor ── */}
       <MagneticParticlesBg opacity={0.9} />
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        
+
         {/* Section Header */}
         <motion.div
           className="text-center mb-12"
@@ -596,9 +596,8 @@ export default function SystemArchitecture() {
                 className="relative py-2.5 text-center focus:outline-none transition-all duration-300 w-full sm:w-auto"
               >
                 <h3
-                  className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-300 ${
-                    isActive ? "text-slate-900" : "text-slate-400 hover:text-slate-600"
-                  }`}
+                  className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-300 ${isActive ? "text-slate-900" : "text-slate-400 hover:text-slate-600"
+                    }`}
                 >
                   {arch.title}
                 </h3>
@@ -623,7 +622,7 @@ export default function SystemArchitecture() {
 
         {/* Central Display: SVG Blueprint Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-5xl mx-auto items-stretch">
-          
+
           {/* Canvas Column */}
           <div className="lg:col-span-7 xl:col-span-8 bg-[#050a10] rounded-3xl border border-slate-900 p-6 md:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden min-h-[360px] md:min-h-[420px]">
             {/* Dot Grid Background */}

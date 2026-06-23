@@ -186,7 +186,7 @@ export default function AboutSection() {
   return (
     <section id="about" className="relative">
       {/* Engineering Mindset — white */}
-      <div className="py-24 bg-white relative overflow-hidden">
+      <div className="py-24 bg-[#FAF7F4] relative overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -419,7 +419,7 @@ export default function AboutSection() {
       </div>
 
       {/* Core Expertise — full-bleed with side decorations */}
-      <div className="w-full bg-slate-50 border-y border-slate-100 py-24 overflow-hidden relative">
+      <div className="w-full bg-[#F2EDE7] border-y border-[#E8E2DA] py-24 overflow-hidden relative">
         {/* Subtle engineering dot pattern background */}
         <div
           className="absolute inset-0 pointer-events-none select-none opacity-[0.18]"

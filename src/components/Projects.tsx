@@ -177,7 +177,7 @@ function ProjectCard({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.65, ease: "easeOut" }}
       className="group relative rounded-2xl border overflow-hidden min-h-[460px] flex flex-col justify-between"
-      style={{ background: "#0d1117", borderColor: `${p.color}28` }}
+      style={{ background: "#FAF7F4", borderColor: `${p.color}28` }}
     >
       {/* Top accent */}
       <div className="h-[2px]" style={{ background: `linear-gradient(to right, transparent, ${p.color}, transparent)` }} />
@@ -201,7 +201,7 @@ function ProjectCard({
               </span>
               <span className="text-[11px] text-slate-500 font-mono">{p.category}</span>
             </div>
-            <h3 className="text-lg font-bold text-white leading-snug">{p.title}</h3>
+            <h3 className="text-lg font-bold text-slate-900 leading-snug">{p.title}</h3>
           </div>
           {/* Links */}
           <div className="flex gap-2 flex-shrink-0">
@@ -223,7 +223,7 @@ function ProjectCard({
         </div>
 
         {/* Tab switcher */}
-        <div className="flex gap-1 bg-slate-950/60 p-1 rounded-xl border border-slate-800/80 mb-5 relative">
+        <div className="flex gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200 mb-5 relative">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
@@ -233,7 +233,7 @@ function ProjectCard({
                 onClick={() => setActiveTab(tab.id as any)}
                 className="flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors relative z-10"
                 style={{
-                  color: isSelected ? "#ffffff" : "#64748b",
+                  color: isSelected ? "#1e293b" : "#64748b",
                 }}
               >
                 <Icon size={13} className={isSelected ? "" : "opacity-80"} />
@@ -243,8 +243,8 @@ function ProjectCard({
                     layoutId={`active-tab-${index}`}
                     className="absolute inset-0 rounded-lg -z-10"
                     style={{
-                      background: `linear-gradient(135deg, ${p.color}22 0%, ${p.color}11 100%)`,
-                      border: `1px solid ${p.color}35`,
+                      background: `linear-gradient(135deg, ${p.color}18 0%, ${p.color}0a 100%)`,
+                      border: `1px solid ${p.color}30`,
                     }}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
@@ -266,8 +266,8 @@ function ProjectCard({
             {/* Tab: Overview */}
             {activeTab === "overview" && (
               <div className="space-y-4">
-                <p className="text-slate-400 text-sm leading-relaxed">{p.description}</p>
-                
+                <p className="text-slate-600 text-sm leading-relaxed">{p.description}</p>
+
                 {/* Problem Statement banner */}
                 <div className="p-3.5 rounded-xl border border-amber-500/10 bg-amber-500/[0.03] flex gap-3">
                   <AlertTriangle size={18} className="text-amber-500 shrink-0 mt-0.5" />
@@ -278,7 +278,7 @@ function ProjectCard({
                 </div>
 
                 {/* Tech Stack categorization */}
-                <div className="space-y-2 pt-1 border-t border-slate-800/40">
+                <div className="space-y-2 pt-1 border-t border-slate-200/60">
                   <div className="flex flex-wrap gap-1.5 items-center">
                     <span className="text-[9px] font-bold font-mono text-slate-500 uppercase mr-1">Infrastructure:</span>
                     {p.stack.infra.map((s) => (
@@ -296,7 +296,7 @@ function ProjectCard({
                     {p.stack.languages.map((s) => (
                       <span
                         key={s}
-                        className="px-2 py-0.5 text-[10px] font-bold rounded-md font-mono border border-slate-800 text-slate-400 bg-slate-900/50"
+                        className="px-2 py-0.5 text-[10px] font-bold rounded-md font-mono border border-slate-200 text-slate-600 bg-slate-50"
                       >
                         {s}
                       </span>
@@ -341,7 +341,7 @@ function ProjectCard({
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Node Info */}
                     <div className="pb-3 flex-1">
                       <h4 className="text-xs font-bold text-slate-200 group-hover/node:text-white transition-colors duration-200">{step.name}</h4>
@@ -363,7 +363,7 @@ function ProjectCard({
                         <span>Latency Performance</span>
                         <span className="text-emerald-400 font-bold font-mono">99.9% reduction</span>
                       </div>
-                      <div className="h-8 w-full bg-slate-950/80 border border-slate-800/80 rounded-xl relative overflow-hidden flex items-center px-3.5">
+                      <div className="h-8 w-full bg-slate-100 border border-slate-200 rounded-xl relative overflow-hidden flex items-center px-3.5">
                         <div className="absolute left-0 top-0 bottom-0 bg-rose-500/10 border-r border-rose-500/30" style={{ width: "95%" }} />
                         <div className="absolute left-0 top-0 bottom-0 bg-emerald-500/25 border-r border-emerald-500/80 rounded-r-lg" style={{ width: "2%" }} />
                         <div className="w-full flex justify-between relative z-10 text-[10px] font-bold text-white font-mono">
@@ -375,19 +375,19 @@ function ProjectCard({
 
                     {/* Metrics Grid */}
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                      <div className="bg-slate-100/80 border border-slate-200/60 p-3 rounded-xl flex flex-col justify-between">
                         <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Throughput</span>
                         <div className="flex items-baseline gap-1 mt-1">
-                          <span className="text-base font-bold text-white font-mono">{p.metrics.throughput}</span>
+                          <span className="text-base font-bold text-slate-900 font-mono">{p.metrics.throughput}</span>
                         </div>
-                        <span className="text-[10px] text-slate-400">Events/sec ingestion</span>
+                        <span className="text-[10px] text-slate-600">Events/sec ingestion</span>
                       </div>
-                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                      <div className="bg-slate-100/80 border border-slate-200/60 p-3 rounded-xl flex flex-col justify-between">
                         <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Volume</span>
                         <div className="flex items-baseline gap-1 mt-1">
-                          <span className="text-base font-bold text-white font-mono">{p.metrics.volume}</span>
+                          <span className="text-base font-bold text-slate-900 font-mono">{p.metrics.volume}</span>
                         </div>
-                        <span className="text-[10px] text-slate-400">Kafka Clickstream data</span>
+                        <span className="text-[10px] text-slate-600">Kafka Clickstream data</span>
                       </div>
                     </div>
                   </div>
@@ -400,14 +400,14 @@ function ProjectCard({
 
                     {/* Stats row */}
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                      <div className="bg-slate-100/80 border border-slate-200/60 p-3 rounded-xl flex flex-col justify-between">
                         <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Illness Cases</span>
                         <div className="flex items-baseline gap-1 mt-1 text-emerald-400 font-mono">
                           <span className="text-base font-bold">-{p.metrics.reduction}</span>
                         </div>
                         <span className="text-[10px] text-slate-400">Severe case reduction</span>
                       </div>
-                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                      <div className="bg-slate-100/80 border border-slate-200/60 p-3 rounded-xl flex flex-col justify-between">
                         <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Sensor Streams</span>
                         <div className="flex items-baseline gap-1 mt-1">
                           <span className="text-xs font-bold text-white font-mono truncate">{p.metrics.sensors}</span>
@@ -425,14 +425,14 @@ function ProjectCard({
 
                     {/* Stats row */}
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                      <div className="bg-slate-100/80 border border-slate-200/60 p-3 rounded-xl flex flex-col justify-between">
                         <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">API Latency</span>
                         <div className="flex items-baseline gap-1 mt-1 text-indigo-400 font-mono">
                           <span className="text-base font-bold">{p.metrics.latency}</span>
                         </div>
                         <span className="text-[10px] text-slate-400">Sub-100ms target met</span>
                       </div>
-                      <div className="bg-slate-950/40 border border-slate-800/50 p-3 rounded-xl flex flex-col justify-between">
+                      <div className="bg-slate-100/80 border border-slate-200/60 p-3 rounded-xl flex flex-col justify-between">
                         <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Dataset Size</span>
                         <div className="flex items-baseline gap-1 mt-1">
                           <span className="text-base font-bold text-white font-mono">{p.metrics.datasetSize}</span>
@@ -443,18 +443,18 @@ function ProjectCard({
                   </div>
                 )}
 
-                <div className="p-3 bg-slate-950/30 border border-slate-800/40 rounded-xl flex items-center gap-2.5">
+                <div className="p-3 bg-slate-100/80 border border-slate-200/50 rounded-xl flex items-center gap-2.5">
                   <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: p.color }} />
-                  <span className="text-[11px] text-slate-400">Business Impact: <strong className="text-slate-200 font-semibold">{p.impact}</strong></span>
+                  <span className="text-[11px] text-slate-600">Business Impact: <strong className="text-slate-800 font-semibold">{p.impact}</strong></span>
                 </div>
               </div>
             )}
           </motion.div>
 
           {/* Tags Footer inside Card */}
-          <div className="flex flex-wrap gap-1.5 mt-6 pt-4 border-t border-slate-800/40">
+          <div className="flex flex-wrap gap-1.5 mt-6 pt-4 border-t border-slate-200/60">
             {p.tags.map((t) => (
-              <span key={t} className="px-2 py-0.5 text-[9px] font-semibold rounded-md border border-slate-800 text-slate-500">
+              <span key={t} className="px-2 py-0.5 text-[9px] font-semibold rounded-md border border-slate-200 text-slate-500">
                 {t}
               </span>
             ))}
@@ -468,10 +468,10 @@ function ProjectCard({
 /* ─── Main section ────────────────────────────────────────────── */
 export default function Projects() {
   return (
-    <section id="projects" className="py-24 relative overflow-hidden" style={{ background: "#080d14" }}>
+    <section id="projects" className="py-24 relative overflow-hidden" style={{ background: "#FAF7F4" }}>
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.1) 0%, transparent 55%)" }} />
+        style={{ backgroundImage: "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.06) 0%, transparent 55%)" }} />
 
       <div className="container mx-auto px-6 lg:px-12">
         {/* Header */}
@@ -480,10 +480,10 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-bold tracking-[0.25em] text-indigo-400 uppercase mb-3">Case Studies</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Production AI Systems</h2>
+          <p className="text-xs font-bold tracking-[0.25em] text-indigo-600 uppercase mb-3">Case Studies</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Production AI Systems</h2>
           <div className="w-20 h-1 bg-indigo-500 mx-auto rounded-full mb-6" />
-          <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
+          <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">
             Deep-dive into the architecture, challenges, and metrics behind intelligent systems I&apos;ve engineered.
           </p>
         </motion.div>
@@ -523,7 +523,7 @@ export default function Projects() {
                       <motion.div
                         className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center font-black text-base border-2"
                         style={{
-                          background: "#080d14",
+                          background: "#FAF7F4",
                           borderColor: p.color,
                           color: p.color,
                           boxShadow: `0 0 0 4px ${p.color}18, 0 0 24px ${p.color}40`,
@@ -566,7 +566,7 @@ export default function Projects() {
                     <div className="flex flex-col items-center flex-shrink-0">
                       <motion.div
                         className="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 flex-shrink-0"
-                        style={{ background: "#080d14", borderColor: p.color, color: p.color }}
+                        style={{ background: "#FAF7F4", borderColor: p.color, color: p.color }}
                         initial={{ scale: 0 }} whileInView={{ scale: 1 }}
                         viewport={{ once: true }} transition={{ type: "spring", stiffness: 200 }}
                       >

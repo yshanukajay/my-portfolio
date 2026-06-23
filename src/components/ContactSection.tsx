@@ -116,8 +116,8 @@ function ContactCard({ icon, label, value, href, color, delay }: ContactCardProp
       whileHover={{ y: -3, boxShadow: `0 12px 28px ${color}18` }}
       className="flex items-center gap-4 p-4 rounded-2xl border cursor-pointer group transition-all duration-200"
       style={{
-        background: "rgba(255,255,255,0.06)",
-        borderColor: "rgba(255,255,255,0.1)",
+        background: "rgba(255,255,255,0.85)",
+        borderColor: "rgba(0,0,0,0.08)",
         backdropFilter: "blur(8px)",
       }}
     >
@@ -126,10 +126,10 @@ function ContactCard({ icon, label, value, href, color, delay }: ContactCardProp
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">{label}</p>
-        <p className="text-sm font-medium text-white truncate">{value}</p>
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">{label}</p>
+        <p className="text-sm font-medium text-slate-900 truncate">{value}</p>
       </div>
-      <ArrowUpRight size={14} className="text-slate-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 shrink-0" />
+      <ArrowUpRight size={14} className="text-slate-400 group-hover:text-slate-700 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 shrink-0" />
     </motion.a>
   );
 }
@@ -152,15 +152,15 @@ export default function ContactSection() {
     setTimeout(() => setSent(false), 4000);
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition-all duration-200 font-medium focus:ring-2 focus:ring-indigo-500/60";
+  const inputClass = "w-full px-4 py-3 rounded-xl text-sm text-slate-900 placeholder-slate-400 outline-none transition-all duration-200 font-medium focus:ring-2 focus:ring-indigo-500/60";
   const inputStyle = {
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,255,255,0.1)",
+    background: "rgba(255,255,255,0.9)",
+    border: "1px solid rgba(0,0,0,0.12)",
   };
 
   return (
     <section id="contact" className="py-28 relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #060911 0%, #080c18 50%, #05090f 100%)" }}>
+      style={{ background: "#FAF7F4" }}>
 
       {/* Animated grid */}
       <ContactGrid reduced={reduced} />
@@ -172,15 +172,19 @@ export default function ContactSection() {
       {!reduced && (
         <>
           <motion.div className="absolute pointer-events-none"
-            style={{ top: "10%", right: "8%", width: 420, height: 420, borderRadius: "50%",
+            style={{
+              top: "10%", right: "8%", width: 420, height: 420, borderRadius: "50%",
               background: "radial-gradient(circle, rgba(99,102,241,0.09) 0%, transparent 65%)",
-              filter: "blur(2px)", willChange: "transform" }}
+              filter: "blur(2px)", willChange: "transform"
+            }}
             animate={{ x: [0, 25, -10, 0], y: [0, -20, 12, 0] }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }} />
           <motion.div className="absolute pointer-events-none"
-            style={{ bottom: "15%", left: "5%", width: 340, height: 340, borderRadius: "50%",
+            style={{
+              bottom: "15%", left: "5%", width: 340, height: 340, borderRadius: "50%",
               background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 65%)",
-              filter: "blur(2px)", willChange: "transform" }}
+              filter: "blur(2px)", willChange: "transform"
+            }}
             animate={{ x: [0, -20, 15, 0], y: [0, 18, -10, 0] }}
             transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 4 }} />
         </>
@@ -188,7 +192,7 @@ export default function ContactSection() {
 
       {/* Top edge fade */}
       <div className="absolute inset-x-0 top-0 h-20 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, #060911, transparent)" }} aria-hidden />
+        style={{ background: "linear-gradient(to bottom, #FAF7F4, transparent)" }} aria-hidden />
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
 
@@ -204,9 +208,9 @@ export default function ContactSection() {
               transition={{ duration: 0.35, delay: i * 0.06 }}
               className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border"
               style={{
-                background: "rgba(99,102,241,0.08)",
-                borderColor: "rgba(99,102,241,0.22)",
-                color: "rgba(165,180,252,0.9)",
+                background: "rgba(99,102,241,0.07)",
+                borderColor: "rgba(99,102,241,0.18)",
+                color: "rgba(99,102,241,0.9)",
               }}>
               {chip}
             </motion.span>
@@ -235,7 +239,7 @@ export default function ContactSection() {
 
             {/* Heading */}
             <h2 className="text-4xl md:text-5xl lg:text-[54px] font-bold leading-[1.1] mb-6"
-              style={{ color: "rgba(255,255,255,0.95)" }}>
+              style={{ color: "rgba(30,41,59,0.95)" }}>
               Let&apos;s Build{" "}
               <span className="relative inline-block">
                 <span className="bg-clip-text text-transparent"
@@ -247,14 +251,14 @@ export default function ContactSection() {
             </h2>
 
             <p className="text-base leading-relaxed mb-4"
-              style={{ color: "rgba(148,163,184,0.9)", maxWidth: "42ch" }}>
+              style={{ color: "rgba(71,85,105,0.9)", maxWidth: "42ch" }}>
               Interested in AI engineering, data infrastructure, distributed systems, or ML platform architecture?
               I&apos;m always open to discussing innovative projects and engineering challenges.
             </p>
 
             {/* Quick response */}
             <div className="flex items-center gap-2 mb-10"
-              style={{ color: "rgba(99,102,241,0.8)" }}>
+              style={{ color: "rgba(99,102,241,1)" }}>
               <Clock size={13} />
               <span className="text-xs font-semibold">Usually responds within 24 hours</span>
             </div>
@@ -307,11 +311,11 @@ export default function ContactSection() {
             <div className="relative p-px rounded-3xl"
               style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.5) 0%, rgba(139,92,246,0.3) 50%, rgba(99,102,241,0.15) 100%)" }}>
               <div className="rounded-3xl overflow-hidden relative"
-                style={{ background: "linear-gradient(160deg, #0d1117 0%, #0a0f1a 100%)" }}>
+                style={{ background: "rgba(255,255,255,0.95)" }}>
 
                 {/* Inner top glow */}
                 <div className="absolute inset-x-0 top-0 h-px"
-                  style={{ background: "linear-gradient(to right, transparent, rgba(129,140,248,0.6), transparent)" }} aria-hidden />
+                  style={{ background: "linear-gradient(to right, transparent, rgba(99,102,241,0.4), transparent)" }} aria-hidden />
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 pointer-events-none"
                   style={{ background: "radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%)" }} aria-hidden />
 
@@ -411,7 +415,7 @@ export default function ContactSection() {
 
       {/* Bottom edge fade */}
       <div className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-        style={{ background: "linear-gradient(to top, #060911, transparent)" }} aria-hidden />
+        style={{ background: "linear-gradient(to top, #FAF7F4, transparent)" }} aria-hidden />
     </section>
   );
 }
