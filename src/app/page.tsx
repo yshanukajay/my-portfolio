@@ -11,6 +11,7 @@ import Research from "@/components/Research";
 import EngineeringPhilosophy from "@/components/EngineeringPhilosophy";
 import ContactSection from "@/components/ContactSection";
 import TerminalWidget from "@/components/TerminalWidget";
+import LazySection from "@/components/LazySection";
 
 export default function Home() {
   return (
@@ -28,25 +29,39 @@ export default function Home() {
       <TechStack />
 
       {/* 4. Production AI Systems */}
-      <Projects />
+      <LazySection height="600px">
+        <Projects />
+      </LazySection>
 
       {/* 5. Research & Publications */}
-      <Research />
+      <LazySection height="500px">
+        <Research />
+      </LazySection>
 
       {/* 6. Scalable Architecture */}
-      <SystemArchitecture />
+      <LazySection height="600px">
+        <SystemArchitecture />
+      </LazySection>
 
       {/* 7. Currently Building */}
-      <CurrentlyBuilding />
+      <LazySection height="400px">
+        <CurrentlyBuilding />
+      </LazySection>
 
       {/* 8. Certifications */}
-      <Certifications />
+      <LazySection height="300px">
+        <Certifications />
+      </LazySection>
 
       {/* 9. Engineering Philosophy */}
-      <EngineeringPhilosophy />
+      <LazySection height="400px">
+        <EngineeringPhilosophy />
+      </LazySection>
 
       {/* 10. Contact */}
-      <ContactSection />
+      <LazySection height="500px">
+        <ContactSection />
+      </LazySection>
 
       <TerminalWidget />
 

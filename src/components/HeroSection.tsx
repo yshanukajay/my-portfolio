@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState, useRef, useMemo } from "react";
-import { ArrowRight, Cpu, Zap } from "lucide-react";
+import { ArrowRight, GitBranch, CheckCircle2, Circle } from "lucide-react";
 import HeroDiagramCarousel from "./HeroDiagramCarousel";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
@@ -32,175 +32,204 @@ const CvIcon = ({ size = 24, className = "" }: { size?: number; className?: stri
   </svg>
 );
 
-/* ─── Animated titles ─────────────────────────────────────────────────────── */
-const titles = [
-  "ML Engineer",
-  "Data Engineer",
-  "MLOps Enthusiast",
-  "Pipeline Architect",
-  "Distributed Systems Builder",
-  "Realtime Data Engineer",
+/* ─── Shifting professional titles ────────────────────────────────────────── */
+const shiftingTitles = [
+  "Machine Learning & Data Engineer",
+  "ML Engineer | Data Engineer",
+  "Building Scalable ML Systems",
+  "Designing Production Data Pipelines",
+  "Orchestrating MLOps Workflows",
 ];
 
-/* ─── Diagram slides config (for phase chips only) ───────────────────────── */
+/* ─── Diagram slides config ───────────────────────────────────────────────── */
 const SLIDES = [
   { id: "data", phase: "Phase 1", color: "#0ea5e9" },
   { id: "ml", phase: "Phase 2", color: "#6366f1" },
   { id: "mlops", phase: "Phase 3", color: "#14b8a6" },
 ];
 
-const SLIDE_DURATION = 8; // seconds per slide (matches carousel DURATION)
+const SLIDE_DURATION = 8;
 
-/* ─── Raw → Processed split-panel widget ─────────────────────────────────── */
-const RAW_LINES = [
-  "Pt: Sarah K, 34F DOB:1990-03-12",
-  "Chief complaint: persistent cough, +ve",
-  "Temp 38.2°C SpO2 96% BP:118/74",
-  "Hx: childhood asthma, smoker 8yr",
-  "Smokes: no Fam hx: lung ca (father)",
-  "Ordered: CXR Rx: azithromycin",
-  '  drug_rx_far"],',
-  '  doxycycline",',
+/* ─── ML Pipeline Code Card ─────────────────────────────────────────────────
+   Replaces the patient-data widget. Shows a real Kafka → Spark → Airflow → MLflow
+   pipeline code with syntax-highlighted tokens and active status indicators.
+─────────────────────────────────────────────────────────────────────────── */
+const PIPELINE_STAGES = [
+  {
+    step: "01",
+    file: "kafka_producer.py",
+    label: "Ingest",
+    color: "#f97316",
+    metric: "10k events/s",
+    status: "running",
+    code: [
+      { t: "kw", v: "from " }, { t: "mod", v: "confluent_kafka " }, { t: "kw", v: "import " }, { t: "cls", v: "Producer" },
+      { t: "fn", v: "producer" }, { t: "op", v: "." }, { t: "fn", v: "produce" }, { t: "op", v: "(" },
+      { t: "str", v: "'clickstream'" }, { t: "op", v: ", " }, { t: "var", v: "payload" }, { t: "op", v: ")" },
+    ],
+  },
+  {
+    step: "02",
+    file: "spark_stream.py",
+    label: "Transform",
+    color: "#0ea5e9",
+    metric: "p95 < 420ms",
+    status: "running",
+    code: [
+      { t: "var", v: "df" }, { t: "op", v: " = " }, { t: "fn", v: "spark" }, { t: "op", v: "." }, { t: "fn", v: "readStream" },
+      { t: "op", v: "." }, { t: "fn", v: "format" }, { t: "op", v: "(" }, { t: "str", v: "'kafka'" }, { t: "op", v: ")" },
+      { t: "op", v: "." }, { t: "fn", v: "load" }, { t: "op", v: "()" },
+    ],
+  },
+  {
+    step: "03",
+    file: "airflow_dag.py",
+    label: "Orchestrate",
+    color: "#10b981",
+    metric: "SLA 99.9%",
+    status: "scheduled",
+    code: [
+      { t: "dec", v: "@dag" }, { t: "op", v: "(" }, { t: "var", v: "schedule" }, { t: "op", v: "=" }, { t: "str", v: "'@hourly'" }, { t: "op", v: ")" },
+      { t: "kw", v: "def " }, { t: "fn", v: "ml_pipeline" }, { t: "op", v: "(): ..." },
+    ],
+  },
+  {
+    step: "04",
+    file: "mlflow_run.py",
+    label: "Track & Serve",
+    color: "#6366f1",
+    metric: "acc 94.2%",
+    status: "complete",
+    code: [
+      { t: "fn", v: "mlflow" }, { t: "op", v: "." }, { t: "fn", v: "log_metric" }, { t: "op", v: "(" },
+      { t: "str", v: "'accuracy'" }, { t: "op", v: ", " }, { t: "num", v: "0.942" }, { t: "op", v: ")" },
+    ],
+  },
 ];
 
-const STRUCTURED_FIELDS = [
-  { label: "patient_id", value: "PT-9274", color: "#6366f1" },
-  { label: "age", value: "34", color: "#0ea5e9" },
-  { label: "gender", value: "F", color: "#0ea5e9" },
-  { label: "chief_complaint", value: "persistent_cough", color: "#f59e0b" },
-  { label: "vitals.temp_c", value: "38.2", color: "#ef4444" },
-  { label: "vitals.spo2_pct", value: "96", color: "#f59e0b" },
-  { label: "vitals.bp", value: "118/74", color: "#10b981" },
-  { label: "risk_flags", value: "[\"smoker\", \"fam_hx_lung_ca\"]", color: "#f59e0b" },
-  { label: "prescribed_rx", value: "[\"azithromycin\"]", color: "#10b981" },
-  { label: "confidence", value: "0.97", color: "#10b981" },
-];
+const TOKEN_COLORS: Record<string, string> = {
+  kw: "#c084fc",  // keyword — purple
+  mod: "#7dd3fc",  // module — sky
+  cls: "#34d399",  // class — emerald
+  fn: "#60a5fa",  // function — blue
+  str: "#fbbf24",  // string — amber
+  var: "#e2e8f0",  // variable — white
+  op: "#64748b",  // operator — slate
+  num: "#f87171",  // number — red
+  dec: "#a78bfa",  // decorator
+};
 
-function RawToProcessedWidget({ slideColor }: { slideColor: string }) {
-  const [hovered, setHovered] = useState(false);
-  const [revealPct, setRevealPct] = useState(50);
-  const containerRef = useRef<HTMLDivElement>(null);
+function PipelineCodeCard({ accentColor }: { accentColor: string }) {
+  const [activeStage, setActiveStage] = useState(0);
+  const [running, setRunning] = useState(true);
 
-  // Smoothly auto-animate the divider on hover
+  // Auto-cycle through stages
   useEffect(() => {
-    let raf: number;
-    let current = revealPct;
-    const target = hovered ? 100 : 50;
-    const animate = () => {
-      current += (target - current) * 0.08;
-      setRevealPct(current);
-      if (Math.abs(current - target) > 0.3) raf = requestAnimationFrame(animate);
-      else setRevealPct(target);
-    };
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hovered]);
+    if (!running) return;
+    const t = setTimeout(() => setActiveStage(s => (s + 1) % PIPELINE_STAGES.length), 2200);
+    return () => clearTimeout(t);
+  }, [activeStage, running]);
+
+  const stage = PIPELINE_STAGES[activeStage];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 0.15 }}
-      ref={containerRef}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      transition={{ duration: 0.65, delay: 0.5 }}
+      className="relative w-full max-w-[430px] rounded-2xl overflow-hidden border bg-slate-950 font-mono text-[10px] select-none"
       style={{
-        borderColor: `${slideColor}30`,
-        boxShadow: `0 24px 60px rgba(0,0,0,0.28), 0 0 30px ${slideColor}12`,
+        borderColor: `${accentColor}28`,
+        boxShadow: `0 8px 32px rgba(0,0,0,0.22), 0 0 0 1px ${accentColor}10`,
       }}
-      className="relative w-full max-w-[430px] h-[220px] rounded-2xl overflow-hidden border bg-slate-950 font-mono text-[10px] select-none cursor-pointer"
+      onMouseEnter={() => setRunning(false)}
+      onMouseLeave={() => setRunning(true)}
     >
-      {/* Top neon accent line */}
+      {/* Top accent line */}
       <div
-        className="absolute top-0 inset-x-0 h-[1.5px] z-20 pointer-events-none"
-        style={{ background: `linear-gradient(90deg, transparent 0%, ${slideColor}80 50%, transparent 100%)` }}
+        className="absolute top-0 inset-x-0 h-[1.5px] z-20"
+        style={{ background: `linear-gradient(90deg, transparent, ${stage.color}90, transparent)` }}
       />
 
-      {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-950/80 border-b border-slate-800/60 z-10 relative">
+      {/* Window chrome */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-800/60 bg-slate-950">
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-[#ff5f56]/90" />
-          <div className="w-2 h-2 rounded-full bg-[#ffbd2e]/90" />
-          <div className="w-2 h-2 rounded-full bg-[#27c93f]/90" />
+          <div className="w-2 h-2 rounded-full bg-[#ff5f56]/80" />
+          <div className="w-2 h-2 rounded-full bg-[#ffbd2e]/80" />
+          <div className="w-2 h-2 rounded-full bg-[#27c93f]/80" />
         </div>
-        <div className="flex items-center gap-3 text-[9px] font-semibold tracking-widest uppercase">
-          <span
-            style={{ color: hovered ? "#475569" : slideColor }}
-            className="transition-colors duration-500 flex items-center gap-1"
-          >
-            <Cpu size={9} /> Raw Input
-          </span>
-          <span className="text-slate-700">→</span>
-          <span
-            style={{ color: hovered ? slideColor : "#475569" }}
-            className="transition-colors duration-500 flex items-center gap-1"
-          >
-            <Zap size={9} /> Structured Output
-          </span>
+        <div className="flex items-center gap-1.5 text-[9px] text-slate-500 font-semibold tracking-wider">
+          <GitBranch size={8} className="text-slate-600" />
+          <span>ml-pipeline</span>
+          <span className="text-slate-700">·</span>
+          <span style={{ color: stage.color }}>{stage.file}</span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ backgroundColor: slideColor }} />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: slideColor }} />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ backgroundColor: stage.color }} />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: stage.color }} />
           </span>
-          <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: slideColor }}>LIVE</span>
+          <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: stage.color }}>LIVE</span>
         </div>
       </div>
 
-      {/* Body: two panels side by side */}
-      <div className="relative flex h-[calc(100%-40px)] overflow-hidden">
-
-        {/* LEFT panel — RAW */}
-        <div className="absolute inset-0 px-3.5 py-2.5 space-y-1 overflow-hidden">
-          {RAW_LINES.map((line, i) => (
-            <div key={i} className="flex gap-2 items-start leading-relaxed">
-              <span className="text-slate-700 text-[8.5px] shrink-0">{String(i + 1).padStart(2, "0")}</span>
-              <span className="text-slate-400 break-all">{line}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* RIGHT panel — STRUCTURED (clip-path controlled by revealPct) */}
-        <div
-          className="absolute inset-0 px-3.5 py-2.5 space-y-1 overflow-hidden"
-          style={{
-            clipPath: `inset(0 0 0 ${100 - revealPct}%)`,
-            background: "#020617",
-            transition: "clip-path 0ms",
-          }}
-        >
-          {STRUCTURED_FIELDS.map((f, i) => (
-            <div key={i} className="flex items-center gap-1.5 leading-relaxed">
-              <span className="text-slate-600 text-[8.5px] shrink-0">{String(i + 1).padStart(2, "0")}</span>
-              <span className="text-slate-500">"</span>
-              <span style={{ color: f.color }} className="shrink-0 font-semibold">{f.label}</span>
-              <span className="text-slate-500">":</span>
-              <span className="text-emerald-300 truncate">{f.value}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Divider line */}
-        <div
-          className="absolute top-0 bottom-0 w-[1.5px] z-10 pointer-events-none"
-          style={{
-            left: `${revealPct}%`,
-            background: `${slideColor}`,
-            boxShadow: `0 0 10px ${slideColor}80, 0 0 20px ${slideColor}40`,
-            transition: "left 0ms",
-          }}
-        />
-
-        {/* Hover hint label */}
-        {!hovered && (
-          <div
-            className="absolute bottom-2 right-3 text-[8px] text-slate-600 flex items-center gap-1 z-20 pointer-events-none"
+      {/* Stage tabs */}
+      <div className="flex border-b border-slate-800/40">
+        {PIPELINE_STAGES.map((s, i) => (
+          <button
+            key={s.step}
+            onClick={() => { setActiveStage(i); setRunning(false); }}
+            className="flex-1 py-1.5 text-[8px] font-bold uppercase tracking-wider transition-colors"
+            style={{
+              color: i === activeStage ? s.color : "#475569",
+              borderBottom: i === activeStage ? `1px solid ${s.color}` : "1px solid transparent",
+              background: i === activeStage ? `${s.color}08` : "transparent",
+            }}
           >
-            <span>hover to process</span>
-            <ArrowRight size={8} />
-          </div>
-        )}
+            {s.step} {s.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Code area */}
+      <div className="px-4 pt-3 pb-2 min-h-[62px]">
+        <div className="flex flex-wrap items-center gap-x-0.5 leading-relaxed">
+          <span className="text-slate-600 text-[8.5px] mr-2 shrink-0">{activeStage + 1}</span>
+          {stage.code.map((tok, i) => (
+            <span key={i} style={{ color: TOKEN_COLORS[tok.t] ?? "#e2e8f0" }}>{tok.v}</span>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-x-0.5 mt-0.5">
+          <span className="text-slate-600 text-[8.5px] mr-2 shrink-0">2</span>
+          <span style={{ color: TOKEN_COLORS.op }}># </span>
+          <span style={{ color: TOKEN_COLORS.str }}>→ {stage.metric}</span>
+        </div>
+      </div>
+
+      {/* Pipeline progress bar */}
+      <div className="px-4 pb-3">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          {PIPELINE_STAGES.map((s, i) => (
+            <div key={s.step} className="flex items-center gap-1">
+              {i === activeStage ? (
+                <Circle size={6} style={{ color: s.color, fill: s.color }} />
+              ) : i < activeStage ? (
+                <CheckCircle2 size={6} style={{ color: s.color }} />
+              ) : (
+                <Circle size={6} className="text-slate-700" />
+              )}
+              {i < PIPELINE_STAGES.length - 1 && (
+                <div
+                  className="h-px w-6 rounded"
+                  style={{ background: i < activeStage ? `${PIPELINE_STAGES[i+1].color}60` : "#1e293b" }}
+                />
+              )}
+            </div>
+          ))}
+          <span className="ml-auto text-[8px] font-bold" style={{ color: stage.color }}>
+            {stage.status === "running" ? "● running" : stage.status === "scheduled" ? "◐ scheduled" : "✓ complete"}
+          </span>
+        </div>
       </div>
     </motion.div>
   );
@@ -220,41 +249,41 @@ function InteractiveGeometricBackground() {
   // Saffron, Deep Indigo, Gold, Neon Teal
   const colors = useMemo(() => ["#fbbf24", "#f59e0b", "#3730a3", "#14b8a6", "#6366f1"], []);
 
-  // 1. Generate Mandala Nodes — reduced: 1 core + 6 inner + 7 mid + 6 outer = 20 nodes (was 31)
+  // 1. Generate Mandala Nodes — reduced: 1 core + 5 inner + 6 mid + 5 outer = 17 nodes (was 31)
   const mandalaNodes = useMemo(() => {
     const arr: { id: number; origX: number; origY: number; color: string; r: number }[] = [];
     const cx = 500;
     const cy = 300;
     // Core
-    arr.push({ id: 0, origX: cx, origY: cy, color: colors[0], r: 5.5 });
-    // Inner ring — 6 nodes
-    for (let i = 0; i < 6; i++) {
-      const angle = (Math.PI * 2 * i) / 6;
-      arr.push({ id: 10 + i, origX: cx + Math.cos(angle) * 110, origY: cy + Math.sin(angle) * 110, color: colors[1], r: 3.5 });
+    arr.push({ id: 0, origX: cx, origY: cy, color: colors[0], r: 5 });
+    // Inner ring — reduced 6 → 5 nodes
+    for (let i = 0; i < 5; i++) {
+      const angle = (Math.PI * 2 * i) / 5;
+      arr.push({ id: 10 + i, origX: cx + Math.cos(angle) * 110, origY: cy + Math.sin(angle) * 110, color: colors[1], r: 3 });
     }
-    // Mid ring — reduced 12 → 7 nodes
-    for (let i = 0; i < 7; i++) {
-      const angle = (Math.PI * 2 * i) / 7 + Math.PI / 7;
-      arr.push({ id: 20 + i, origX: cx + Math.cos(angle) * 230, origY: cy + Math.sin(angle) * 230, color: colors[2], r: 2.5 });
-    }
-    // Outer ring — reduced 12 → 6 nodes
+    // Mid ring — reduced 12 → 6 nodes
     for (let i = 0; i < 6; i++) {
-      const angle = (Math.PI * 2 * i) / 6;
-      arr.push({ id: 40 + i, origX: cx + Math.cos(angle) * 365, origY: cy + Math.sin(angle) * 365, color: colors[3], r: 1.8 });
+      const angle = (Math.PI * 2 * i) / 6 + Math.PI / 6;
+      arr.push({ id: 20 + i, origX: cx + Math.cos(angle) * 230, origY: cy + Math.sin(angle) * 230, color: colors[2], r: 2.2 });
+    }
+    // Outer ring — reduced 12 → 5 nodes
+    for (let i = 0; i < 5; i++) {
+      const angle = (Math.PI * 2 * i) / 5;
+      arr.push({ id: 40 + i, origX: cx + Math.cos(angle) * 365, origY: cy + Math.sin(angle) * 365, color: colors[3], r: 1.5 });
     }
     return arr;
   }, [colors]);
 
-  // 2. Generate Ambient Particles — reduced to 7
+  // 2. Generate Ambient Particles — reduced to 5
   const ambientParticles = useMemo(() => {
     if (!mounted) return [];
-    return Array.from({ length: 7 }, (_, i) => ({
+    return Array.from({ length: 5 }, (_, i) => ({
       id: `p-${i}`,
       origX: Math.random() * 800,
       origY: Math.random() * 700,
       color: colors[Math.floor(Math.random() * colors.length)],
-      r: Math.random() * 1.2 + 0.6,
-      dur: 6 + Math.random() * 4,
+      r: Math.random() * 1.0 + 0.5,
+      dur: 7 + Math.random() * 4,
     }));
   }, [mounted, colors]);
 
@@ -262,17 +291,17 @@ function InteractiveGeometricBackground() {
   const connections = useMemo(() => {
     const conns: { from: number; to: number; type: string }[] = [];
     // Core → inner ring
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
       conns.push({ from: 0, to: 10 + i, type: "core" });
-      conns.push({ from: 10 + i, to: 10 + ((i + 1) % 6), type: "ring" });
+      conns.push({ from: 10 + i, to: 10 + ((i + 1) % 5), type: "ring" });
     }
-    // Inner ring → mid ring (6 inner → 7 mid, connect each inner to nearest mid node)
-    for (let i = 0; i < 6; i++) {
-      const midIdx = Math.round((i / 6) * 7) % 7;
+    // Inner ring → mid ring (5 inner → 6 mid)
+    for (let i = 0; i < 5; i++) {
+      const midIdx = Math.round((i / 5) * 6) % 6;
       conns.push({ from: 10 + i, to: 20 + midIdx, type: "mesh" });
     }
-    // Mid ring → outer ring (7 mid → 6 outer, sparse)
-    for (let i = 0; i < 6; i++) {
+    // Mid ring → outer ring (6 mid → 5 outer)
+    for (let i = 0; i < 5; i++) {
       conns.push({ from: 20 + i, to: 40 + i, type: "fade" });
     }
     return conns;
@@ -546,27 +575,24 @@ function MagneticButton({ children, className, href, target, rel, download, "ari
 
 /* ─── Main component ──────────────────────────────────────────────────────── */
 export default function HeroSection() {
-  const [titleIndex, setTitleIndex] = useState(0);
   const [slideIndex, setSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  // The HeroDiagramCarousel manages its own slideIndex/progress internally.
-  // We still keep a lightweight local timer to sync the phase chips + title color.
+  const [titleIndex, setTitleIndex] = useState(0);
 
-
+  // Shifting titles timer
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTitleIndex((p) => (p + 1) % titles.length);
+    const timer = setInterval(() => {
+      setTitleIndex((p) => (p + 1) % shiftingTitles.length);
     }, 3000);
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, []);
 
-  // Slide timer — 500ms tick to reduce re-renders during scroll
+  // Slide timer — 500ms tick, drives right-side carousel sync
   useEffect(() => {
     setProgress(0);
-    const tick = 500; // ms — reduced from 100ms
+    const tick = 500;
     const steps = (SLIDE_DURATION * 1000) / tick;
     let step = 0;
-
     const timer = setInterval(() => {
       step++;
       setProgress((step / steps) * 100);
@@ -582,119 +608,122 @@ export default function HeroSection() {
   const slide = SLIDES[slideIndex];
 
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-20 pb-10 bg-[#F4F8FC]">
+    <section className="relative w-full min-h-[80vh] flex items-center overflow-hidden pt-16 pb-8 bg-[#F4F8FC]">
 
       {/* ── Right Half: Geometric System Background ── */}
       <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block overflow-hidden z-0">
         <InteractiveGeometricBackground />
       </div>
 
-      {/* ── CONTENT GRID ─────────────────────────────────────────── */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-1 items-center">
+      {/* ── CONTENT GRID ─────────────────────────────────────── */}
+      <div className="relative z-10 container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
 
-        {/* ── LEFT: Text ── */}
+        {/* ── LEFT: Text — proper visual hierarchy ── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col space-y-6"
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="flex flex-col space-y-5"
         >
+          {/* 1. Category badge */}
           <div className="flex items-center space-x-2">
-            <span className="h-px w-8 bg-sky-500" />
-            <p className="text-[11px] font-bold tracking-[0.18em] text-sky-600 uppercase">
-              ML Engineering&nbsp;•&nbsp;Data Systems&nbsp;•&nbsp;MLOps
+            <span className="h-px w-6 bg-sky-500" />
+            <p className="text-[10px] font-bold tracking-[0.2em] text-sky-600 uppercase">
+              ML Engineering&nbsp;·&nbsp;Data Engineering&nbsp;·&nbsp;MLOps
             </p>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-slate-900 tracking-tight">
+          {/* 2. Name — biggest, dominant */}
+          <h1 className="text-[2.8rem] sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 tracking-tight leading-[1.05]">
             Yohan Shanuka
           </h1>
 
-          <div className="h-10 text-2xl md:text-3xl font-medium text-slate-600 overflow-hidden">
+          {/* 3. Shifting professional title — clear at a glance, no layout shifts */}
+          <div className="h-8 md:h-10 flex items-center overflow-hidden">
             <AnimatePresence mode="wait">
-              <motion.span
+              <motion.h2
                 key={titleIndex}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
-                className="inline-block"
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="text-xl md:text-2xl font-semibold tracking-tight"
                 style={{ color: slide.color }}
               >
-                {titles[titleIndex]}
-              </motion.span>
+                {shiftingTitles[titleIndex]}
+              </motion.h2>
             </AnimatePresence>
           </div>
 
-          <p className="text-lg md:text-xl text-slate-600 max-w-lg leading-relaxed">
-            Engineering scalable data pipelines, MLOps workflows, and cloud-native ML systems.
+          {/* 4. Recruiter-focused description */}
+          <p className="text-base md:text-lg text-slate-500 max-w-[460px] leading-relaxed">
+            Designing production-grade data pipelines, ML training systems, and MLOps workflows
+            that scale from prototype to millions of events per second.
           </p>
 
-          {/* ── Raw → Processed Split Panel Widget ── */}
-          <RawToProcessedWidget slideColor={slide.color} />
-
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            {/* View Projects - Premium Animated Border Button */}
+          {/* 5. CTA buttons — immediately after description */}
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            {/* Primary CTA */}
             <MagneticButton
               href="#projects"
-              className="group relative rounded-[14px] p-[1px] overflow-hidden shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all duration-300 block"
+              className="group relative rounded-[13px] p-[1px] overflow-hidden shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_0_28px_rgba(99,102,241,0.35)] transition-all duration-300 block"
             >
-              {/* Spinning gradient border */}
               <motion.div
-                className="absolute inset-[-100%] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-[-100%] opacity-0 group-hover:opacity-100 transition-opacity duration-400"
                 style={{ background: 'conic-gradient(from 0deg, transparent 20%, #0ea5e9 40%, #6366f1 60%, #2dd4bf 80%, transparent 100%)' }}
                 animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               />
-              <div className="absolute inset-0 bg-slate-900 rounded-[14px] group-hover:opacity-0 transition-opacity duration-300" />
-
-              {/* Button inner face */}
-              <div className="relative flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-900 rounded-[13px] text-white font-medium hover:bg-slate-800/90 transition-colors overflow-hidden">
-                {/* Shimmer sweep */}
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out" />
-                <span className="relative z-10">View Systems</span>
-                <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-slate-900 rounded-[13px] group-hover:opacity-0 transition-opacity duration-300" />
+              <div className="relative flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 rounded-[12px] text-white text-sm font-semibold overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700" />
+                <span className="relative z-10">View Projects</span>
+                <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </MagneticButton>
 
+            {/* Icon buttons */}
             <MagneticButton
               href="/YohanShanuka_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-emerald-600 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all"
+              className="group relative w-[46px] h-[46px] flex items-center justify-center bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-600 rounded-[12px] hover:text-emerald-600 hover:border-emerald-200/80 hover:shadow-[0_4px_16px_rgba(16,185,129,0.12)] transition-all duration-200"
               aria-label="View CV"
             >
-              <CvIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
+              <CvIcon size={18} className="group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>
 
             <MagneticButton
               href="https://github.com/yshanukajay"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_0_20px_rgba(15,23,42,0.08)] transition-all"
+              className="group relative w-[46px] h-[46px] flex items-center justify-center bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-600 rounded-[12px] hover:text-slate-900 hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(15,23,42,0.08)] transition-all duration-200"
               aria-label="GitHub Profile"
             >
-              <GithubIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
+              <GithubIcon size={18} className="group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>
 
             <MagneticButton
               href="https://www.linkedin.com/in/yohanshanukajay/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative w-[52px] h-[52px] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-[13px] hover:text-[#0077b5] hover:border-slate-300 hover:shadow-[0_0_20px_rgba(0,119,181,0.15)] transition-all"
+              className="group relative w-[46px] h-[46px] flex items-center justify-center bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-600 rounded-[12px] hover:text-[#0077b5] hover:border-sky-200/80 hover:shadow-[0_4px_16px_rgba(0,119,181,0.12)] transition-all duration-200"
               aria-label="LinkedIn Profile"
             >
-              <LinkedinIcon size={20} className="relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-200" />
+              <LinkedinIcon size={18} className="group-hover:scale-110 transition-transform duration-200" />
             </MagneticButton>
           </div>
+
+          {/* 6. Pipeline code card — supporting illustration */}
+          <PipelineCodeCard accentColor={slide.color} />
         </motion.div>
 
-        {/* ── RIGHT: Premium 3-Diagram Depth Carousel ── */}
+        {/* ── RIGHT: 3-Phase Diagram Carousel ── */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
+          initial={{ opacity: 0, x: 32 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
-          className="relative hidden lg:flex flex-col h-[540px] w-full"
+          transition={{ duration: 0.85, delay: 0.2, ease: "easeOut" }}
+          className="relative hidden lg:flex flex-col h-[500px] w-full"
         >
           <HeroDiagramCarousel
             activeIdx={slideIndex}

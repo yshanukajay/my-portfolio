@@ -114,57 +114,65 @@ const PHASES: PhaseData[] = [
   }
 ];
 
-// CSS float keyframes injected once
+// CSS float keyframes injected once using translate3d to avoid layout paints
 const NODE_FLOAT_STYLE = `
   @keyframes node-float {
-    0%, 100% { translate: 0px 0px; }
-    25%       { translate: 2px -3px; }
-    75%       { translate: -2px 3px; }
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    25%       { transform: translate3d(1.5px, -2px, 0); }
+    75%       { transform: translate3d(-1.5px, 2px, 0); }
   }
 `;
 
 function NodeComponent({ node, id }: { node: NodeDef; id: string }) {
   const seed = id.charCodeAt(1) || 0;
-  const floatDuration = 8 + (seed % 4);
+  const floatDuration = 10 + (seed % 4); // Slowed down slightly for premium feel
 
   return (
     <motion.div
-      className="absolute flex flex-col items-center justify-center pointer-events-none"
+      className="absolute pointer-events-none"
       animate={{
-        left: node.x,
-        top: node.y,
+        x: node.x,
+        y: node.y,
         opacity: node.opacity,
       }}
       transition={{
-        left: { type: "spring", stiffness: 40, damping: 15, mass: 1 },
-        top: { type: "spring", stiffness: 40, damping: 15, mass: 1 },
+        x: { type: "spring", stiffness: 45, damping: 16, mass: 1 },
+        y: { type: "spring", stiffness: 45, damping: 16, mass: 1 },
         opacity: { duration: 0.5 },
       }}
       style={{
-        transform: "translate(-50%, -50%)",
-        animation: `node-float ${floatDuration}s ease-in-out infinite`,
-        animationDelay: `${(seed % 5) * 0.6}s`,
+        left: 0,
+        top: 0,
       }}
     >
-      {/* Glowing Synapse Orb */}
+      {/* Floating inner container centers itself using translate classes */}
       <div
-        className="w-4 h-4 rounded-full"
+        className="relative flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2"
         style={{
-          backgroundColor: node.color,
-          boxShadow: `0 0 8px ${node.color}90, inset 0 0 4px rgba(255,255,255,0.7)`
+          animation: `node-float ${floatDuration}s ease-in-out infinite`,
+          animationDelay: `${(seed % 5) * 0.6}s`,
         }}
-      />
-      {/* Floating Free Text */}
-      <div className="absolute top-6 flex flex-col items-center w-[160px] text-center" style={{ WebkitFontSmoothing: "antialiased" }}>
-        <span className="text-slate-700 font-bold text-[14px] leading-tight tracking-wide drop-shadow-sm">
-          {node.label}
-        </span>
-        <span
-          className="text-[10px] font-bold font-mono leading-none mt-1 uppercase tracking-widest opacity-95 drop-shadow-sm"
-          style={{ color: node.color }}
-        >
-          {node.sub}
-        </span>
+      >
+        {/* Glowing Synapse Orb — glow reduced by 30% */}
+        <div
+          className="w-4 h-4 rounded-full"
+          style={{
+            backgroundColor: node.color,
+            boxShadow: `0 0 5px ${node.color}70, inset 0 0 3px rgba(255,255,255,0.7)`
+          }}
+        />
+        {/* Floating Free Text */}
+        <div className="absolute top-6 flex flex-col items-center w-[160px] text-center" style={{ WebkitFontSmoothing: "antialiased" }}>
+          <span className="text-slate-700 font-bold text-[14px] leading-tight tracking-wide drop-shadow-sm">
+            {node.label}
+          </span>
+          <span
+            className="text-[10px] font-bold font-mono leading-none mt-1 uppercase tracking-widest opacity-95 drop-shadow-sm"
+            style={{ color: node.color }}
+          >
+            {node.sub}
+          </span>
+        </div>
       </div>
     </motion.div>
   );
@@ -213,7 +221,7 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
         strokeDasharray={flowDash}
         style={{
           stroke: activeColor,
-          filter: `drop-shadow(0px 0px 4px ${activeColor})`
+          filter: `drop-shadow(0px 0px 2.5px ${activeColor})`
         }}
         animate={{
           d,
@@ -316,8 +324,8 @@ export default function HeroDiagramCarousel({
           style={{
             inset: "10% 8%",
             zIndex: 0,
-            backdropFilter: "blur(6px) saturate(1.1)",
-            WebkitBackdropFilter: "blur(6px) saturate(1.1)",
+            backdropFilter: "blur(4px) saturate(1.1)",
+            WebkitBackdropFilter: "blur(4px) saturate(1.1)",
             background: "rgba(255,255,255,0.42)",
             maskImage: "radial-gradient(ellipse 80% 75% at 50% 50%, black 30%, transparent 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 75% at 50% 50%, black 30%, transparent 100%)",

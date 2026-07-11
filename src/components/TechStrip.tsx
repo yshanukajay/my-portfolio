@@ -54,13 +54,13 @@ export default function TechStrip() {
           animation-play-state: paused;
         }
         .tech-marquee-content {
-          animation: tech-marquee 50s linear infinite;
+          animation: tech-marquee 70s linear infinite;
           will-change: transform;
         }
         /* Pause on mobile — reduced motion / small screens */
         @media (max-width: 640px) {
           .tech-marquee-content {
-            animation-duration: 80s;
+            animation-duration: 100s;
           }
           .data-particle {
             display: none;
