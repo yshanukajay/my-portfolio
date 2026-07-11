@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Database, Sparkles, Wind, Activity, Zap, Layers, Network, Code } from "lucide-react";
 
 const baseTechnologies = [
@@ -14,52 +14,101 @@ const baseTechnologies = [
   { name: "Python", role: "Core", icon: Code, color: "text-yellow-600", accentColor: "#eab308" },
 ];
 
-// Duplicate multiple times for a seamless infinite loop
+// Duplicate for seamless infinite loop (2× is enough when we use translate3d(-50%))
 const technologies = [
-  ...baseTechnologies,
-  ...baseTechnologies,
   ...baseTechnologies,
   ...baseTechnologies,
 ];
 
 export default function TechStrip() {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  // Pause animation when tab is not visible (Page Visibility API)
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (!marqueeRef.current) return;
+      marqueeRef.current.style.animationPlayState =
+        document.hidden ? "paused" : "running";
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
   return (
     <div className="w-full bg-white/70 backdrop-blur-xl border-y border-slate-100 py-5 overflow-hidden flex items-center shadow-[0_1px_3px_rgba(0,0,0,0.01)] relative z-20 tech-marquee-container">
-      {/* Dynamic Keyframes injected locally */}
       <style dangerouslySetInnerHTML={{
         __html: `
+        /* GPU-composited marquee — transform: translate3d avoids layout/paint */
         @keyframes tech-marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
+        @keyframes data-particle {
+          0%   { transform: translate3d(-100%, 0, 0); opacity: 0; }
+          20%  { opacity: 1; }
+          80%  { opacity: 1; }
+          100% { transform: translate3d(350%, 0, 0); opacity: 0; }
+        }
+        /* Pause on hover */
         .tech-marquee-container:hover .tech-marquee-content {
           animation-play-state: paused;
         }
         .tech-marquee-content {
-          animation: tech-marquee 40s linear infinite;
+          animation: tech-marquee 50s linear infinite;
+          will-change: transform;
+        }
+        /* Pause on mobile — reduced motion / small screens */
+        @media (max-width: 640px) {
+          .tech-marquee-content {
+            animation-duration: 80s;
+          }
+          .data-particle {
+            display: none;
+          }
+        }
+        /* Respect prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+          .tech-marquee-content {
+            animation: none;
+          }
+          .data-particle {
+            display: none;
+          }
+        }
+        .tech-card {
+          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .tech-card:hover {
+          transform: scale(1.04);
+        }
+        .tech-card .tech-icon {
+          transition: transform 0.25s ease;
+        }
+        .tech-card:hover .tech-icon {
+          transform: scale(1.1);
+        }
+        .data-particle {
+          animation: data-particle 2.5s linear infinite;
+          will-change: transform, opacity;
         }
       `}} />
 
-      {/* Edge gradient overlays for visual depth */}
+      {/* Edge gradient overlays */}
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
-      <div className="flex whitespace-nowrap items-center tech-marquee-content">
+      <div ref={marqueeRef} className="flex whitespace-nowrap items-center tech-marquee-content">
         {technologies.map((tech, index) => {
           const Icon = tech.icon;
           return (
             <div key={index} className="flex items-center">
-              {/* Pipeline Node */}
-              <motion.div
-                whileHover={{
-                  scale: 1.04,
-                  borderColor: tech.accentColor,
-                  boxShadow: `0 10px 25px -5px ${tech.accentColor}15, 0 8px 10px -6px ${tech.accentColor}15`,
-                }}
-                className="flex items-center gap-3.5 px-5 py-3 rounded-2xl border border-slate-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-lg cursor-pointer transition-all duration-300 select-none group"
+              {/* Pipeline Node — pure CSS hover, no framer-motion */}
+              <div
+                className="tech-card flex items-center gap-3.5 px-5 py-3 rounded-2xl border border-slate-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-lg cursor-pointer select-none group"
+                style={{ ["--accent" as string]: tech.accentColor } as React.CSSProperties}
               >
-                {/* Active Pulsing Indicator (color-coded to tech) */}
-                <span className="relative flex h-2 w-2">
+                {/* Active Pulsing Indicator */}
+                <span className="relative flex h-2 w-2 shrink-0">
                   <span
                     className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
                     style={{ backgroundColor: tech.accentColor }}
@@ -71,7 +120,7 @@ export default function TechStrip() {
                 </span>
 
                 {/* Tech Icon */}
-                <Icon size={18} className={`${tech.color} opacity-85 group-hover:scale-110 transition-transform duration-300`} />
+                <Icon size={18} className={`tech-icon ${tech.color} opacity-85`} />
 
                 {/* Tech Info */}
                 <div className="flex flex-col text-left">
@@ -82,22 +131,15 @@ export default function TechStrip() {
                     {tech.role}
                   </span>
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Glowing Connection Line */}
-              <div className="w-14 h-[2px] bg-slate-200/50 relative overflow-hidden flex items-center justify-center mx-1">
-                {/* Moving Data Particle color-coded to the tech */}
-                <motion.div
-                  className="absolute h-full w-8"
+              {/* Glowing Connection Line — CSS animated particle */}
+              <div className="w-14 h-[2px] bg-slate-200/50 relative overflow-hidden mx-1">
+                <div
+                  className="data-particle absolute h-full w-8"
                   style={{
-                    background: `linear-gradient(90deg, transparent, ${tech.accentColor}, transparent)`
-                  }}
-                  animate={{ left: ["-50%", "150%"] }}
-                  transition={{
-                    duration: 1.8,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: (index % 4) * 0.45,
+                    background: `linear-gradient(90deg, transparent, ${tech.accentColor}, transparent)`,
+                    animationDelay: `${(index % 4) * 0.6}s`,
                   }}
                 />
               </div>
@@ -108,5 +150,3 @@ export default function TechStrip() {
     </div>
   );
 }
-
-

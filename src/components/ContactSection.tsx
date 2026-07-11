@@ -160,7 +160,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="py-28 relative overflow-hidden"
-      style={{ background: "#FAF7F4" }}>
+      style={{ background: "#F4F8FC" }}>
 
       {/* Animated grid */}
       <ContactGrid reduced={reduced} />
@@ -192,7 +192,7 @@ export default function ContactSection() {
 
       {/* Top edge fade */}
       <div className="absolute inset-x-0 top-0 h-20 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, #FAF7F4, transparent)" }} aria-hidden />
+        style={{ background: "linear-gradient(to bottom, #F4F8FC, transparent)" }} aria-hidden />
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
 
@@ -415,7 +415,7 @@ export default function ContactSection() {
 
       {/* Bottom edge fade */}
       <div className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-        style={{ background: "linear-gradient(to top, #FAF7F4, transparent)" }} aria-hidden />
+        style={{ background: "linear-gradient(to top, #F4F8FC, transparent)" }} aria-hidden />
     </section>
   );
 }

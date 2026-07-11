@@ -101,7 +101,7 @@ function DomainCard({ domain, index }: { domain: Domain; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, delay: index * 0.08 }}
-      className="rounded-2xl p-6 md:p-7 flex flex-col h-full bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
+      className="rounded-2xl p-6 md:p-7 flex flex-col h-full bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-[0_4px_20px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_28px_rgba(15,23,42,0.09)] hover:border-slate-300/80 transition-all duration-300"
     >
       <div className="flex items-start justify-between gap-4 mb-5">
         <div className="flex items-center gap-3 min-w-0">
@@ -117,7 +117,7 @@ function DomainCard({ domain, index }: { domain: Domain; index: number }) {
           </div>
         </div>
         <div
-          className="text-right flex-shrink-0 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200"
+          className="text-right flex-shrink-0 px-3 py-2 rounded-xl bg-white/80 border border-slate-200/70 shadow-sm"
         >
           <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {domain.metric.label}
@@ -186,7 +186,7 @@ export default function AboutSection() {
   return (
     <section id="about" className="relative">
       {/* Engineering Mindset — white */}
-      <div className="py-24 bg-[#FAF7F4] relative overflow-hidden">
+      <div className="py-24 bg-[#F4F8FC] relative overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -380,7 +380,7 @@ export default function AboutSection() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.35, delay: 0.08 + i * 0.05 }}
                         whileHover={{ y: -2 }}
-                        className="group relative flex items-center gap-4 p-4 rounded-2xl cursor-default transition-all duration-300 bg-white border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-slate-300/80"
+                        className="group relative flex items-center gap-4 p-4 rounded-2xl cursor-default transition-all duration-300 bg-white/90 backdrop-blur-sm border border-slate-200/70 shadow-[0_2px_10px_rgba(15,23,42,0.05)] hover:shadow-[0_6px_20px_rgba(15,23,42,0.08)] hover:border-slate-300/80"
                       >
                         {/* Hover subtle background accent indicator */}
                         <div
@@ -470,7 +470,7 @@ export default function AboutSection() {
                   key={stat.label}
                   initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
-                  className="rounded-2xl p-4 border border-slate-200 bg-white shadow-sm"
+                  className="rounded-2xl p-4 border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-[0_4px_16px_rgba(15,23,42,0.06)]"
                 >
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
                     {stat.label}
@@ -552,11 +552,11 @@ export default function AboutSection() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -15, scale: 0.98 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="rounded-3xl p-6 md:p-8 bg-white border border-slate-200 shadow-md hover:shadow-lg transition-shadow duration-300 relative overflow-hidden"
+                    className="rounded-3xl p-6 md:p-8 bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-[0_4px_24px_rgba(15,23,42,0.07),0_1px_4px_rgba(15,23,42,0.05)] hover:shadow-[0_8px_32px_rgba(15,23,42,0.10)] transition-shadow duration-300 relative overflow-hidden"
                   >
                     {/* Corner gradient glow matching active tab color */}
                     <div
-                      className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[40px] pointer-events-none opacity-20"
+                      className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[30px] pointer-events-none opacity-15"
                       style={{ backgroundColor: activeDomain.color }}
                     />
 
@@ -677,7 +677,7 @@ export default function AboutSection() {
               className="hidden lg:flex flex-col gap-4"
             >
               {/* Mini pipeline steps */}
-              <div className="rounded-2xl p-4 border border-slate-200 bg-white shadow-sm">
+              <div className="rounded-2xl p-4 border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-[0_4px_16px_rgba(15,23,42,0.05)]">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3">
                   ML Lifecycle
                 </div>
@@ -706,7 +706,7 @@ export default function AboutSection() {
                   key={item.tech}
                   initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 + i * 0.07 }}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-slate-200 bg-white shadow-sm"
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(15,23,42,0.05)]"
                 >
                   <motion.span
                     className="w-2 h-2 rounded-full flex-shrink-0"

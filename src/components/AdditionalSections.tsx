@@ -12,7 +12,7 @@ const GithubIcon = ({ size = 24, className = "" }: { size?: number, className?: 
 
 export default function AdditionalSections() {
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-24 bg-[#F4F8FC] relative">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           

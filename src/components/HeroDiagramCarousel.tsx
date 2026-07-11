@@ -114,9 +114,18 @@ const PHASES: PhaseData[] = [
   }
 ];
 
+// CSS float keyframes injected once
+const NODE_FLOAT_STYLE = `
+  @keyframes node-float {
+    0%, 100% { translate: 0px 0px; }
+    25%       { translate: 2px -3px; }
+    75%       { translate: -2px 3px; }
+  }
+`;
+
 function NodeComponent({ node, id }: { node: NodeDef; id: string }) {
-  // Use a pseudo-random seed based on the ID for consistent drift animations
   const seed = id.charCodeAt(1) || 0;
+  const floatDuration = 8 + (seed % 4);
 
   return (
     <motion.div
@@ -125,24 +134,24 @@ function NodeComponent({ node, id }: { node: NodeDef; id: string }) {
         left: node.x,
         top: node.y,
         opacity: node.opacity,
-        y: [0, -3, 0, 3, 0],
-        x: [0, 2, 0, -2, 0]
       }}
       transition={{
         left: { type: "spring", stiffness: 40, damping: 15, mass: 1 },
         top: { type: "spring", stiffness: 40, damping: 15, mass: 1 },
         opacity: { duration: 0.5 },
-        y: { duration: 8 + (seed % 3), repeat: Infinity, ease: "easeInOut" },
-        x: { duration: 9 + (seed % 4), repeat: Infinity, ease: "easeInOut" }
       }}
-      style={{ transform: "translate(-50%, -50%)" }} // Center on coordinate
+      style={{
+        transform: "translate(-50%, -50%)",
+        animation: `node-float ${floatDuration}s ease-in-out infinite`,
+        animationDelay: `${(seed % 5) * 0.6}s`,
+      }}
     >
       {/* Glowing Synapse Orb */}
       <div
         className="w-4 h-4 rounded-full"
         style={{
           backgroundColor: node.color,
-          boxShadow: `0 0 15px ${node.color}, 0 0 30px ${node.color}60, inset 0 0 8px rgba(255,255,255,0.9)`
+          boxShadow: `0 0 8px ${node.color}90, inset 0 0 4px rgba(255,255,255,0.7)`
         }}
       />
       {/* Floating Free Text */}
@@ -204,7 +213,7 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
         strokeDasharray={flowDash}
         style={{
           stroke: activeColor,
-          filter: `drop-shadow(0px 0px 8px ${activeColor})`
+          filter: `drop-shadow(0px 0px 4px ${activeColor})`
         }}
         animate={{
           d,
@@ -273,6 +282,7 @@ export default function HeroDiagramCarousel({
 
   return (
     <div className="group relative w-full max-w-[800px] aspect-[16/10] flex flex-col overflow-visible select-none items-center justify-center">
+      <style>{NODE_FLOAT_STYLE}</style>
 
       {/* --- Header Content --- */}
       <div className="absolute top-6 left-8 z-10 pointer-events-none">
@@ -306,8 +316,8 @@ export default function HeroDiagramCarousel({
           style={{
             inset: "10% 8%",
             zIndex: 0,
-            backdropFilter: "blur(10px) saturate(1.2)",
-            WebkitBackdropFilter: "blur(10px) saturate(1.2)",
+            backdropFilter: "blur(6px) saturate(1.1)",
+            WebkitBackdropFilter: "blur(6px) saturate(1.1)",
             background: "rgba(255,255,255,0.42)",
             maskImage: "radial-gradient(ellipse 80% 75% at 50% 50%, black 30%, transparent 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 75% at 50% 50%, black 30%, transparent 100%)",

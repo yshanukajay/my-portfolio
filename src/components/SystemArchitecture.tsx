@@ -562,7 +562,7 @@ export default function SystemArchitecture() {
   };
 
   return (
-    <section id="architecture" className="py-24 bg-[#FAF7F4] relative border-y border-[#E8E2DA] overflow-hidden">
+    <section id="architecture" className="py-24 bg-[#F4F8FC] relative border-y border-[#DDE8F0] overflow-hidden">
       {/* ── Interactive magnetic particles — white + blue, attracted to cursor ── */}
       <MagneticParticlesBg opacity={0.9} />
       <div className="container mx-auto px-6 lg:px-12 relative z-10">

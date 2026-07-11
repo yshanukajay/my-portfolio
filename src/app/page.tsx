@@ -14,7 +14,7 @@ import TerminalWidget from "@/components/TerminalWidget";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-[#FAF7F4] overflow-x-hidden pt-16">
+    <main className="flex min-h-screen flex-col bg-[#F4F8FC] overflow-x-hidden pt-16">
       <Navbar />
 
       {/* 1. Hero */}

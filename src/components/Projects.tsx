@@ -177,7 +177,7 @@ function ProjectCard({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.65, ease: "easeOut" }}
       className="group relative rounded-2xl border overflow-hidden min-h-[460px] flex flex-col justify-between"
-      style={{ background: "#FAF7F4", borderColor: `${p.color}28` }}
+      style={{ background: "rgba(255,255,255,0.82)", backdropFilter: "blur(8px)", borderColor: `${p.color}28` }}
     >
       {/* Top accent */}
       <div className="h-[2px]" style={{ background: `linear-gradient(to right, transparent, ${p.color}, transparent)` }} />
@@ -468,7 +468,7 @@ function ProjectCard({
 /* ─── Main section ────────────────────────────────────────────── */
 export default function Projects() {
   return (
-    <section id="projects" className="py-24 relative overflow-hidden" style={{ background: "#FAF7F4" }}>
+    <section id="projects" className="py-24 relative overflow-hidden" style={{ background: "#F4F8FC" }}>
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.06) 0%, transparent 55%)" }} />
@@ -523,7 +523,7 @@ export default function Projects() {
                       <motion.div
                         className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center font-black text-base border-2"
                         style={{
-                          background: "#FAF7F4",
+                          background: "#F4F8FC",
                           borderColor: p.color,
                           color: p.color,
                           boxShadow: `0 0 0 4px ${p.color}18, 0 0 24px ${p.color}40`,
@@ -566,7 +566,7 @@ export default function Projects() {
                     <div className="flex flex-col items-center flex-shrink-0">
                       <motion.div
                         className="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 flex-shrink-0"
-                        style={{ background: "#FAF7F4", borderColor: p.color, color: p.color }}
+                        style={{ background: "#F4F8FC", borderColor: p.color, color: p.color }}
                         initial={{ scale: 0 }} whileInView={{ scale: 1 }}
                         viewport={{ once: true }} transition={{ type: "spring", stiffness: 200 }}
                       >

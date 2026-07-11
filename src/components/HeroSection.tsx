@@ -208,132 +208,218 @@ function RawToProcessedWidget({ slideColor }: { slideColor: string }) {
 
 /* ─── Interactive Geometric System Background (Mandala / Rangoli Inspired) ─── */
 function InteractiveGeometricBackground() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: -1000, y: -1000 });
+  const svgRef = useRef<SVGSVGElement>(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const rafRef = useRef<number>(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const onMove = (e: React.MouseEvent) => {
-    const r = ref.current?.getBoundingClientRect();
-    if (!r) return;
-    setMouse({ x: e.clientX - r.left, y: e.clientY - r.top });
-  };
-
-  const onLeave = () => setMouse({ x: -1000, y: -1000 });
-
   // Saffron, Deep Indigo, Gold, Neon Teal
-  const colors = ["#fbbf24", "#f59e0b", "#3730a3", "#14b8a6", "#6366f1"];
+  const colors = useMemo(() => ["#fbbf24", "#f59e0b", "#3730a3", "#14b8a6", "#6366f1"], []);
 
-  // 1. Generate Mandala Nodes
+  // 1. Generate Mandala Nodes — reduced: 1 core + 6 inner + 7 mid + 6 outer = 20 nodes (was 31)
   const mandalaNodes = useMemo(() => {
-    const arr = [];
+    const arr: { id: number; origX: number; origY: number; color: string; r: number }[] = [];
     const cx = 500;
     const cy = 300;
-
     // Core
-    arr.push({ id: 0, origX: cx, origY: cy, color: colors[0], r: 6 });
-
-    // Inner Hexagon
+    arr.push({ id: 0, origX: cx, origY: cy, color: colors[0], r: 5.5 });
+    // Inner ring — 6 nodes
     for (let i = 0; i < 6; i++) {
       const angle = (Math.PI * 2 * i) / 6;
-      arr.push({ id: 10 + i, origX: cx + Math.cos(angle) * 110, origY: cy + Math.sin(angle) * 110, color: colors[1], r: 4 });
+      arr.push({ id: 10 + i, origX: cx + Math.cos(angle) * 110, origY: cy + Math.sin(angle) * 110, color: colors[1], r: 3.5 });
     }
-
-    // Middle Dodecagon
-    for (let i = 0; i < 12; i++) {
-      const angle = (Math.PI * 2 * i) / 12 + Math.PI / 12;
-      arr.push({ id: 20 + i, origX: cx + Math.cos(angle) * 230, origY: cy + Math.sin(angle) * 230, color: colors[2], r: 3 });
+    // Mid ring — reduced 12 → 7 nodes
+    for (let i = 0; i < 7; i++) {
+      const angle = (Math.PI * 2 * i) / 7 + Math.PI / 7;
+      arr.push({ id: 20 + i, origX: cx + Math.cos(angle) * 230, origY: cy + Math.sin(angle) * 230, color: colors[2], r: 2.5 });
     }
-
-    // Outer Orbit
-    for (let i = 0; i < 12; i++) {
-      const angle = (Math.PI * 2 * i) / 12;
-      // Use 40 + i to avoid overlapping with Middle Dodecagon (which goes up to 31)
-      arr.push({ id: 40 + i, origX: cx + Math.cos(angle) * 380, origY: cy + Math.sin(angle) * 380, color: colors[3], r: 2 });
+    // Outer ring — reduced 12 → 6 nodes
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 * i) / 6;
+      arr.push({ id: 40 + i, origX: cx + Math.cos(angle) * 365, origY: cy + Math.sin(angle) * 365, color: colors[3], r: 1.8 });
     }
-
     return arr;
-  }, []);
+  }, [colors]);
 
-  // 2. Generate Ambient Particles
+  // 2. Generate Ambient Particles — reduced to 7
   const ambientParticles = useMemo(() => {
     if (!mounted) return [];
-    const arr = [];
-    for (let i = 0; i < 25; i++) {
-      arr.push({
-        id: `p-${i}`,
-        origX: Math.random() * 800,
-        origY: Math.random() * 700,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        r: Math.random() * 2 + 1,
-        dur: 4 + Math.random() * 3,
-      });
-    }
-    return arr;
-  }, [mounted]);
+    return Array.from({ length: 7 }, (_, i) => ({
+      id: `p-${i}`,
+      origX: Math.random() * 800,
+      origY: Math.random() * 700,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      r: Math.random() * 1.2 + 0.6,
+      dur: 6 + Math.random() * 4,
+    }));
+  }, [mounted, colors]);
 
-  // 3. Generate Connections
+  // 3. Generate Connections — updated for reduced node counts
   const connections = useMemo(() => {
-    const conns = [];
-    // Center to Inner
+    const conns: { from: number; to: number; type: string }[] = [];
+    // Core → inner ring
     for (let i = 0; i < 6; i++) {
       conns.push({ from: 0, to: 10 + i, type: "core" });
       conns.push({ from: 10 + i, to: 10 + ((i + 1) % 6), type: "ring" });
     }
-    // Inner to Middle
+    // Inner ring → mid ring (6 inner → 7 mid, connect each inner to nearest mid node)
     for (let i = 0; i < 6; i++) {
-      conns.push({ from: 10 + i, to: 20 + i * 2, type: "mesh" });
-      conns.push({ from: 10 + i, to: 20 + ((i * 2 + 1) % 12), type: "mesh" });
+      const midIdx = Math.round((i / 6) * 7) % 7;
+      conns.push({ from: 10 + i, to: 20 + midIdx, type: "mesh" });
     }
-    // Middle to Outer
-    for (let i = 0; i < 12; i++) {
+    // Mid ring → outer ring (7 mid → 6 outer, sparse)
+    for (let i = 0; i < 6; i++) {
       conns.push({ from: 20 + i, to: 40 + i, type: "fade" });
-      conns.push({ from: 20 + i, to: 40 + ((i + 1) % 12), type: "fade" });
     }
     return conns;
   }, []);
 
-  // 4. Calculate Magnetic Hover Physics
-  const processMagnetic = (items: any[]) => {
-    return items.map((item) => {
-      let nx = item.origX;
-      let ny = item.origY;
-      if (mouse.x > 0) {
-        const dx = mouse.x - nx;
-        const dy = mouse.y - ny;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 220) {
-          const force = Math.pow((220 - dist) / 220, 2);
-          nx -= dx * force * 0.35;
-          ny -= dy * force * 0.35;
-        }
-      }
-      return { ...item, x: nx, y: ny };
+  // 4. RAF-based magnetic effect — mutates SVG elements directly, NO React re-renders
+  const nodeEls = useRef<Map<number, SVGCircleElement>>(new Map());
+  const connEls = useRef<Map<number, SVGPathElement>>(new Map());
+  const shieldEl = useRef<SVGCircleElement>(null);
+  // Store spring state per node
+  const springState = useRef<Map<number, { x: number; y: number; vx: number; vy: number }>>(new Map());
+  // Viewport visibility ref — pauses RAF when section is off-screen
+  const isVisibleRef = useRef(true);
+  const frameCountRef = useRef(0);
+
+  useEffect(() => {
+    // Initialize spring state
+    mandalaNodes.forEach((n) => {
+      springState.current.set(n.id, { x: n.origX, y: n.origY, vx: 0, vy: 0 });
     });
+
+    const STIFFNESS = 0.06;
+    const DAMPING = 0.82;
+    const MAGNETIC_RADIUS = 220;
+    const MAGNETIC_STRENGTH = 0.35;
+    // Throttle: skip every other frame when mouse is idle
+    const SKIP_FRAMES = 2;
+
+    const tick = () => {
+      rafRef.current = requestAnimationFrame(tick);
+
+      // Pause when scrolled out of view
+      if (!isVisibleRef.current) return;
+
+      // Throttle: only update every SKIP_FRAMES when mouse is at rest
+      frameCountRef.current++;
+      const isMouseActive = mouseRef.current.x > 0;
+      if (!isMouseActive && frameCountRef.current % SKIP_FRAMES !== 0) return;
+
+      const mx = mouseRef.current.x;
+      const my = mouseRef.current.y;
+
+      mandalaNodes.forEach((node) => {
+        const state = springState.current.get(node.id)!;
+
+        // Compute target with magnetic repulsion
+        let tx = node.origX;
+        let ty = node.origY;
+        if (mx > 0) {
+          const dx = mx - node.origX;
+          const dy = my - node.origY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAGNETIC_RADIUS) {
+            const force = Math.pow((MAGNETIC_RADIUS - dist) / MAGNETIC_RADIUS, 2);
+            tx -= dx * force * MAGNETIC_STRENGTH;
+            ty -= dy * force * MAGNETIC_STRENGTH;
+          }
+        }
+
+        // Spring integration
+        state.vx = state.vx * DAMPING + (tx - state.x) * STIFFNESS;
+        state.vy = state.vy * DAMPING + (ty - state.y) * STIFFNESS;
+        state.x += state.vx;
+        state.y += state.vy;
+
+        // Update DOM directly — no React state
+        const el = nodeEls.current.get(node.id);
+        if (el) {
+          el.setAttribute("cx", String(state.x));
+          el.setAttribute("cy", String(state.y));
+        }
+      });
+
+      // Update shield to follow core node
+      const core = springState.current.get(0);
+      if (core && shieldEl.current) {
+        shieldEl.current.setAttribute("cx", String(core.x));
+        shieldEl.current.setAttribute("cy", String(core.y));
+      }
+
+      // Update connection paths
+      connections.forEach((conn, i) => {
+        const n1State = springState.current.get(conn.from);
+        const n2State = springState.current.get(conn.to);
+        if (!n1State || !n2State) return;
+        const dx = n2State.x - n1State.x;
+        const dy = n2State.y - n1State.y;
+        const cpx = n1State.x + dx / 2 - dy * 0.15;
+        const cpy = n1State.y + dy / 2 + dx * 0.15;
+        const d = `M ${n1State.x.toFixed(1)} ${n1State.y.toFixed(1)} Q ${cpx.toFixed(1)} ${cpy.toFixed(1)} ${n2State.x.toFixed(1)} ${n2State.y.toFixed(1)}`;
+        const el = connEls.current.get(i);
+        if (el) el.setAttribute("d", d);
+      });
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [mandalaNodes, connections]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const r = svgRef.current?.closest<HTMLDivElement>(".geo-bg-root")?.getBoundingClientRect();
+    if (!r) return;
+    mouseRef.current = { x: e.clientX - r.left, y: e.clientY - r.top };
   };
 
-  const activeNodes = processMagnetic(mandalaNodes);
-  const activeParticles = processMagnetic(ambientParticles);
+  const handleMouseLeave = () => {
+    mouseRef.current = { x: -1000, y: -1000 };
+  };
+
+  // Pre-compute initial connection paths
+  const initialPaths = useMemo(() => connections.map((conn) => {
+    const n1 = mandalaNodes.find((n) => n.id === conn.from);
+    const n2 = mandalaNodes.find((n) => n.id === conn.to);
+    if (!n1 || !n2) return "";
+    const dx = n2.origX - n1.origX;
+    const dy = n2.origY - n1.origY;
+    const cpx = n1.origX + dx / 2 - dy * 0.15;
+    const cpy = n1.origY + dy / 2 + dx * 0.15;
+    return `M ${n1.origX} ${n1.origY} Q ${cpx} ${cpy} ${n2.origX} ${n2.origY}`;
+  }), [connections, mandalaNodes]);
+
+  // IntersectionObserver — pause RAF when section is out of viewport
+  useEffect(() => {
+    const root = svgRef.current?.closest<HTMLDivElement>(".geo-bg-root");
+    if (!root) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+      { threshold: 0.05 }
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
-      ref={ref}
-      className="absolute inset-0 overflow-hidden"
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
+      className="geo-bg-root absolute inset-0 overflow-hidden"
+      style={{ willChange: "transform" }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      <svg className="absolute inset-0 w-full h-full opacity-70" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid slice">
+      <svg
+        ref={svgRef}
+        className="absolute inset-0 w-full h-full opacity-70"
+        viewBox="0 0 900 700"
+        preserveAspectRatio="xMidYMid slice"
+      >
         <defs>
-          <filter id="mandala-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
           <radialGradient id="core-glass" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="rgba(251, 191, 36, 0.12)" />
             <stop offset="70%" stopColor="rgba(251, 191, 36, 0.04)" />
@@ -341,82 +427,78 @@ function InteractiveGeometricBackground() {
           </radialGradient>
         </defs>
 
-        {/* Ambient Particles */}
-        {activeParticles.map((p) => (
-          <motion.circle
+        {/* Ambient Particles — CSS keyframe animated, no framer-motion */}
+        {ambientParticles.map((p) => (
+          <circle
             key={p.id}
+            cx={p.origX}
+            cy={p.origY}
             r={p.r}
             fill={p.color}
-            filter="url(#mandala-glow)"
-            animate={{ cx: p.x, cy: p.y, opacity: [0.2, 0.8, 0.2] }}
-            transition={{
-              cx: { type: "spring", stiffness: 60, damping: 20 },
-              cy: { type: "spring", stiffness: 60, damping: 20 },
-              opacity: { duration: p.dur, repeat: Infinity, ease: "easeInOut" },
+            style={{
+              opacity: 0.4,
+              animation: `geo-pulse ${p.dur}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * p.dur}s`,
             }}
           />
         ))}
 
-        {/* Dynamic Connections */}
+        {/* Connections — DOM-mutated by RAF */}
         {connections.map((conn, i) => {
-          const n1 = activeNodes.find((n) => n.id === conn.from);
-          const n2 = activeNodes.find((n) => n.id === conn.to);
-          if (!n1 || !n2) return null;
-
-          // Rangoli-style elegant curved paths
-          const dx = n2.x - n1.x;
-          const dy = n2.y - n1.y;
-          const cx = n1.x + dx / 2 - dy * 0.15;
-          const cy = n1.y + dy / 2 + dx * 0.15;
-          const d = `M ${n1.x} ${n1.y} Q ${cx} ${cy} ${n2.x} ${n2.y}`;
-
-          let stroke = "rgba(55, 48, 163, 0.15)"; // Deep Indigo Mesh
-          if (conn.type === "core") stroke = "rgba(251, 191, 36, 0.3)"; // Gold
-          if (conn.type === "ring") stroke = "rgba(245, 158, 11, 0.25)"; // Saffron
-          if (conn.type === "fade") stroke = "rgba(20, 184, 166, 0.1)"; // Neon Teal
-
+          let stroke = "rgba(55, 48, 163, 0.15)";
+          if (conn.type === "core") stroke = "rgba(251, 191, 36, 0.3)";
+          if (conn.type === "ring") stroke = "rgba(245, 158, 11, 0.25)";
+          if (conn.type === "fade") stroke = "rgba(20, 184, 166, 0.1)";
           return (
-            <motion.path
+            <path
               key={`conn-${i}`}
-              d={d}
+              ref={(el) => { if (el) connEls.current.set(i, el); }}
+              d={initialPaths[i]}
               fill="none"
               stroke={stroke}
               strokeWidth={1.5}
-              animate={{ d }}
-              transition={{ type: "spring", stiffness: 60, damping: 20 }}
             />
           );
         })}
 
         {/* Core Glassmorphic Shield */}
-        <motion.circle
+        <circle
+          ref={shieldEl}
           r={75}
+          cx={mandalaNodes[0]?.origX}
+          cy={mandalaNodes[0]?.origY}
           fill="url(#core-glass)"
           stroke="rgba(251, 191, 36, 0.15)"
           strokeWidth={1}
-          animate={{ cx: activeNodes[0].x, cy: activeNodes[0].y }}
-          transition={{ type: "spring", stiffness: 60, damping: 20 }}
         />
 
-        {/* Geometric Nodes */}
-        {activeNodes.map((node) => (
-          <motion.circle
+        {/* Geometric Nodes — DOM-mutated by RAF, CSS pulse opacity */}
+        {mandalaNodes.map((node) => (
+          <circle
             key={`node-${node.id}`}
+            ref={(el) => { if (el) nodeEls.current.set(node.id, el); }}
+            cx={node.origX}
+            cy={node.origY}
             r={node.r}
             fill={node.color}
-            filter="url(#mandala-glow)"
-            animate={{ cx: node.x, cy: node.y, opacity: [0.6, 1, 0.6] }}
-            transition={{
-              cx: { type: "spring", stiffness: 60, damping: 20 },
-              cy: { type: "spring", stiffness: 60, damping: 20 },
-              opacity: { duration: 3 + (node.id % 3), repeat: Infinity, ease: "easeInOut" },
+            style={{
+              filter: `drop-shadow(0 0 2px ${node.color})`,
+              animation: `geo-pulse ${4 + (node.id % 4)}s ease-in-out infinite`,
+              animationDelay: `${(node.id % 5) * 0.5}s`,
             }}
           />
         ))}
       </svg>
 
       {/* Edge Fade */}
-      <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#FAF7F4] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#F4F8FC] to-transparent pointer-events-none" />
+
+      <style>{`
+        @keyframes geo-pulse {
+          0%, 100% { opacity: 0.45; }
+          50% { opacity: 0.9; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -478,10 +560,10 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // Slide timer
+  // Slide timer — 500ms tick to reduce re-renders during scroll
   useEffect(() => {
     setProgress(0);
-    const tick = 100; // ms
+    const tick = 500; // ms — reduced from 100ms
     const steps = (SLIDE_DURATION * 1000) / tick;
     let step = 0;
 
@@ -500,7 +582,7 @@ export default function HeroSection() {
   const slide = SLIDES[slideIndex];
 
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-20 pb-10 bg-[#FAF7F4]">
+    <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-20 pb-10 bg-[#F4F8FC]">
 
       {/* ── Right Half: Geometric System Background ── */}
       <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block overflow-hidden z-0">

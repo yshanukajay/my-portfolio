@@ -77,13 +77,13 @@ export default function Research() {
           className="absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
-              "linear-gradient(to right,#c7b8a8 1px,transparent 1px),linear-gradient(to bottom,#c7b8a8 1px,transparent 1px)",
+              "linear-gradient(to right,#b8cfe8 1px,transparent 1px),linear-gradient(to bottom,#b8cfe8 1px,transparent 1px)",
             backgroundSize: "60px 60px",
-            background: "#FAF7F4",
+            background: "#F4F8FC",
           }}
         />
-        {/* Warm background fill */}
-        <div className="absolute inset-0" style={{ background: "#FAF7F4" }} />
+        {/* Background fill */}
+        <div className="absolute inset-0" style={{ background: "#F4F8FC" }} />
         {/* Glow orbs */}
         <motion.div
           animate={{ scale: [1, 1.15, 1], opacity: [0.10, 0.18, 0.10] }}
@@ -179,7 +179,7 @@ export default function Research() {
               key={s.label}
               whileHover={{ y: -4, scale: 1.04 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-200 bg-white/80 backdrop-blur-sm shadow-sm"
+              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-[0_4px_16px_rgba(15,23,42,0.06)]"
             >
               <s.icon size={18} className="text-sky-400" />
               <span className="text-base font-bold text-slate-900 font-mono">{s.value}</span>
@@ -216,7 +216,7 @@ export default function Research() {
                 />
 
                 {/* Card body */}
-                <div className="relative rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-sm">
+                <div className="relative rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 overflow-hidden shadow-[0_4px_20px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)]">
 
                   {/* Top glowing accent bar */}
                   <div

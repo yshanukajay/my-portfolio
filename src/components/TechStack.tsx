@@ -139,7 +139,7 @@ function ToolCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.22, delay }}
       whileHover={{ y: -3, transition: { duration: 0.15 } }}
-      className="group relative flex items-center gap-3 px-4 py-3.5 rounded-2xl border border-slate-200 bg-white cursor-default select-none shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200"
+      className="group relative flex items-center gap-3 px-4 py-3.5 rounded-2xl border border-slate-200/80 bg-white/90 backdrop-blur-sm cursor-default select-none shadow-[0_4px_16px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.09)] hover:border-slate-300/80 transition-all duration-200"
     >
       {/* Hover accent */}
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
@@ -191,7 +191,7 @@ export default function TechStack() {
   return (
     <section
       id="stack"
-      className="py-24 relative overflow-hidden bg-[#FAF7F4] border-y border-[#E8E2DA]"
+      className="py-24 relative overflow-hidden bg-[#F4F8FC] border-y border-[#DDE8F0]"
     >
       {/* Subtle engineering grid background */}
       <div
@@ -295,11 +295,11 @@ export default function TechStack() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
-            className="lg:col-span-5 flex flex-col justify-between p-6 md:p-8 rounded-3xl border border-[#E8E2DA] bg-[#FAF7F4] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden group"
+            className="lg:col-span-5 flex flex-col justify-between p-6 md:p-8 rounded-3xl border border-[#DDE8F0] bg-white/88 backdrop-blur-sm shadow-[0_4px_20px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] relative overflow-hidden group"
           >
             {/* Soft colored glow inside the card matching category */}
             <div
-              className="absolute -right-16 -top-16 w-48 h-48 rounded-full blur-[60px] opacity-10 transition-all duration-700 pointer-events-none"
+              className="absolute -right-16 -top-16 w-48 h-48 rounded-full blur-[40px] opacity-8 transition-all duration-700 pointer-events-none"
               style={{ backgroundColor: activeCat?.color }}
             />
 
@@ -346,7 +346,7 @@ export default function TechStack() {
 
             {/* Bottom Stats strip */}
             <div
-              className="pt-6 border-t border-slate-100 flex items-center justify-between"
+              className="pt-6 border-t border-slate-200/70 flex items-center justify-between"
             >
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">

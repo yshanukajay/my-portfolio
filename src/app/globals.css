@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #FAF7F4;
+  --color-background: #F4F8FC;
   --color-foreground: #0F172A;
 
   --font-sans: var(--font-inter), sans-serif;
@@ -64,8 +64,46 @@
 
 @layer base {
   body {
-    background-color: var(--color-background);
+    /* Premium cool-blue base — clean, modern, cloud/ML-inspired */
+    background-color: #F4F8FC;
+    background-image:
+      radial-gradient(circle at 78% 8%, rgba(86, 155, 255, 0.07) 0%, transparent 44%),
+      radial-gradient(circle at 18% 92%, rgba(99, 102, 241, 0.04) 0%, transparent 38%);
+    background-attachment: local;
     color: var(--color-foreground);
+    position: relative;
+  }
+
+  /* Dot-grid engineering pattern — pure CSS, GPU-composited, 6% opacity */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: radial-gradient(
+      circle,
+      rgba(14, 165, 233, 0.09) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+    /* Fade out pattern at page edges so it doesn't fight the content */
+    mask-image: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      black 40%,
+      transparent 100%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      black 40%,
+      transparent 100%
+    );
+  }
+
+  /* Make sure all real content sits above the pattern */
+  body > * {
+    position: relative;
+    z-index: 1;
   }
 
   h1,
@@ -82,21 +120,48 @@
   }
 }
 
+/* ── Premium Card Utilities ─────────────────────────────────────── */
+
+/* Glass card — for sections / panels over the patterned bg */
 @utility glass-card {
-  background-color: rgb(250 247 244 / 0.65);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgb(255 255 255 / 0.8);
-  box-shadow: 0 8px 30px rgb(0 0 0 / 0.04);
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 4px 20px rgba(15, 23, 42, 0.06),
+    0 1px 4px rgba(15, 23, 42, 0.04);
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 
   &:hover {
-    background-color: rgb(255 255 255 / 0.8);
+    background-color: rgba(255, 255, 255, 0.92);
     border-color: #e0f2fe;
     /* sky-100 */
-    box-shadow: 0 8px 30px rgb(14 165 233 / 0.1);
+    box-shadow:
+      0 8px 30px rgba(14, 165, 233, 0.08),
+      0 2px 6px rgba(15, 23, 42, 0.05);
     transform: translateY(-0.25rem);
+  }
+}
+
+/* Premium card — solid white card that pops against #F4F8FC */
+@utility premium-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow:
+    0 4px 20px rgba(15, 23, 42, 0.06),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow:
+      0 8px 28px rgba(15, 23, 42, 0.09),
+      0 2px 6px rgba(15, 23, 42, 0.05);
+    border-color: rgba(203, 213, 225, 0.9);
   }
 }
 

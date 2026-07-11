@@ -30,7 +30,7 @@ const builds = [
 export default function CurrentlyBuilding() {
   return (
     <section id="building" className="py-24 relative overflow-hidden"
-      style={{ background: "#FAF7F4" }}>
+      style={{ background: "#F4F8FC" }}>
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: "radial-gradient(ellipse at 80% 50%, rgba(45,212,191,0.07) 0%, transparent 60%)" }} />
 
@@ -58,7 +58,7 @@ export default function CurrentlyBuilding() {
                 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="rounded-2xl p-5 border"
-                style={{ background: "#FAF7F4", borderColor: "rgba(0,0,0,0.08)" }}>
+                style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(8px)", borderColor: "rgba(203,213,225,0.7)", boxShadow: "0 4px 16px rgba(15,23,42,0.06)" }}>
 
                 {/* Status badge */}
                 <div className="flex items-center justify-between mb-3">
@@ -105,7 +105,7 @@ export default function CurrentlyBuilding() {
             initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }}
             className="rounded-2xl p-6 border"
-            style={{ background: "#FAF7F4", borderColor: "rgba(0,0,0,0.08)" }}>
+            style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(8px)", borderColor: "rgba(203,213,225,0.7)", boxShadow: "0 4px 16px rgba(15,23,42,0.06)" }}>
 
             <div className="flex items-center gap-3 mb-6">
               <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
