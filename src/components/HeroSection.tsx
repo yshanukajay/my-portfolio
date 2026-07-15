@@ -221,7 +221,7 @@ function PipelineCodeCard({ accentColor }: { accentColor: string }) {
               {i < PIPELINE_STAGES.length - 1 && (
                 <div
                   className="h-px w-6 rounded"
-                  style={{ background: i < activeStage ? `${PIPELINE_STAGES[i+1].color}60` : "#1e293b" }}
+                  style={{ background: i < activeStage ? `${PIPELINE_STAGES[i + 1].color}60` : "#1e293b" }}
                 />
               )}
             </div>
