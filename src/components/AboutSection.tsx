@@ -159,7 +159,14 @@ export default function AboutSection() {
   const [activeTab, setActiveTab] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [activePhoto, setActivePhoto] = useState(0);
   const DURATION = 6000; // 6 seconds per expertise tab
+  const PHOTO_DURATION = 5000; // 5 seconds per photo
+
+  const photos = [
+    { src: "/avatar.png",  alt: "Yohan Shanuka — AI Engineer" },
+    { src: "/photo.jpg",   alt: "Yohan Shanuka" },
+  ];
 
   useEffect(() => {
     if (isPaused) return;
@@ -179,6 +186,14 @@ export default function AboutSection() {
 
     return () => clearInterval(timer);
   }, [isPaused]);
+
+  // Auto-swap photo every PHOTO_DURATION ms
+  useEffect(() => {
+    const photoTimer = setInterval(() => {
+      setActivePhoto((prev) => (prev + 1) % photos.length);
+    }, PHOTO_DURATION);
+    return () => clearInterval(photoTimer);
+  }, []);
 
   const activeDomain = domains[activeTab];
   const DomainIcon = activeDomain.icon;
@@ -280,13 +295,41 @@ export default function AboutSection() {
                 />
                 {/* 6. MAIN CARICATURE WRAPPER (NO FRAME) */}
                 <div className="relative transition-all duration-500 group-hover:-translate-y-2 z-10">
-                  {/* Image - clean and frameless */}
-                  <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden">
-                    <img
-                      src="/avatar.png"
-                      alt="Yohan Shanuka"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] opacity-95 group-hover:opacity-100"
-                    />
+                  {/* Image carousel - crossfade between photos */}
+                  <div
+                    className="relative aspect-[4/5] rounded-[32px] overflow-hidden cursor-pointer"
+                    onClick={() => setActivePhoto((prev) => (prev + 1) % photos.length)}
+                    title="Click to switch photo"
+                  >
+                    <AnimatePresence mode="crossfade">
+                      <motion.img
+                        key={activePhoto}
+                        src={photos[activePhoto].src}
+                        alt={photos[activePhoto].alt}
+                        initial={{ opacity: 0, scale: 1.04 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.97 }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Dot indicators */}
+                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+                    {photos.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActivePhoto(i)}
+                        aria-label={`Show photo ${i + 1}`}
+                        className="transition-all duration-300 rounded-full"
+                        style={{
+                          width: activePhoto === i ? "20px" : "8px",
+                          height: "8px",
+                          backgroundColor: activePhoto === i ? "#6366f1" : "#cbd5e1",
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
 
