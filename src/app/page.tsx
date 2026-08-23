@@ -4,7 +4,6 @@ import TechStrip from "@/components/TechStrip";
 import AboutSection from "@/components/AboutSection";
 import TechStack from "@/components/TechStack";
 import Projects from "@/components/Projects";
-import SystemArchitecture from "@/components/SystemArchitecture";
 import CurrentlyBuilding from "@/components/CurrentlyBuilding";
 import Certifications from "@/components/Certifications";
 import Research from "@/components/Research";
@@ -38,11 +37,6 @@ export default function Home() {
         <Research />
       </LazySection>
 
-      {/* 6. Scalable Architecture */}
-      <LazySection id="architecture" height="600px">
-        <SystemArchitecture />
-      </LazySection>
-
       {/* 7. Currently Building */}
       <LazySection height="400px">
         <CurrentlyBuilding />
@@ -65,7 +59,7 @@ export default function Home() {
 
       <TerminalWidget />
 
-      <footer className="py-8 bg-[#F2EDE7] border-t border-[#E8E2DA] text-center text-slate-500 text-sm flex flex-col items-center gap-2">
+      <footer className="py-8 bg-[#F1F5F9] border-t border-[#E2E8F0] text-center text-slate-500 text-sm flex flex-col items-center gap-2">
         <p>&copy; {new Date().getFullYear()} Yohan Shanuka — Engineering intelligent systems.</p>
         <div className="flex items-center gap-4 mt-1">
           <a href="https://github.com/yshanukajay" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors font-medium">GitHub</a>

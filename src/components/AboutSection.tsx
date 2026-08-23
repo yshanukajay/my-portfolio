@@ -164,8 +164,8 @@ export default function AboutSection() {
   const PHOTO_DURATION = 5000; // 5 seconds per photo
 
   const photos = [
-    { src: "/avatar.png",  alt: "Yohan Shanuka — AI Engineer" },
-    { src: "/photo.jpg",   alt: "Yohan Shanuka" },
+    { src: "/avatar.png", alt: "Yohan Shanuka — AI Engineer" },
+    { src: "/photo.jpg", alt: "Yohan Shanuka" },
   ];
 
   useEffect(() => {
@@ -301,7 +301,7 @@ export default function AboutSection() {
                     onClick={() => setActivePhoto((prev) => (prev + 1) % photos.length)}
                     title="Click to switch photo"
                   >
-                    <AnimatePresence mode="crossfade">
+                    <AnimatePresence mode="wait">
                       <motion.img
                         key={activePhoto}
                         src={photos[activePhoto].src}
@@ -462,12 +462,12 @@ export default function AboutSection() {
       </div>
 
       {/* Core Expertise — full-bleed with side decorations */}
-      <div className="w-full bg-[#F2EDE7] border-y border-[#E8E2DA] py-24 overflow-hidden relative">
+      <div className="w-full bg-[#F1F5F9] border-y border-[#E2E8F0] py-24 overflow-hidden relative">
         {/* Subtle engineering dot pattern background */}
         <div
-          className="absolute inset-0 pointer-events-none select-none opacity-[0.18]"
+          className="absolute inset-0 pointer-events-none select-none opacity-[0.08]"
           style={{
-            backgroundImage: "radial-gradient(#6366f1 1.5px, transparent 1.5px)",
+            backgroundImage: "radial-gradient(#2563EB 1.5px, transparent 1.5px)",
             backgroundSize: "24px 24px",
             maskImage: "radial-gradient(circle at 50% 50%, black, transparent 85%)",
             WebkitMaskImage: "radial-gradient(circle at 50% 50%, black, transparent 85%)",
@@ -504,10 +504,10 @@ export default function AboutSection() {
             >
               {/* System stats */}
               {[
-                { label: "Models Deployed", value: "12+", color: "#818cf8" },
+                { label: "Models Deployed", value: "3+", color: "#818cf8" },
                 { label: "Pipeline Uptime", value: "99.9%", color: "#10b981" },
                 { label: "Avg Latency", value: "< 100ms", color: "#0ea5e9" },
-                { label: "Data Processed", value: "10TB+", color: "#f59e0b" },
+                { label: "AI Projects", value: "8+", color: "#a855f7" },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}

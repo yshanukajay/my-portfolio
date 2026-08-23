@@ -20,20 +20,20 @@ interface Pole {
 type Path = [number, number][];
 
 /* ─── tuning constants ───────────────────────────────────────────── */
-const NUM_POLES      = 5;      // total magnetic poles
+const NUM_POLES = 5;      // total magnetic poles
 const LINES_PER_POLE = 22;     // field lines per positive pole
-const MAX_STEPS      = 280;    // max integration steps per line
-const STEP_PX        = 5;      // pixels per integration step
-const PARTICLES      = 4;      // glowing dots per field line
+const MAX_STEPS = 280;    // max integration steps per line
+const STEP_PX = 5;      // pixels per integration step
+const PARTICLES = 4;      // glowing dots per field line
 const PARTICLE_SPEED = 0.00014; // t-units per ms  → ~4-6 s per loop
-const POLE_DRIFT     = 0.12;   // px per ms drift speed
+const POLE_DRIFT = 0.12;   // px per ms drift speed
 
 /* ─── component ──────────────────────────────────────────────────── */
 export default function MagneticFieldBg({
-  color   = "#10b981",
+  color = "#10b981",
   opacity = 0.85,
 }: {
-  color?:   string;
+  color?: string;
   opacity?: number;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -47,18 +47,18 @@ export default function MagneticFieldBg({
     if (!ctx) return;
 
     // Non-null aliases for TypeScript closure narrowing
-    const cvs: HTMLCanvasElement         = canvas;
-    const c:   CanvasRenderingContext2D  = ctx;
+    const cvs: HTMLCanvasElement = canvas;
+    const c: CanvasRenderingContext2D = ctx;
     const [r, g, b] = hexToRgb(color);
 
     /* ─── state ───────────────────────────────────────────────── */
     let w = 0, h = 0;
-    let poles:   Pole[]   = [];
-    let paths:   Path[]   = [];
+    let poles: Pole[] = [];
+    let paths: Path[] = [];
     let pOffsets: number[] = []; // 0-1 phase per path
-    let poleDVX:  number[] = [];
-    let poleDVY:  number[] = [];
-    let animId:  number;
+    let poleDVX: number[] = [];
+    let poleDVY: number[] = [];
+    let animId: number;
     let prevTime = 0;
 
     /* ─── field helpers ────────────────────────────────────────── */
@@ -99,7 +99,7 @@ export default function MagneticFieldBg({
 
     /* ─── build paths from all positive poles ──────────────────── */
     function buildPaths() {
-      paths    = [];
+      paths = [];
       pOffsets = [];
       for (const p of poles) {
         if (p.charge < 0) continue;
@@ -118,7 +118,7 @@ export default function MagneticFieldBg({
     function init() {
       w = parent!.clientWidth;
       h = parent!.clientHeight;
-      cvs.width  = w;
+      cvs.width = w;
       cvs.height = h;
 
       // Place poles in a balanced layout
@@ -141,10 +141,10 @@ export default function MagneticFieldBg({
     /* ─── interpolate position on a path at normalised t (0-1) ── */
     function samplePath(path: Path, t: number): [number, number] {
       if (path.length < 2) return path[0] ?? [0, 0];
-      const total  = path.length - 1;
+      const total = path.length - 1;
       const scaled = t * total;
-      const i      = Math.min(Math.floor(scaled), total - 1);
-      const frac   = scaled - i;
+      const i = Math.min(Math.floor(scaled), total - 1);
+      const frac = scaled - i;
       const [x1, y1] = path[i];
       const [x2, y2] = path[i + 1];
       return [x1 + (x2 - x1) * frac, y1 + (y2 - y1) * frac];
@@ -185,7 +185,7 @@ export default function MagneticFieldBg({
           c.lineTo(path[i][0], path[i][1]);
         }
         c.strokeStyle = `rgba(${r},${g},${b},0.07)`;
-        c.lineWidth   = 0.9;
+        c.lineWidth = 0.9;
         c.stroke();
       }
 
@@ -207,7 +207,7 @@ export default function MagneticFieldBg({
           const [px, py] = samplePath(path, t);
 
           // Outer glow
-          const haloR  = 7 * edgeFade;
+          const haloR = 7 * edgeFade;
           const haloGr = c.createRadialGradient(px, py, 0, px, py, haloR);
           haloGr.addColorStop(0, `rgba(${r},${g},${b},${0.5 * edgeFade})`);
           haloGr.addColorStop(1, `rgba(${r},${g},${b},0)`);
@@ -226,8 +226,8 @@ export default function MagneticFieldBg({
 
       /* 3 ─── Pole markers ────────────────────────────────────── */
       for (const p of poles) {
-        const pRadius  = p.charge > 0 ? 28 : 18;
-        const pAlpha   = p.charge > 0 ? 0.30 : 0.15;
+        const pRadius = p.charge > 0 ? 28 : 18;
+        const pAlpha = p.charge > 0 ? 0.30 : 0.15;
         const poleGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, pRadius);
         poleGrad.addColorStop(0, `rgba(${r},${g},${b},${pAlpha})`);
         poleGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);

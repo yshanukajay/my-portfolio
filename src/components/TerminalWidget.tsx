@@ -161,11 +161,11 @@ function line(
 }
 
 const BOOT_LINES: HistoryLine[] = [
-  line("info",    "╔══════════════════════════════════════════╗"),
-  line("info",    "║   yohan.sh  —  portfolio terminal v1.0   ║"),
-  line("info",    "╚══════════════════════════════════════════╝"),
-  line("output",  "  Type  help  to see available commands."),
-  line("output",  "  Press  `  (backtick) to toggle this terminal."),
+  line("info", "╔══════════════════════════════════════════╗"),
+  line("info", "║   yohan.sh  —  portfolio terminal v1.0   ║"),
+  line("info", "╚══════════════════════════════════════════╝"),
+  line("output", "  Type  help  to see available commands."),
+  line("output", "  Press  `  (backtick) to toggle this terminal."),
 ];
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -281,11 +281,11 @@ export default function TerminalWidget() {
   };
 
   const lineColor: Record<HistoryLine["type"], string> = {
-    input:   "text-sky-400",
-    output:  "text-slate-300",
-    error:   "text-red-400",
+    input: "text-sky-400",
+    output: "text-slate-300",
+    error: "text-red-400",
     success: "text-emerald-400",
-    info:    "text-indigo-400",
+    info: "text-indigo-400",
   };
 
   return (

@@ -15,7 +15,7 @@ export default function AdditionalSections() {
     <section className="py-24 bg-[#F4F8FC] relative">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          
+
           {/* GitHub Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -31,21 +31,21 @@ export default function AdditionalSections() {
             <p className="text-slate-600 mb-6 text-sm">
               I actively contribute to open-source data engineering tools and maintain a clean, well-documented repository of ML pipelines and system architectures.
             </p>
-            
+
             <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6 h-40">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={[
-                  { name: 'Jan', commits: 12 }, { name: 'Feb', commits: 25 }, 
-                  { name: 'Mar', commits: 18 }, { name: 'Apr', commits: 45 }, 
+                  { name: 'Jan', commits: 12 }, { name: 'Feb', commits: 25 },
+                  { name: 'Mar', commits: 18 }, { name: 'Apr', commits: 45 },
                   { name: 'May', commits: 60 }, { name: 'Jun', commits: 80 }
                 ]}>
                   <defs>
                     <linearGradient id="colorCommits" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     itemStyle={{ color: '#0ea5e9', fontWeight: 'bold' }}
                     labelStyle={{ color: '#64748b' }}
@@ -54,7 +54,7 @@ export default function AdditionalSections() {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-            
+
             <a href="https://github.com/yshanukajay" target="_blank" rel="noopener noreferrer" className="text-sky-600 font-medium hover:text-sky-700 flex items-center gap-2">
               View GitHub Profile <span aria-hidden="true">&rarr;</span>
             </a>

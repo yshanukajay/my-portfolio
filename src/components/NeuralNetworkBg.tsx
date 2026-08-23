@@ -66,7 +66,7 @@ export default function NeuralNetworkBg({
     function layout() {
       const w = parent!.clientWidth;
       const h = parent!.clientHeight;
-      cvs.width  = w;
+      cvs.width = w;
       cvs.height = h;
 
       // Horizontal padding so nodes don't sit at the very edge
@@ -86,9 +86,9 @@ export default function NeuralNetworkBg({
 
     /* ── signal factory ─────────────────────────────────────────── */
     function spawnSignal(): Signal {
-      const layer   = Math.floor(Math.random() * (TOPOLOGY.length - 1));
+      const layer = Math.floor(Math.random() * (TOPOLOGY.length - 1));
       const fromIdx = Math.floor(Math.random() * TOPOLOGY[layer]);
-      const toIdx   = Math.floor(Math.random() * TOPOLOGY[layer + 1]);
+      const toIdx = Math.floor(Math.random() * TOPOLOGY[layer + 1]);
       return {
         layer, fromIdx, toIdx,
         t: 0,
@@ -120,7 +120,7 @@ export default function NeuralNetworkBg({
       // ── 1. Connection lines ────────────────────────────────────
       for (let li = 0; li < nodes.length - 1; li++) {
         const fromLayer = nodes[li];
-        const toLayer   = nodes[li + 1];
+        const toLayer = nodes[li + 1];
         for (const fn of fromLayer) {
           for (const tn of toLayer) {
             c.beginPath();
@@ -147,7 +147,7 @@ export default function NeuralNetworkBg({
         const sy = fn.y + (tn.y - fn.y) * sig.t;
 
         // Tail — fading line segment behind signal
-        const tailT  = Math.max(0, sig.t - 0.12);
+        const tailT = Math.max(0, sig.t - 0.12);
         const tx = fn.x + (tn.x - fn.x) * tailT;
         const ty = fn.y + (tn.y - fn.y) * tailT;
         const tailGrad = c.createLinearGradient(tx, ty, sx, sy);
@@ -189,7 +189,7 @@ export default function NeuralNetworkBg({
           const pulse = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(nd.phase)); // 0.45–1.0
 
           // Outer glow ring
-          const outerR  = 14;
+          const outerR = 14;
           const outerGr = c.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, outerR);
           outerGr.addColorStop(0, `rgba(${r},${g},${b},${0.18 * pulse})`);
           outerGr.addColorStop(1, `rgba(${r},${g},${b},0)`);

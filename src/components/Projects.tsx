@@ -1,75 +1,76 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Eye, Workflow, TrendingUp, AlertTriangle, ChevronRight, Terminal, Cpu, Database } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ExternalLink, Workflow, AlertTriangle, Cpu, Zap, Activity } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
-import { useReducedMotion } from "framer-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 /* ─── GitHub Icon Component ───────────────────────────────────── */
-const GithubIcon = () => (
-  <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="inline-block">
+const GithubIcon = ({ size = 15 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block">
     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
   </svg>
 );
 
-/* ─── Project Data ────────────────────────────────────────────── */
-const projects = [
+/* ─── Projects Data ───────────────────────────────────────────── */
+export const projectsData = [
   {
+    id: "streaming-pipeline",
     title: "Real-Time Streaming Pipeline",
     badge: "Real-Time",
-    category: "Distributed · Stream Processing",
+    category: "Distributed Stream Processing · MLOps",
     image: "/project-streaming.png",
     description:
-      "End-to-end streaming pipeline handling high-throughput event data with sub-500ms latency. Replaced legacy batch jobs that caused 24-hour reporting delays.",
-    problem: "24-hour delays in critical metric reporting due to batch processing.",
-    dataset: "10TB+ clickstream events via Kafka",
-    impact: "24h → < 500ms latency",
+      "End-to-end event streaming architecture handling high-throughput telemetry data with sub-500ms latency. Replaced legacy batch processes to enable real-time operational insights.",
+    problem: "24-hour reporting delays caused by batch processing bottlenecks during peak event traffic.",
+    dataset: "10TB+ clickstream events ingested via Apache Kafka",
+    impact: "24h batch delay → < 500ms real-time latency",
     stack: {
       infra: ["Kafka", "Spark Streaming", "MongoDB", "Docker"],
       languages: ["Python", "FastAPI"]
     },
     flow: [
-      { name: "Kafka Ingest", desc: "High-throughput event queue" },
-      { name: "Spark Stream", desc: "Real-time stateful transformations" },
-      { name: "MongoDB Store", desc: "Low-latency document store write" },
+      { name: "Kafka Ingest", desc: "High-throughput message broker" },
+      { name: "Spark Stream", desc: "Stateful windowed transformations" },
+      { name: "MongoDB Store", desc: "Low-latency document write" },
     ],
     metrics: {
       type: "streaming",
       throughput: "10,000/s",
       volume: "10TB+",
       latencyBefore: "24h",
-      latencyAfter: "500ms"
+      latencyAfter: "< 500ms"
     },
-    color: "#0ea5e9", // Sky Blue
-    bgColor: "#F0F6FC", // Subtle blue-gray
+    color: "#2563EB",
+    bgColor: "#EFF6FF",
     tags: ["Real-Time", "Distributed", "MLOps Enabled"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
   {
+    id: "cattle-health",
     title: "Cattle Health Monitoring System",
     badge: "Edge AI",
-    category: "IoT · ML Prediction · Alerting",
+    category: "IoT Telemetry · ML Prediction · Alert Engine",
     image: "/project-cattle.png",
     description:
-      "IoT-driven pipeline combining streaming sensor ingestion with ML prediction to monitor livestock health patterns and trigger real-time alerts.",
-    problem: "Manual monitoring caused late disease detection and yield loss.",
-    dataset: "IoT Sensor Data (Temp, Motion, Heart Rate)",
-    impact: "30% reduction in severe illness cases",
+      "Edge-assisted IoT pipeline coupling continuous collar sensor telemetry with LSTM neural networks for early disease detection and real-time farmer alerts.",
+    problem: "Manual livestock inspection led to delayed diagnosis, high treatment costs, and yield loss.",
+    dataset: "Continuous IoT Collar Telemetry (Temperature, Motion, Heart Rate)",
+    impact: "30% reduction in severe livestock illness cases",
     stack: {
       infra: ["MongoDB", "FastAPI", "Kafka", "Docker"],
       languages: ["Python", "TensorFlow"]
     },
     flow: [
-      { name: "IoT Sensors", desc: "Continuous collar telemetry data" },
-      { name: "ML Prediction", desc: "LSTM neural network classification" },
-      { name: "Alert Engine", desc: "Real-time SMS/Web notification" }
+      { name: "IoT Collars", desc: "LoRa long-range telemetry feed" },
+      { name: "LSTM Classifier", desc: "Pattern anomaly detection" },
+      { name: "Alert Pipeline", desc: "Automated SMS/Web dispatch" }
     ],
     metrics: {
       type: "ml_classification",
@@ -78,29 +79,30 @@ const projects = [
       reduction: "30%",
       sensors: "Temp, Motion, HR"
     },
-    color: "#10b981", // Emerald Green
-    bgColor: "#F0F7F4", // Subtle green-gray
+    color: "#0891B2",
+    bgColor: "#F0F9FF",
     tags: ["Edge AI", "API Integrated", "Computer Vision"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
   {
+    id: "tomato-classifier",
     title: "Tomato Leaf Disease Classifier",
     badge: "Computer Vision",
-    category: "CNN · FastAPI · Docker Serving",
+    category: "CNN Microservice · FastAPI · Containerized Serving",
     image: "/project-tomato.png",
     description:
-      "Production-grade CNN microservice for automated crop disease diagnosis. Sub-100ms inference latency with a fully containerized deployment pipeline.",
-    problem: "Farmers needed reliable automated API for rapid field image diagnosis.",
-    dataset: "PlantVillage: 50,000+ labeled images",
-    impact: "< 100ms API inference latency",
+      "Production-grade Convolutional Neural Network serving microservice for rapid automated crop disease identification. Built with sub-100ms inference latency.",
+    problem: "Farmers lacked instant, reliable field diagnostic tools to prevent crop infection spread.",
+    dataset: "PlantVillage: 50,000+ expert-annotated leaf images",
+    impact: "< 100ms API inference latency in production",
     stack: {
       infra: ["FastAPI", "Docker", "React", "OpenCV"],
       languages: ["Python", "TensorFlow"]
     },
     flow: [
-      { name: "CNN Model", desc: "Custom ConvNet with transfer learning" },
-      { name: "FastAPI serving", desc: "Containerized serving microservice" },
-      { name: "React Web App", desc: "Mobile-friendly image uploader UI" }
+      { name: "CNN Model", desc: "Transfer-learned ResNet backbone" },
+      { name: "FastAPI Engine", desc: "Containerized model server" },
+      { name: "Client UI", desc: "Mobile-optimized diagnostic app" }
     ],
     metrics: {
       type: "ml_classification",
@@ -109,29 +111,29 @@ const projects = [
       latency: "< 100ms",
       datasetSize: "50,000+"
     },
-    color: "#818cf8", // Indigo
-    bgColor: "#F2F3F8", // Subtle indigo-gray
+    color: "#1D4ED8",
+    bgColor: "#EFF6FF",
     tags: ["Computer Vision", "API Integrated", "MLOps Enabled"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
 ];
 
-/* ─── Radial Gauge Helper ─────────────────────────────────────── */
+/* ─── Radial Gauge Component ─────────────────────────────────── */
 function RadialGauge({ value, label, color }: { value: number; label: string; color: string }) {
-  const radius = 20;
+  const radius = 22;
   const strokeWidth = 3.5;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (value / 100) * circumference;
 
   return (
-    <div className="flex items-center gap-3.5 bg-slate-900/5 border border-slate-200/50 p-3 rounded-xl">
+    <div className="flex items-center gap-3.5 bg-white border border-[#E2E8F0] p-3 rounded-xl shadow-xs">
       <div className="relative w-11 h-11 shrink-0 flex items-center justify-center">
         <svg className="w-full h-full transform -rotate-90">
           <circle
             cx="22"
             cy="22"
             r={radius}
-            className="stroke-slate-200"
+            className="stroke-slate-100"
             strokeWidth={strokeWidth}
             fill="transparent"
           />
@@ -150,34 +152,28 @@ function RadialGauge({ value, label, color }: { value: number; label: string; co
             strokeLinecap="round"
           />
         </svg>
-        <span className="absolute text-[10px] font-bold text-slate-800 font-mono">{value}%</span>
+        <span className="absolute text-[10px] font-bold text-[#0F172A] font-mono">{value}%</span>
       </div>
       <div>
         <div className="text-[9px] font-bold uppercase tracking-wider text-slate-400 font-mono">{label}</div>
-        <div className="text-xs font-bold text-slate-700 mt-0.5">High Performance</div>
+        <div className="text-xs font-bold text-[#0F172A] mt-0.5">High Performance</div>
       </div>
     </div>
   );
 }
 
 /* ─── Project Card Component ──────────────────────────────────── */
-interface ProjectCardProps {
-  project: typeof projects[0];
-  isActive: boolean;
-}
-
-function ProjectCard({ project, isActive }: ProjectCardProps) {
+function ProjectCard({ project, isActive }: { project: typeof projectsData[0]; isActive: boolean }) {
   const p = project;
 
   return (
     <motion.article
       whileHover={{ y: isActive ? -6 : 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`w-full bg-white/95 backdrop-blur-sm border rounded-3xl overflow-hidden flex flex-col md:flex-row transition-shadow duration-300 ${
-        isActive 
-          ? "shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12)] border-slate-200" 
-          : "shadow-[0_4px_20px_-8px_rgba(15,23,42,0.05)] border-slate-100/80"
-      }`}
+      className={`w-full bg-white/95 backdrop-blur-sm border rounded-3xl overflow-hidden flex flex-col md:flex-row transition-shadow duration-300 ${isActive
+        ? "shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12)] border-slate-200"
+        : "shadow-[0_4px_20px_-8px_rgba(15,23,42,0.05)] border-slate-100/80"
+        }`}
       style={{
         boxShadow: isActive ? `0 24px 60px -15px ${p.color}15, inset 0 0 0 1px ${p.color}15` : undefined,
       }}
@@ -239,7 +235,7 @@ function ProjectCard({ project, isActive }: ProjectCardProps) {
           {p.metrics.type === "ml_classification" && p.metrics.accuracy !== undefined && (
             <div className="space-y-3">
               <RadialGauge value={p.metrics.accuracy} label={p.metrics.metricLabel || "Accuracy"} color={p.color} />
-              
+
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-white/80 border border-slate-200/60 p-2.5 rounded-xl flex flex-col justify-between">
                   <span className="text-[8px] font-bold uppercase tracking-wider text-slate-400 font-mono">Illness Reduction</span>
@@ -339,7 +335,7 @@ function ProjectCard({ project, isActive }: ProjectCardProps) {
             <GithubIcon />
             <span>GitHub Repository</span>
           </motion.a>
-          
+
           <motion.a
             href={p.links.demo}
             target="_blank"
@@ -370,7 +366,7 @@ interface SidebarIndicatorProps {
 function SidebarIndicator({ activeIndex, activeColor }: SidebarIndicatorProps) {
   return (
     <div className="hidden lg:flex flex-col gap-5 select-none pointer-events-none">
-      {projects.map((p, idx) => {
+      {projectsData.map((p, idx) => {
         const isActive = activeIndex === idx;
         return (
           <div key={p.title} className="flex items-center gap-3.5 group cursor-pointer pointer-events-auto">
@@ -384,9 +380,8 @@ function SidebarIndicator({ activeIndex, activeColor }: SidebarIndicatorProps) {
                 />
               )}
               <motion.span
-                className={`w-2 h-2 rounded-full border transition-all duration-300 ${
-                  isActive ? "border-transparent" : "border-slate-300 bg-slate-100 group-hover:border-slate-400"
-                }`}
+                className={`w-2 h-2 rounded-full border transition-all duration-300 ${isActive ? "border-transparent" : "border-slate-300 bg-slate-100 group-hover:border-slate-400"
+                  }`}
                 style={{
                   backgroundColor: isActive ? activeColor : undefined,
                   scale: isActive ? 1.25 : 1
@@ -396,9 +391,8 @@ function SidebarIndicator({ activeIndex, activeColor }: SidebarIndicatorProps) {
 
             {/* Label */}
             <span
-              className={`text-xs font-bold font-mono transition-all duration-300 tracking-wider ${
-                isActive ? "text-slate-800 translate-x-1" : "text-slate-400 group-hover:text-slate-500"
-              }`}
+              className={`text-xs font-bold font-mono transition-all duration-300 tracking-wider ${isActive ? "text-slate-800 translate-x-1" : "text-slate-400 group-hover:text-slate-500"
+                }`}
               style={{ color: isActive ? activeColor : undefined }}
             >
               {p.badge}
@@ -417,7 +411,7 @@ export default function Projects() {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(true);
-  
+
   const lenis = useLenis();
   const prefersReduced = useReducedMotion();
 
@@ -478,26 +472,26 @@ export default function Projects() {
       yPercent: -3,
       ease: "power1.inOut"
     }, "card1")
-    .to(cards[1], {
-      yPercent: 0,
-      opacity: 1,
-      scale: 1,
-      ease: "power2.out"
-    }, "card1")
+      .to(cards[1], {
+        yPercent: 0,
+        opacity: 1,
+        scale: 1,
+        ease: "power2.out"
+      }, "card1")
 
-    // Animate Card 2 entering, Card 1 receding
-    .to(cards[1], {
-      scale: 0.94,
-      opacity: 0.72,
-      yPercent: -3,
-      ease: "power1.inOut"
-    }, "card2")
-    .to(cards[2], {
-      yPercent: 0,
-      opacity: 1,
-      scale: 1,
-      ease: "power2.out"
-    }, "card2");
+      // Animate Card 2 entering, Card 1 receding
+      .to(cards[1], {
+        scale: 0.94,
+        opacity: 0.72,
+        yPercent: -3,
+        ease: "power1.inOut"
+      }, "card2")
+      .to(cards[2], {
+        yPercent: 0,
+        opacity: 1,
+        scale: 1,
+        ease: "power2.out"
+      }, "card2");
 
     // Recalculate ScrollTrigger on Lenis Scroll events to ensure exact alignment
     if (lenis) {
@@ -516,7 +510,7 @@ export default function Projects() {
     };
   }, [isMobile, prefersReduced, lenis]);
 
-  const activeProject = projects[activeIndex];
+  const activeProject = projectsData[activeIndex];
 
   return (
     <section
@@ -526,7 +520,7 @@ export default function Projects() {
       style={{
         backgroundColor: (isMobile || prefersReduced) ? "#F4F8FC" : activeProject.bgColor,
         // Subtle ambient glow change mapped to active color
-        backgroundImage: (isMobile || prefersReduced) 
+        backgroundImage: (isMobile || prefersReduced)
           ? "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.06) 0%, transparent 55%)"
           : `radial-gradient(ellipse at 50% 0%, ${activeProject.color}08 0%, transparent 60%)`
       }}
@@ -549,19 +543,18 @@ export default function Projects() {
 
         {/* 2. Middle Content Row (Cards Stack + Sidebar) */}
         <div className="flex-1 max-w-6xl mx-auto w-full flex items-center justify-center gap-10 py-4">
-          
+
           {/* Main Card viewport stack (Desktop layout is absolute stack, mobile is regular flex list) */}
-          <div 
+          <div
             ref={cardsContainerRef}
-            className={`w-full max-w-4xl relative ${
-              (isMobile || prefersReduced) 
-                ? "flex flex-col gap-8 md:gap-12" 
-                : "h-[62vh] md:h-[65vh] flex items-center justify-center"
-            }`}
+            className={`w-full max-w-4xl relative ${(isMobile || prefersReduced)
+              ? "flex flex-col gap-8 md:gap-12"
+              : "h-[62vh] md:h-[65vh] flex items-center justify-center"
+              }`}
           >
-            {projects.map((p, idx) => {
+            {projectsData.map((p, idx) => {
               const isActive = activeIndex === idx;
-              
+
               if (isMobile || prefersReduced) {
                 // Mobile and prefers-reduced-motion fallback layout: normal list layout
                 return (

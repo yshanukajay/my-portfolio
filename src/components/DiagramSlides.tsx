@@ -111,8 +111,10 @@ function Conn({
       <motion.circle r={3.5} fill={color}
         style={{ filter: `drop-shadow(0 0 5px ${color})` }}
         animate={{ cx: dotPath.map(p => p.cx), cy: dotPath.map(p => p.cy) }}
-        transition={{ duration: 2.2, delay: delay + 0.9, repeat: Infinity, ease: "linear",
-          times: dotPath.map((_, i) => i / (dotPath.length - 1)) }} />
+        transition={{
+          duration: 2.2, delay: delay + 0.9, repeat: Infinity, ease: "linear",
+          times: dotPath.map((_, i) => i / (dotPath.length - 1))
+        }} />
     </g>
   );
 }
@@ -133,10 +135,10 @@ export function DataEngineeringDiagram() {
       </motion.text>
 
       {/* Main pipeline row y=110 */}
-      <Node x={72}  y={110} w={118} label="Kafka"     sub="event stream" color="#f59e0b" delay={0.1} />
-      <Node x={200} y={110} w={118} label="Spark"     sub="batch / stream" color="#0ea5e9" delay={0.2} />
-      <Node x={330} y={110} w={118} label="Airflow"   sub="orchestrator"  color="#10b981" delay={0.3} />
-      <Node x={460} y={110} w={118} label="Data Lake" sub="parquet/delta"  color="#818cf8" delay={0.4} />
+      <Node x={72} y={110} w={118} label="Kafka" sub="event stream" color="#f59e0b" delay={0.1} />
+      <Node x={200} y={110} w={118} label="Spark" sub="batch / stream" color="#0ea5e9" delay={0.2} />
+      <Node x={330} y={110} w={118} label="Airflow" sub="orchestrator" color="#10b981" delay={0.3} />
+      <Node x={460} y={110} w={118} label="Data Lake" sub="parquet/delta" color="#818cf8" delay={0.4} />
 
       {/* Main arrows */}
       <Conn x1={133} y1={110} x2={141} y2={110} color="#0ea5e9" delay={0.5} />
@@ -145,8 +147,8 @@ export function DataEngineeringDiagram() {
 
       {/* Sub-nodes row y=200 */}
       <Node x={136} y={205} w={120} label="Schema Reg." sub="avro / protobuf" color="#f59e0b" delay={0.6} />
-      <Node x={265} y={205} w={110} label="DQ Checks"  sub="great expectations" color="#10b981" delay={0.7} />
-      <Node x={394} y={205} w={110} label="Iceberg"    sub="table format" color="#818cf8" delay={0.8} />
+      <Node x={265} y={205} w={110} label="DQ Checks" sub="great expectations" color="#10b981" delay={0.7} />
+      <Node x={394} y={205} w={110} label="Iceberg" sub="table format" color="#818cf8" delay={0.8} />
 
       {/* Vertical drop lines */}
       <Conn x1={136} y1={129} x2={136} y2={185} color="#f59e0b" delay={0.7} vert />
@@ -173,9 +175,9 @@ export function MLPipelineDiagram() {
       </motion.text>
 
       {/* Top row */}
-      <Node x={80}  y={95}  w={120} label="Raw Data"      sub="structured + raw" color="#94a3b8" delay={0.1} />
-      <Node x={220} y={95}  w={125} label="Feature Store" sub="feast / hopsworks"  color="#f59e0b" delay={0.2} />
-      <Node x={360} y={95}  w={115} label="Data Split"    sub="train/val/test"     color="#818cf8" delay={0.3} />
+      <Node x={80} y={95} w={120} label="Raw Data" sub="structured + raw" color="#94a3b8" delay={0.1} />
+      <Node x={220} y={95} w={125} label="Feature Store" sub="feast / hopsworks" color="#f59e0b" delay={0.2} />
+      <Node x={360} y={95} w={115} label="Data Split" sub="train/val/test" color="#818cf8" delay={0.3} />
 
       <Conn x1={141} y1={95} x2={157} y2={95} color="#f59e0b" delay={0.45} />
       <Conn x1={283} y1={95} x2={302} y2={95} color="#818cf8" delay={0.6} />
@@ -185,14 +187,14 @@ export function MLPipelineDiagram() {
       <Conn x1={360} y1={116} x2={420} y2={183} color="#818cf8" delay={0.75} vert />
 
       {/* Training nodes */}
-      <Node x={245} y={205} w={130} label="TensorFlow"  sub="GPU training" color="#f97316" delay={0.8} />
-      <Node x={420} y={205} w={120} label="PyTorch"     sub="custom loops"  color="#818cf8" delay={0.8} />
+      <Node x={245} y={205} w={130} label="TensorFlow" sub="GPU training" color="#f97316" delay={0.8} />
+      <Node x={420} y={205} w={120} label="PyTorch" sub="custom loops" color="#818cf8" delay={0.8} />
 
       {/* Converge to MLflow */}
       <Conn x1={245} y1={226} x2={310} y2={272} color="#10b981" delay={0.95} vert />
       <Conn x1={420} y1={226} x2={340} y2={272} color="#10b981" delay={0.95} vert />
 
-      <Node x={320} y={285} w={140} label="MLflow"  sub="experiment tracking" color="#10b981" delay={1.0} />
+      <Node x={320} y={285} w={140} label="MLflow" sub="experiment tracking" color="#10b981" delay={1.0} />
 
       {/* Pulsing ring on MLflow */}
       <motion.circle cx={320} cy={285} r={32} fill="none" stroke="#10b981" strokeWidth={1}
@@ -218,9 +220,9 @@ export function MLOpsDeployDiagram() {
       </motion.text>
 
       {/* CI/CD Row y=80 */}
-      <Node x={75}  y={80} w={118} label="GitHub"   sub="push / PR"     color="#94a3b8" delay={0.1} />
-      <Node x={205} y={80} w={118} label="Actions"  sub="build & test"  color="#0ea5e9" delay={0.2} />
-      <Node x={340} y={80} w={118} label="Registry" sub="ECR / GHCR"    color="#818cf8" delay={0.3} />
+      <Node x={75} y={80} w={118} label="GitHub" sub="push / PR" color="#94a3b8" delay={0.1} />
+      <Node x={205} y={80} w={118} label="Actions" sub="build & test" color="#0ea5e9" delay={0.2} />
+      <Node x={340} y={80} w={118} label="Registry" sub="ECR / GHCR" color="#818cf8" delay={0.3} />
 
       <Conn x1={135} y1={80} x2={146} y2={80} color="#0ea5e9" delay={0.4} />
       <Conn x1={265} y1={80} x2={281} y2={80} color="#818cf8" delay={0.55} />
@@ -236,16 +238,16 @@ export function MLOpsDeployDiagram() {
       </motion.text>
 
       {/* Pods inside cluster */}
-      <Node x={210} y={183} w={100} h={36} label="API Pod ×3" sub="FastAPI"  color="#2dd4bf" delay={0.8} />
-      <Node x={360} y={183} w={100} h={36} label="ML Pod ×2"  sub="inference" color="#818cf8" delay={0.85} />
+      <Node x={210} y={183} w={100} h={36} label="API Pod ×3" sub="FastAPI" color="#2dd4bf" delay={0.8} />
+      <Node x={360} y={183} w={100} h={36} label="ML Pod ×2" sub="inference" color="#818cf8" delay={0.85} />
 
       {/* Registry → Cluster */}
       <Conn x1={340} y1={100} x2={298} y2={118} color="#2dd4bf" delay={0.7} vert />
 
       {/* Bottom observability row y=278 */}
       <Node x={150} y={278} w={120} label="Prometheus" sub="metrics scrape" color="#f59e0b" delay={1.0} />
-      <Node x={300} y={278} w={110} label="Grafana"    sub="dashboards"     color="#f97316" delay={1.05} />
-      <Node x={440} y={278} w={110} label="PagerDuty"  sub="alerting"       color="#ef4444" delay={1.1} />
+      <Node x={300} y={278} w={110} label="Grafana" sub="dashboards" color="#f97316" delay={1.05} />
+      <Node x={440} y={278} w={110} label="PagerDuty" sub="alerting" color="#ef4444" delay={1.1} />
 
       <Conn x1={211} y1={278} x2={244} y2={278} color="#f97316" delay={1.2} />
       <Conn x1={356} y1={278} x2={384} y2={278} color="#ef4444" delay={1.35} />
