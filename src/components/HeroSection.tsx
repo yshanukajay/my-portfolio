@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ArrowRight, GitBranch, CheckCircle2, Circle } from "lucide-react";
+import { useLenis } from "lenis/react";
 import HeroDiagramCarousel from "./HeroDiagramCarousel";
 
 /* ─── GitHub icon ─────────────────────────────────────────────────────────── */
@@ -34,11 +35,11 @@ const CvIcon = ({ size = 24, className = "" }: { size?: number; className?: stri
 
 /* ─── Shifting professional titles ────────────────────────────────────────── */
 const shiftingTitles = [
-  "Machine Learning & Data Engineer",
-  "ML Engineer | Data Engineer",
-  "Building Scalable ML Systems",
-  "Designing Production Data Pipelines",
+  "ML Engineer · AI Engineer · MLOps",
+  "Building Intelligent AI Systems",
+  "Deploying Models to Production",
   "Orchestrating MLOps Workflows",
+  "Crafting AI-Powered Solutions",
 ];
 
 /* ─── Diagram slides config ───────────────────────────────────────────────── */
@@ -46,6 +47,7 @@ const SLIDES = [
   { id: "data", phase: "Phase 1", color: "#0ea5e9" },
   { id: "ml", phase: "Phase 2", color: "#6366f1" },
   { id: "mlops", phase: "Phase 3", color: "#14b8a6" },
+  { id: "rag", phase: "Phase 4", color: "#a855f7" },
 ];
 
 const SLIDE_DURATION = 8;
@@ -137,11 +139,7 @@ function PipelineCodeCard({ accentColor }: { accentColor: string }) {
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, delay: 0.5 }}
-      className="relative w-full max-w-[430px] rounded-2xl overflow-hidden border bg-slate-950 font-mono text-[10px] select-none"
-      style={{
-        borderColor: `${accentColor}28`,
-        boxShadow: `0 8px 32px rgba(0,0,0,0.22), 0 0 0 1px ${accentColor}10`,
-      }}
+      className="relative w-full max-w-[430px] rounded-3xl overflow-hidden bg-slate-950 font-mono text-[10px] select-none shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
       onMouseEnter={() => setRunning(false)}
       onMouseLeave={() => setRunning(true)}
     >
@@ -537,6 +535,7 @@ function MagneticButton({ children, className, href, target, rel, download, "ari
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const lenis = useLenis();
 
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15, mass: 0.5 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15, mass: 0.5 });
@@ -555,6 +554,21 @@ function MagneticButton({ children, className, href, target, rel, download, "ari
     y.set(0);
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (href?.startsWith("#")) {
+      e.preventDefault();
+      const targetId = href.replace("#", "");
+      const element = document.getElementById(targetId);
+      if (element) {
+        if (lenis) {
+          lenis.scrollTo(element, { offset: -20, duration: 1.2 });
+        } else {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  };
+
   return (
     <motion.a
       ref={ref}
@@ -563,6 +577,7 @@ function MagneticButton({ children, className, href, target, rel, download, "ari
       rel={rel}
       download={download}
       aria-label={ariaLabel}
+      onClick={handleClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ x: mouseXSpring, y: mouseYSpring }}
@@ -629,7 +644,7 @@ export default function HeroSection() {
           <div className="flex items-center space-x-2">
             <span className="h-px w-6 bg-sky-500" />
             <p className="text-[10px] font-bold tracking-[0.2em] text-sky-600 uppercase">
-              ML Engineering&nbsp;·&nbsp;Data Engineering&nbsp;·&nbsp;MLOps
+              ML Engineering&nbsp;·&nbsp;AI Engineering&nbsp;·&nbsp;MLOps
             </p>
           </div>
 

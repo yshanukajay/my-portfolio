@@ -28,13 +28,15 @@ export default function Navbar() {
   }, []);
 
   const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("#") && lenis) {
-      e.preventDefault();
-      const targetId = href.replace("#", "");
-      const element = document.getElementById(targetId);
-      if (element) {
-        lenis.scrollTo(element, { offset: -80, duration: 1.2 });
-      }
+    if (!href.startsWith("#")) return;
+    e.preventDefault();
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+    if (!element) return;
+    if (lenis) {
+      lenis.scrollTo(element, { offset: -80, duration: 1.2 });
+    } else {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 

@@ -5,9 +5,10 @@ import { useState, useEffect, useRef, ReactNode } from "react";
 interface LazySectionProps {
   children: ReactNode;
   height?: string;
+  id?: string;
 }
 
-export default function LazySection({ children, height = "300px" }: LazySectionProps) {
+export default function LazySection({ children, height = "300px", id }: LazySectionProps) {
   const [isRendered, setIsRendered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +34,7 @@ export default function LazySection({ children, height = "300px" }: LazySectionP
   }, []);
 
   return (
-    <div ref={containerRef} style={{ minHeight: isRendered ? "auto" : height }}>
+    <div id={id} ref={containerRef} style={{ minHeight: isRendered ? "auto" : height }}>
       {isRendered ? children : <div style={{ height }} />}
     </div>
   );

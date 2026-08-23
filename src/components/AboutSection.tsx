@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Cpu, Cloud, GitMerge, Database, Zap, type LucideIcon } from "lucide-react";
+import { Brain, Cpu, Cloud, GitMerge, Network, Zap, Bot, Link, GitBranch, BarChart2, type LucideIcon } from "lucide-react";
 
 
 
@@ -17,55 +17,55 @@ type Domain = {
 };
 
 const interests = [
-  { icon: GitMerge, text: "MLOps & Automation", accent: "#f43f5e" },
-  { icon: Terminal, text: "Data Engineering Pipelines", accent: "#0ea5e9" },
-  { icon: Cpu, text: "Machine Learning Systems", accent: "#6366f1" },
-  { icon: Cloud, text: "Cloud-Based Systems", accent: "#10b981" },
-  { icon: Database, text: "Distributed Data Processing", accent: "#f59e0b" },
-  { icon: Zap, text: "Backend Infrastructure", accent: "#06b6d4" },
+  { icon: Brain, text: "LLM Application Development", accent: "#8b5cf6" },
+  { icon: Bot, text: "AI Agent Systems", accent: "#6366f1" },
+  { icon: Link, text: "RAG & Knowledge Pipelines", accent: "#0ea5e9" },
+  { icon: GitMerge, text: "MLOps & Model Deployment", accent: "#f43f5e" },
+  { icon: GitBranch, text: "LangGraph & Agentic Flows", accent: "#10b981" },
+  { icon: BarChart2, text: "AI Observability & Evaluation", accent: "#f59e0b" },
 ] as const;
 
 const domains: Domain[] = [
   {
     icon: Cpu,
-    title: "ML Engineering",
-    summary: "Train, evaluate, and serve models with low-latency APIs.",
+    title: "ML Engineer",
+    summary: "Design, train, and serve production-grade ML models with low-latency inference APIs.",
     metric: { label: "Inference", value: "< 100ms" },
     color: "#6366f1",
     flow: ["Features", "Training", "Serving"],
     capabilities: [
-      "CNN & transfer learning",
-      "Model APIs & FastAPI",
-      "Prediction systems",
-      "Model optimization",
+      "CNNs, transformers & fine-tuning",
+      "FastAPI model serving",
+      "Feature stores & pipelines",
+      "Model optimization & quantization",
     ],
   },
   {
-    icon: Database,
-    title: "Data Engineering",
-    summary: "Reliable ingestion, transformation, and storage at scale.",
-    metric: { label: "Throughput", value: "10k+ /s" },
-    color: "#0ea5e9",
-    flow: ["Ingest", "Transform", "Store"],
+    icon: Brain,
+    title: "AI Engineer",
+    summary: "Build intelligent LLM-powered agents, RAG systems, and multi-modal AI applications.",
+    metric: { label: "Context", value: "128k tok" },
+    color: "#8b5cf6",
+    flow: ["Prompt", "Retrieve", "Generate"],
     capabilities: [
-      "Kafka & Spark pipelines",
-      "Airflow orchestration",
-      "Data lakes & MongoDB",
-      "ETL & data quality",
+      "LangChain & LangGraph agents",
+      "RAG & vector search (Qdrant)",
+      "LLM fine-tuning & evaluation",
+      "Tool-calling & multi-agent flows",
     ],
   },
   {
     icon: GitMerge,
     title: "MLOps",
-    summary: "Automated deploys, monitoring, and reproducible ML workflows.",
+    summary: "Automate model lifecycle, observability, and reproducible AI workflows at scale.",
     metric: { label: "Deploy", value: "< 3 min" },
     color: "#10b981",
     flow: ["Build", "Deploy", "Monitor"],
     capabilities: [
-      "Docker & Kubernetes",
-      "CI/CD & GitHub Actions",
-      "MLflow tracking",
-      "Observability & alerts",
+      "Docker & CI/CD pipelines",
+      "MLflow & Langfuse tracking",
+      "Model drift & alerting",
+      "GitHub Actions automation",
     ],
   },
 ];
@@ -305,24 +305,24 @@ export default function AboutSection() {
               <div className="flex items-center space-x-2 mb-6">
                 <span className="h-px w-8 bg-indigo-500" />
                 <p className="text-sm font-bold tracking-[0.2em] text-indigo-500 uppercase">
-                  Engineering Mindset
+                  AI Engineering Mindset
                 </p>
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight">
                 Building{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-sky-500">
-                  Scalable
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-violet-500">
+                  Intelligent
                 </span>{" "}
-                ML &amp; Data Systems.
+                AI Systems.
               </h2>
               <div className="text-slate-600 space-y-4">
                 <p className="leading-relaxed font-medium text-slate-800 text-xl">
-                  I focus on building intelligent systems at the intersection of machine learning and data engineering,
-                  designing high-throughput distributed pipelines and deploying production-ready models that solve complex real-world challenges.
+                  I build production AI systems — from LLM-powered agents and RAG pipelines to
+                  fine-tuned models and multi-agent workflows — engineered to solve real-world problems at scale.
                 </p>
                 <p className="leading-relaxed">
-                  My goal is to develop production-ready machine learning workflows supported by reliable
-                  data infrastructure, modern backend systems, and scalable cloud architectures.
+                  My focus spans ML engineering, AI agent design, and MLOps — shipping intelligent systems
+                  that are observable, reproducible, and ready for production from day one.
                 </p>
               </div>
 
@@ -679,9 +679,9 @@ export default function AboutSection() {
               {/* Mini pipeline steps */}
               <div className="rounded-2xl p-4 border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-[0_4px_16px_rgba(15,23,42,0.05)]">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3">
-                  ML Lifecycle
+                  AI Lifecycle
                 </div>
-                {["Data Ingest", "Feature Eng", "Training", "Evaluation", "Deployment", "Monitoring"].map((step, i) => (
+                {["Prompt Design", "Retrieval", "Generation", "Evaluation", "Deployment", "Observability"].map((step, i) => (
                   <div key={step} className="flex items-center gap-2 mb-2 last:mb-0">
                     <motion.div
                       className="w-2 h-2 rounded-full flex-shrink-0"
@@ -697,10 +697,10 @@ export default function AboutSection() {
 
               {/* Stack highlight */}
               {[
-                { tech: "Kafka", role: "Ingest", color: "#f59e0b" },
-                { tech: "Spark", role: "Process", color: "#0ea5e9" },
-                { tech: "MLflow", role: "Track", color: "#10b981" },
-                { tech: "K8s", role: "Deploy", color: "#2dd4bf" },
+                { tech: "LangChain", role: "Chains", color: "#22c55e" },
+                { tech: "LangGraph", role: "Agents", color: "#8b5cf6" },
+                { tech: "Qdrant", role: "Vector DB", color: "#f43f5e" },
+                { tech: "Langfuse", role: "Observe", color: "#ec4899" },
               ].map((item, i) => (
                 <motion.div
                   key={item.tech}

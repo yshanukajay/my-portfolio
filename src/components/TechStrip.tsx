@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Database, Sparkles, Wind, Activity, Zap, Layers, Network, Code } from "lucide-react";
+import { Database, Sparkles, Wind, Activity, Zap, Layers, Link, Code, GitBranch, BarChart2, Search, Table } from "lucide-react";
 
 const baseTechnologies = [
   { name: "Kafka", role: "Ingest", icon: Database, color: "text-orange-500", accentColor: "#f97316" },
@@ -10,8 +10,12 @@ const baseTechnologies = [
   { name: "MLflow", role: "Track", icon: Activity, color: "text-emerald-500", accentColor: "#10b981" },
   { name: "FastAPI", role: "Serve", icon: Zap, color: "text-cyan-500", accentColor: "#06b6d4" },
   { name: "Docker", role: "Package", icon: Layers, color: "text-blue-500", accentColor: "#3b82f6" },
-  { name: "Kubernetes", role: "Scale", icon: Network, color: "text-indigo-500", accentColor: "#6366f1" },
   { name: "Python", role: "Core", icon: Code, color: "text-yellow-600", accentColor: "#eab308" },
+  { name: "LangChain", role: "LLM Chains", icon: Link, color: "text-green-500", accentColor: "#22c55e" },
+  { name: "LangGraph", role: "AI Agents", icon: GitBranch, color: "text-violet-500", accentColor: "#8b5cf6" },
+  { name: "Langfuse", role: "Observability", icon: BarChart2, color: "text-pink-500", accentColor: "#ec4899" },
+  { name: "Qdrant", role: "Vector DB", icon: Search, color: "text-rose-500", accentColor: "#f43f5e" },
+  { name: "Supabase", role: "Backend", icon: Table, color: "text-teal-500", accentColor: "#14b8a6" },
 ];
 
 // Duplicate for seamless infinite loop (2× is enough when we use translate3d(-50%))
@@ -104,7 +108,7 @@ export default function TechStrip() {
             <div key={index} className="flex items-center">
               {/* Pipeline Node — pure CSS hover, no framer-motion */}
               <div
-                className="tech-card flex items-center gap-3.5 px-5 py-3 rounded-2xl border border-slate-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-lg cursor-pointer select-none group"
+                className="tech-card flex items-center gap-3.5 px-5.5 py-2.5 rounded-full border border-slate-100/80 bg-white/90 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-md cursor-pointer select-none group"
                 style={{ ["--accent" as string]: tech.accentColor } as React.CSSProperties}
               >
                 {/* Active Pulsing Indicator */}

@@ -18,7 +18,7 @@ type PhaseData = {
   accent: string;
   nodes: Record<string, NodeDef>;
   conns: Record<string, ConnDef>;
-  k8s: { opacity: number; x: number; y: number; w: number; h: number };
+  k8s: { opacity: number; x: number; y: number; w: number; h: number; label?: string };
 };
 
 const PHASES: PhaseData[] = [
@@ -110,7 +110,37 @@ const PHASES: PhaseData[] = [
       c7: { from: "n7", to: "n8", opacity: 0 },
       c8: { from: "n2", to: "n4", opacity: 1 }, // Registry direct to ML Pods
     },
-    k8s: { opacity: 1, x: 500, y: 100, w: 120, h: 230 } // Encloses API and ML Pods
+    k8s: { opacity: 1, x: 500, y: 100, w: 120, h: 230, label: "⎈ Kubernetes Cluster" } // Encloses API and ML Pods
+  },
+  {
+    id: "rag",
+    phaseLabel: "Phase 04",
+    title: "LLM & RAG Systems Architecture",
+    subtitle: "LangChain · Vector DB · Embeddings · Hybrid Search",
+    accent: "#a855f7", // Vibrant Purple
+    nodes: {
+      n0: { label: "User Prompt", sub: "query input", x: 90, y: 225, color: "#64748b", opacity: 1 },
+      n1: { label: "Embeddings", sub: "openai / bge", x: 230, y: 140, color: "#0ea5e9", opacity: 1 },
+      n2: { label: "Vector DB", sub: "qdrant / pinecone", x: 380, y: 140, color: "#a855f7", opacity: 1 },
+      n3: { label: "RAG Retriever", sub: "top-k / rerank", x: 380, y: 310, color: "#10b981", opacity: 1 },
+      n4: { label: "Context Builder", sub: "prompt + docs", x: 530, y: 225, color: "#f59e0b", opacity: 1 },
+      n5: { label: "LLM Inference", sub: "gpt-4 / vllm", x: 660, y: 225, color: "#ec4899", opacity: 1 },
+      n6: { label: "Guardrails", sub: "eval / filter", x: 530, y: 360, color: "#f43f5e", opacity: 1 },
+      n7: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
+      n8: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
+    },
+    conns: {
+      c0: { from: "n0", to: "n1", opacity: 1 }, // Query -> Embeddings
+      c1: { from: "n1", to: "n2", opacity: 1 }, // Embeddings -> Vector DB
+      c2: { from: "n2", to: "n3", opacity: 1 }, // Vector DB -> Retriever
+      c3: { from: "n0", to: "n4", opacity: 1 }, // Query -> Context Builder
+      c4: { from: "n3", to: "n4", opacity: 1 }, // Retriever -> Context Builder
+      c5: { from: "n4", to: "n5", opacity: 1 }, // Context Builder -> LLM Inference
+      c6: { from: "n5", to: "n6", opacity: 1 }, // LLM -> Guardrails
+      c7: { from: "n6", to: "n7", opacity: 0 },
+      c8: { from: "n7", to: "n8", opacity: 0 },
+    },
+    k8s: { opacity: 1, x: 320, y: 90, w: 120, h: 270, label: "Vector Search Engine" }
   }
 ];
 
@@ -336,19 +366,19 @@ export default function HeroDiagramCarousel({
         {/* --- LAYER 1: Background --- */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <svg viewBox="0 0 700 450" className="w-full h-full overflow-visible">
-            {/* Kubernetes Cluster Box for MLOps */}
+            {/* Cluster Box */}
             <motion.g animate={{ opacity: phase.k8s.opacity }} transition={{ duration: 0.6 }}>
               <motion.rect
                 animate={{ x: phase.k8s.x, y: phase.k8s.y, width: phase.k8s.w, height: phase.k8s.h }}
-                rx={16} fill="rgba(20, 184, 166, 0.05)" stroke="#14b8a6" strokeWidth={1.5} strokeDasharray="6 6"
+                rx={16} fill={`${phase.accent}0d`} stroke={phase.accent} strokeWidth={1.5} strokeDasharray="6 6"
                 transition={{ type: "spring", stiffness: 50, damping: 14 }}
               />
               <motion.text
                 animate={{ x: phase.k8s.x + 16, y: phase.k8s.y + 24 }}
-                fill="#14b8a6" fontSize={12} fontWeight={600} fontFamily="Inter, sans-serif"
+                fill={phase.accent} fontSize={11} fontWeight={600} fontFamily="Inter, sans-serif"
                 transition={{ type: "spring", stiffness: 50, damping: 14 }}
               >
-                ⎈ Kubernetes Cluster
+                {phase.k8s.label ?? "Cluster"}
               </motion.text>
             </motion.g>
           </svg>

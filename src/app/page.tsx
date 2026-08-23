@@ -29,17 +29,17 @@ export default function Home() {
       <TechStack />
 
       {/* 4. Production AI Systems */}
-      <LazySection height="600px">
+      <LazySection id="projects" height="600px">
         <Projects />
       </LazySection>
 
       {/* 5. Research & Publications */}
-      <LazySection height="500px">
+      <LazySection id="publications" height="500px">
         <Research />
       </LazySection>
 
       {/* 6. Scalable Architecture */}
-      <LazySection height="600px">
+      <LazySection id="architecture" height="600px">
         <SystemArchitecture />
       </LazySection>
 
@@ -59,7 +59,7 @@ export default function Home() {
       </LazySection>
 
       {/* 10. Contact */}
-      <LazySection height="500px">
+      <LazySection id="contact" height="500px">
         <ContactSection />
       </LazySection>
 
