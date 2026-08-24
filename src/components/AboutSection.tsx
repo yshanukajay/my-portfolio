@@ -17,12 +17,12 @@ type Domain = {
 };
 
 const interests = [
-  { icon: Brain, text: "LLM Application Development", accent: "#8b5cf6" },
-  { icon: Bot, text: "AI Agent Systems", accent: "#6366f1" },
-  { icon: Link, text: "RAG & Knowledge Pipelines", accent: "#0ea5e9" },
-  { icon: GitMerge, text: "MLOps & Model Deployment", accent: "#f43f5e" },
-  { icon: GitBranch, text: "LangGraph & Agentic Flows", accent: "#10b981" },
-  { icon: BarChart2, text: "AI Observability & Evaluation", accent: "#f59e0b" },
+  { icon: Brain, text: "LLM Application Development", accent: "var(--color-accent-secondary)" },
+  { icon: Bot, text: "AI Agent Systems", accent: "var(--color-accent-secondary)" },
+  { icon: Link, text: "RAG & Knowledge Pipelines", accent: "var(--color-accent-primary)" },
+  { icon: GitMerge, text: "MLOps & Model Deployment", accent: "var(--color-danger)" },
+  { icon: GitBranch, text: "LangGraph & Agentic Flows", accent: "var(--color-success)" },
+  { icon: BarChart2, text: "AI Observability & Evaluation", accent: "var(--color-warning)" },
 ] as const;
 
 const domains: Domain[] = [
@@ -31,7 +31,7 @@ const domains: Domain[] = [
     title: "ML Engineer",
     summary: "Design, train, and serve production-grade ML models with low-latency inference APIs.",
     metric: { label: "Inference", value: "< 100ms" },
-    color: "#6366f1",
+    color: "var(--color-accent-secondary)",
     flow: ["Features", "Training", "Serving"],
     capabilities: [
       "CNNs, transformers & fine-tuning",
@@ -45,7 +45,7 @@ const domains: Domain[] = [
     title: "AI Engineer",
     summary: "Build intelligent LLM-powered agents, RAG systems, and multi-modal AI applications.",
     metric: { label: "Context", value: "128k tok" },
-    color: "#8b5cf6",
+    color: "var(--color-accent-secondary)",
     flow: ["Prompt", "Retrieve", "Generate"],
     capabilities: [
       "LangChain & LangGraph agents",
@@ -59,7 +59,7 @@ const domains: Domain[] = [
     title: "MLOps",
     summary: "Automate model lifecycle, observability, and reproducible AI workflows at scale.",
     metric: { label: "Deploy", value: "< 3 min" },
-    color: "#10b981",
+    color: "var(--color-success)",
     flow: ["Build", "Deploy", "Monitor"],
     capabilities: [
       "Docker & CI/CD pipelines",
@@ -504,10 +504,10 @@ export default function AboutSection() {
             >
               {/* System stats */}
               {[
-                { label: "Models Deployed", value: "3+", color: "#818cf8" },
-                { label: "Pipeline Uptime", value: "99.9%", color: "#10b981" },
-                { label: "Avg Latency", value: "< 100ms", color: "#0ea5e9" },
-                { label: "AI Projects", value: "8+", color: "#a855f7" },
+                { label: "Models Deployed", value: "3+", color: "var(--color-accent-secondary)" },
+                { label: "Pipeline Uptime", value: "99.9%", color: "var(--color-success)" },
+                { label: "Avg Latency", value: "< 100ms", color: "var(--color-accent-primary)" },
+                { label: "AI Projects", value: "8+", color: "var(--color-accent-secondary)" },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}

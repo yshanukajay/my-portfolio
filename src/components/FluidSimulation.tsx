@@ -850,7 +850,7 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
 
     // Bloom FBOs
     const bloomRes = getResolution(cfg.BLOOM_RESOLUTION);
-    let bloom = createFBO(bloomRes.width, bloomRes.height, fmtRGBA.internalFormat, fmtRGBA.format, halfFloatType, linearFilter);
+    const bloom = createFBO(bloomRes.width, bloomRes.height, fmtRGBA.internalFormat, fmtRGBA.format, halfFloatType, linearFilter);
     const bloomFBOs: FBO[] = [];
     for (let i = 0; i < cfg.BLOOM_ITERATIONS; i++) {
       const w = bloomRes.width >> (i + 1);
@@ -861,8 +861,8 @@ const FluidSimulation = forwardRef<FluidHandle, FluidProps>((props, ref) => {
 
     // Sunrays FBOs
     const srRes = getResolution(cfg.SUNRAYS_RESOLUTION);
-    let sunrays = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
-    let sunraysTemp = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
+    const sunrays = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
+    const sunraysTemp = createFBO(srRes.width, srRes.height, fmtR.internalFormat, fmtR.format, halfFloatType, linearFilter);
 
     /* ── Display material keywords ───────────────────────────── */
     const kws: string[] = [];

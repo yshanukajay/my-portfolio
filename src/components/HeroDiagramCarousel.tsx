@@ -27,17 +27,17 @@ const PHASES: PhaseData[] = [
     phaseLabel: "Phase 01",
     title: "Data Pipeline Architecture",
     subtitle: "Kafka · Spark · Airflow · Iceberg",
-    accent: "#0ea5e9", // Sky Blue
+    accent: "var(--color-accent-primary)",
     nodes: {
-      n0: { label: "Kafka", sub: "event stream", x: 120, y: 225, color: "#f97316", opacity: 1 },
-      n1: { label: "Schema Reg", sub: "avro/protobuf", x: 260, y: 140, color: "#f97316", opacity: 1 },
-      n2: { label: "Spark", sub: "batch / stream", x: 260, y: 310, color: "#0ea5e9", opacity: 1 },
-      n3: { label: "Airflow", sub: "orchestrator", x: 400, y: 140, color: "#10b981", opacity: 1 },
-      n4: { label: "DQ Checks", sub: "expectations", x: 400, y: 310, color: "#10b981", opacity: 1 },
-      n5: { label: "Data Lake", sub: "parquet/delta", x: 540, y: 225, color: "#6366f1", opacity: 1 },
-      n6: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
-      n7: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
-      n8: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
+      n0: { label: "Kafka", sub: "event stream", x: 120, y: 225, color: "var(--color-warning)", opacity: 1 },
+      n1: { label: "Schema Reg", sub: "avro/protobuf", x: 260, y: 140, color: "var(--color-warning)", opacity: 1 },
+      n2: { label: "Spark", sub: "batch / stream", x: 260, y: 310, color: "var(--color-accent-primary)", opacity: 1 },
+      n3: { label: "Airflow", sub: "orchestrator", x: 400, y: 140, color: "var(--color-success)", opacity: 1 },
+      n4: { label: "DQ Checks", sub: "expectations", x: 400, y: 310, color: "var(--color-success)", opacity: 1 },
+      n5: { label: "Data Lake", sub: "parquet/delta", x: 540, y: 225, color: "var(--color-accent-secondary)", opacity: 1 },
+      n6: { label: "Hidden", sub: "", x: 350, y: 225, color: "var(--color-muted)", opacity: 0 },
+      n7: { label: "Hidden", sub: "", x: 350, y: 225, color: "var(--color-muted)", opacity: 0 },
+      n8: { label: "Hidden", sub: "", x: 350, y: 225, color: "var(--color-muted)", opacity: 0 },
     },
     conns: {
       c0: { from: "n0", to: "n1", opacity: 1 }, // Kafka -> Schema
@@ -57,17 +57,17 @@ const PHASES: PhaseData[] = [
     phaseLabel: "Phase 02",
     title: "ML Training Pipeline",
     subtitle: "TensorFlow · PyTorch · MLflow · Feature Store",
-    accent: "#6366f1", // Indigo
+    accent: "var(--color-accent-secondary)",
     nodes: {
-      n0: { label: "Raw Data", sub: "structured/raw", x: 100, y: 225, color: "#64748b", opacity: 1 },
-      n1: { label: "Feature Store", sub: "feast/hopsworks", x: 240, y: 225, color: "#0ea5e9", opacity: 1 },
-      n2: { label: "Data Split", sub: "train/val/test", x: 380, y: 225, color: "#6366f1", opacity: 1 },
-      n3: { label: "TensorFlow", sub: "gpu training", x: 520, y: 150, color: "#f97316", opacity: 1 },
-      n4: { label: "PyTorch", sub: "custom loops", x: 520, y: 300, color: "#6366f1", opacity: 1 },
-      n5: { label: "MLflow", sub: "experiment track", x: 660, y: 225, color: "#10b981", opacity: 1 },
-      n6: { label: "Hidden", sub: "", x: 350, y: 360, color: "#10b981", opacity: 0 },
-      n7: { label: "Hidden", sub: "", x: 350, y: 360, color: "#10b981", opacity: 0 },
-      n8: { label: "Hidden", sub: "", x: 350, y: 360, color: "#10b981", opacity: 0 },
+      n0: { label: "Raw Data", sub: "structured/raw", x: 100, y: 225, color: "var(--color-muted)", opacity: 1 },
+      n1: { label: "Feature Store", sub: "feast/hopsworks", x: 240, y: 225, color: "var(--color-accent-primary)", opacity: 1 },
+      n2: { label: "Data Split", sub: "train/val/test", x: 380, y: 225, color: "var(--color-accent-secondary)", opacity: 1 },
+      n3: { label: "TensorFlow", sub: "gpu training", x: 520, y: 150, color: "var(--color-warning)", opacity: 1 },
+      n4: { label: "PyTorch", sub: "custom loops", x: 520, y: 300, color: "var(--color-accent-secondary)", opacity: 1 },
+      n5: { label: "MLflow", sub: "experiment track", x: 660, y: 225, color: "var(--color-success)", opacity: 1 },
+      n6: { label: "Hidden", sub: "", x: 350, y: 360, color: "var(--color-success)", opacity: 0 },
+      n7: { label: "Hidden", sub: "", x: 350, y: 360, color: "var(--color-success)", opacity: 0 },
+      n8: { label: "Hidden", sub: "", x: 350, y: 360, color: "var(--color-success)", opacity: 0 },
     },
     conns: {
       c0: { from: "n0", to: "n1", opacity: 1 },
@@ -87,17 +87,17 @@ const PHASES: PhaseData[] = [
     phaseLabel: "Phase 03",
     title: "Cloud + MLOps Infrastructure",
     subtitle: "Docker · Kubernetes · FastAPI · Prometheus",
-    accent: "#14b8a6", // Teal
+    accent: "var(--color-accent-primary)",
     nodes: {
-      n0: { label: "GitHub", sub: "push / PR", x: 100, y: 150, color: "#475569", opacity: 1 },
-      n1: { label: "GH Actions", sub: "build & test", x: 250, y: 150, color: "#0ea5e9", opacity: 1 },
-      n2: { label: "Registry", sub: "docker / ecr", x: 400, y: 150, color: "#6366f1", opacity: 1 },
-      n3: { label: "API Pods", sub: "fastapi", x: 560, y: 150, color: "#14b8a6", opacity: 1 },
-      n4: { label: "ML Pods", sub: "inference", x: 560, y: 280, color: "#6366f1", opacity: 1 },
-      n5: { label: "Prometheus", sub: "metrics", x: 400, y: 350, color: "#f97316", opacity: 1 },
-      n6: { label: "Grafana", sub: "dashboards", x: 250, y: 350, color: "#f97316", opacity: 1 },
-      n7: { label: "PagerDuty", sub: "alerts", x: 100, y: 350, color: "#f43f5e", opacity: 1 },
-      n8: { label: "Hidden", sub: "", x: 580, y: 350, color: "#f43f5e", opacity: 0 },
+      n0: { label: "GitHub", sub: "push / PR", x: 100, y: 150, color: "var(--color-muted)", opacity: 1 },
+      n1: { label: "GH Actions", sub: "build & test", x: 250, y: 150, color: "var(--color-accent-primary)", opacity: 1 },
+      n2: { label: "Registry", sub: "docker / ecr", x: 400, y: 150, color: "var(--color-accent-secondary)", opacity: 1 },
+      n3: { label: "API Pods", sub: "fastapi", x: 560, y: 150, color: "var(--color-accent-primary)", opacity: 1 },
+      n4: { label: "ML Pods", sub: "inference", x: 560, y: 280, color: "var(--color-accent-secondary)", opacity: 1 },
+      n5: { label: "Prometheus", sub: "metrics", x: 400, y: 350, color: "var(--color-warning)", opacity: 1 },
+      n6: { label: "Grafana", sub: "dashboards", x: 250, y: 350, color: "var(--color-warning)", opacity: 1 },
+      n7: { label: "PagerDuty", sub: "alerts", x: 100, y: 350, color: "var(--color-danger)", opacity: 1 },
+      n8: { label: "Hidden", sub: "", x: 580, y: 350, color: "var(--color-danger)", opacity: 0 },
     },
     conns: {
       c0: { from: "n0", to: "n1", opacity: 1 },
@@ -117,17 +117,17 @@ const PHASES: PhaseData[] = [
     phaseLabel: "Phase 04",
     title: "LLM & RAG Systems Architecture",
     subtitle: "LangChain · Vector DB · Embeddings · Hybrid Search",
-    accent: "#a855f7", // Vibrant Purple
+    accent: "var(--color-accent-secondary)",
     nodes: {
-      n0: { label: "User Prompt", sub: "query input", x: 90, y: 225, color: "#64748b", opacity: 1 },
-      n1: { label: "Embeddings", sub: "openai / bge", x: 230, y: 140, color: "#0ea5e9", opacity: 1 },
-      n2: { label: "Vector DB", sub: "qdrant / pinecone", x: 380, y: 140, color: "#a855f7", opacity: 1 },
-      n3: { label: "RAG Retriever", sub: "top-k / rerank", x: 380, y: 310, color: "#10b981", opacity: 1 },
-      n4: { label: "Context Builder", sub: "prompt + docs", x: 530, y: 225, color: "#f59e0b", opacity: 1 },
-      n5: { label: "LLM Inference", sub: "gpt-4 / vllm", x: 660, y: 225, color: "#ec4899", opacity: 1 },
-      n6: { label: "Guardrails", sub: "eval / filter", x: 530, y: 360, color: "#f43f5e", opacity: 1 },
-      n7: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
-      n8: { label: "Hidden", sub: "", x: 350, y: 225, color: "#64748b", opacity: 0 },
+      n0: { label: "User Prompt", sub: "query input", x: 90, y: 225, color: "var(--color-muted)", opacity: 1 },
+      n1: { label: "Embeddings", sub: "openai / bge", x: 230, y: 140, color: "var(--color-accent-primary)", opacity: 1 },
+      n2: { label: "Vector DB", sub: "qdrant / pinecone", x: 380, y: 140, color: "var(--color-accent-secondary)", opacity: 1 },
+      n3: { label: "RAG Retriever", sub: "top-k / rerank", x: 380, y: 310, color: "var(--color-success)", opacity: 1 },
+      n4: { label: "Context Builder", sub: "prompt + docs", x: 530, y: 225, color: "var(--color-warning)", opacity: 1 },
+      n5: { label: "LLM Inference", sub: "gpt-4 / vllm", x: 660, y: 225, color: "var(--color-accent-secondary)", opacity: 1 },
+      n6: { label: "Guardrails", sub: "eval / filter", x: 530, y: 360, color: "var(--color-danger)", opacity: 1 },
+      n7: { label: "Hidden", sub: "", x: 350, y: 225, color: "var(--color-muted)", opacity: 0 },
+      n8: { label: "Hidden", sub: "", x: 350, y: 225, color: "var(--color-muted)", opacity: 0 },
     },
     conns: {
       c0: { from: "n0", to: "n1", opacity: 1 }, // Query -> Embeddings
@@ -188,7 +188,7 @@ function NodeComponent({ node, id }: { node: NodeDef; id: string }) {
           className="w-4 h-4 rounded-full"
           style={{
             backgroundColor: node.color,
-            boxShadow: `0 0 5px ${node.color}70, inset 0 0 3px rgba(255,255,255,0.7)`
+            boxShadow: `0 0 5px color-mix(in srgb, ${node.color} 44%, transparent), inset 0 0 3px rgba(255,255,255,0.7)`
           }}
         />
         {/* Floating Free Text */}
@@ -238,7 +238,7 @@ function ConnectionComponent({ conn, nodes, activeColor }: { conn: ConnDef; node
         className="connector-base"
         strokeWidth={1.5}
         fill="none"
-        style={{ stroke: `${activeColor}20` }}
+        style={{ stroke: `color-mix(in srgb, ${activeColor} 12%, transparent)` }}
         animate={{ d }}
         transition={{ type: "spring", stiffness: 50, damping: 14, mass: 1 }}
       />
@@ -370,7 +370,7 @@ export default function HeroDiagramCarousel({
             <motion.g animate={{ opacity: phase.k8s.opacity }} transition={{ duration: 0.6 }}>
               <motion.rect
                 animate={{ x: phase.k8s.x, y: phase.k8s.y, width: phase.k8s.w, height: phase.k8s.h }}
-                rx={16} fill={`${phase.accent}0d`} stroke={phase.accent} strokeWidth={1.5} strokeDasharray="6 6"
+                rx={16} fill={phase.accent} fillOpacity={0.05} stroke={phase.accent} strokeWidth={1.5} strokeDasharray="6 6"
                 transition={{ type: "spring", stiffness: 50, damping: 14 }}
               />
               <motion.text

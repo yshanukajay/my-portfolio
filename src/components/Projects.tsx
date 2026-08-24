@@ -47,8 +47,8 @@ export const projectsData = [
       latencyBefore: "24h",
       latencyAfter: "< 500ms"
     },
-    color: "#2563EB",
-    bgColor: "#EFF6FF",
+    color: "var(--color-accent-primary)",
+    bgColor: "rgba(14, 165, 233, 0.04)",
     tags: ["Real-Time", "Distributed", "MLOps Enabled"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
@@ -79,8 +79,8 @@ export const projectsData = [
       reduction: "30%",
       sensors: "Temp, Motion, HR"
     },
-    color: "#0891B2",
-    bgColor: "#F0F9FF",
+    color: "var(--color-accent-secondary)",
+    bgColor: "rgba(99, 102, 241, 0.04)",
     tags: ["Edge AI", "API Integrated", "Computer Vision"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
@@ -111,8 +111,8 @@ export const projectsData = [
       latency: "< 100ms",
       datasetSize: "50,000+"
     },
-    color: "#1D4ED8",
-    bgColor: "#EFF6FF",
+    color: "var(--color-accent-primary)",
+    bgColor: "rgba(14, 165, 233, 0.04)",
     tags: ["Computer Vision", "API Integrated", "MLOps Enabled"],
     links: { github: "https://github.com/yshanukajay", demo: "#" },
   },
@@ -175,7 +175,7 @@ function ProjectCard({ project, isActive }: { project: typeof projectsData[0]; i
         : "shadow-[0_4px_20px_-8px_rgba(15,23,42,0.05)] border-slate-100/80"
         }`}
       style={{
-        boxShadow: isActive ? `0 24px 60px -15px ${p.color}15, inset 0 0 0 1px ${p.color}15` : undefined,
+        boxShadow: isActive ? `0 24px 60px -15px color-mix(in srgb, ${p.color} 8%, transparent), inset 0 0 0 1px color-mix(in srgb, ${p.color} 8%, transparent)` : undefined,
       }}
     >
       {/* Visual / Screenshot Column (Left) */}
@@ -261,9 +261,9 @@ function ProjectCard({ project, isActive }: { project: typeof projectsData[0]; i
             <span
               className="px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md border"
               style={{
-                backgroundColor: `${p.color}0a`,
+                backgroundColor: `color-mix(in srgb, ${p.color} 4%, transparent)`,
                 color: p.color,
-                borderColor: `${p.color}25`
+                borderColor: `color-mix(in srgb, ${p.color} 15%, transparent)`
               }}
             >
               {p.badge}
@@ -299,9 +299,9 @@ function ProjectCard({ project, isActive }: { project: typeof projectsData[0]; i
                   key={s}
                   className="px-2 py-0.5 text-[9px] font-bold rounded-md font-mono border"
                   style={{
-                    backgroundColor: `${p.color}0a`,
+                    backgroundColor: `color-mix(in srgb, ${p.color} 4%, transparent)`,
                     color: p.color,
-                    borderColor: `${p.color}20`
+                    borderColor: `color-mix(in srgb, ${p.color} 12%, transparent)`
                   }}
                 >
                   {s}
@@ -344,8 +344,8 @@ function ProjectCard({ project, isActive }: { project: typeof projectsData[0]; i
             whileTap={{ scale: 0.98 }}
             className="flex-1 py-3 px-4 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
             style={{
-              background: `linear-gradient(135deg, ${p.color}e0 0%, ${p.color} 100%)`,
-              boxShadow: `0 4px 14px ${p.color}25`
+              background: `linear-gradient(135deg, color-mix(in srgb, ${p.color} 88%, transparent) 0%, ${p.color} 100%)`,
+              boxShadow: `0 4px 14px color-mix(in srgb, ${p.color} 15%, transparent)`
             }}
           >
             <span>Live System Demo</span>

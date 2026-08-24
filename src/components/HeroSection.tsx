@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { ArrowRight, GitBranch, CheckCircle2, Circle } from "lucide-react";
 import { useLenis } from "lenis/react";
 import HeroDiagramCarousel from "./HeroDiagramCarousel";
@@ -44,10 +44,10 @@ const shiftingTitles = [
 
 /* ─── Diagram slides config ───────────────────────────────────────────────── */
 const SLIDES = [
-  { id: "data", phase: "Phase 1", color: "#0ea5e9" },
-  { id: "ml", phase: "Phase 2", color: "#6366f1" },
-  { id: "mlops", phase: "Phase 3", color: "#14b8a6" },
-  { id: "rag", phase: "Phase 4", color: "#a855f7" },
+  { id: "data", phase: "Phase 1", color: "var(--color-accent-primary)" },
+  { id: "ml", phase: "Phase 2", color: "var(--color-accent-secondary)" },
+  { id: "mlops", phase: "Phase 3", color: "var(--color-accent-primary)" },
+  { id: "rag", phase: "Phase 4", color: "var(--color-accent-secondary)" },
 ];
 
 const SLIDE_DURATION = 8;
@@ -61,7 +61,7 @@ const PIPELINE_STAGES = [
     step: "01",
     file: "kafka_producer.py",
     label: "Ingest",
-    color: "#f97316",
+    color: "var(--color-warning)",
     metric: "10k events/s",
     status: "running",
     code: [
@@ -74,7 +74,7 @@ const PIPELINE_STAGES = [
     step: "02",
     file: "spark_stream.py",
     label: "Transform",
-    color: "#0ea5e9",
+    color: "var(--color-accent-primary)",
     metric: "p95 < 420ms",
     status: "running",
     code: [
@@ -87,7 +87,7 @@ const PIPELINE_STAGES = [
     step: "03",
     file: "airflow_dag.py",
     label: "Orchestrate",
-    color: "#10b981",
+    color: "var(--color-success)",
     metric: "SLA 99.9%",
     status: "scheduled",
     code: [
@@ -99,7 +99,7 @@ const PIPELINE_STAGES = [
     step: "04",
     file: "mlflow_run.py",
     label: "Track & Serve",
-    color: "#6366f1",
+    color: "var(--color-accent-secondary)",
     metric: "acc 94.2%",
     status: "complete",
     code: [
@@ -121,131 +121,124 @@ const TOKEN_COLORS: Record<string, string> = {
   dec: "#a78bfa",  // decorator
 };
 
-function PipelineCodeCard({ accentColor }: { accentColor: string }) {
-  const [activeStage, setActiveStage] = useState(0);
-  const [running, setRunning] = useState(true);
+function AIParserCard() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const xPercent = useMotionValue(50);
+  const xPercentSpring = useSpring(xPercent, { stiffness: 350, damping: 30, mass: 0.5 });
+  
+  const clipPath = useTransform(xPercentSpring, (val) => `inset(0 0 0 ${val}%)`);
+  const left = useTransform(xPercentSpring, (val) => `${val}%`);
 
-  // Auto-cycle through stages
-  useEffect(() => {
-    if (!running) return;
-    const t = setTimeout(() => setActiveStage(s => (s + 1) % PIPELINE_STAGES.length), 2200);
-    return () => clearTimeout(t);
-  }, [activeStage, running]);
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    xPercent.set(percent);
+  };
 
-  const stage = PIPELINE_STAGES[activeStage];
+  const handlePointerLeave = () => {
+    xPercent.set(50); // Snaps back smoothly via Spring
+  };
+
+  const rawInput = `Pt: Sarah K. 34F
+Temp 38.2°C SpO2 96%
+Hx: childhood asthma
+Rx: azithromycin 500mg`;
+
+  const structuredOutput = `{
+  "patient": {
+    "name": "Sarah K.",
+    "age": 34,
+    "gender": "F"
+  },
+  "vitals": {
+    "temp_c": 38.2,
+    "spo2_percent": 96
+  },
+  "meds": ["azithromycin"]
+}`;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, delay: 0.5 }}
-      className="relative w-full max-w-[430px] rounded-3xl overflow-hidden bg-slate-950 font-mono text-[10px] select-none shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
-      onMouseEnter={() => setRunning(false)}
-      onMouseLeave={() => setRunning(true)}
+      ref={containerRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className="relative w-full max-w-[340px] h-[230px] rounded-[16px] border border-[var(--color-border)] overflow-hidden cursor-crosshair select-none shadow-[0_12px_30px_-10px_rgba(0,0,0,0.06),0_8px_16px_-8px_rgba(0,0,0,0.08)] touch-none"
+      style={{
+        backgroundColor: "var(--color-background)",
+        userSelect: "none",
+        WebkitUserSelect: "none"
+      }}
     >
-      {/* Top accent line */}
+      {/* Raw Input (Bottom Layer) */}
       <div
-        className="absolute top-0 inset-x-0 h-[1.5px] z-20"
-        style={{ background: `linear-gradient(90deg, transparent, ${stage.color}90, transparent)` }}
-      />
-
-      {/* Window chrome */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-800/60 bg-slate-950">
-        <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-[#ff5f56]/80" />
-          <div className="w-2 h-2 rounded-full bg-[#ffbd2e]/80" />
-          <div className="w-2 h-2 rounded-full bg-[#27c93f]/80" />
-        </div>
-        <div className="flex items-center gap-1.5 text-[9px] text-slate-500 font-semibold tracking-wider">
-          <GitBranch size={8} className="text-slate-600" />
-          <span>ml-pipeline</span>
-          <span className="text-slate-700">·</span>
-          <span style={{ color: stage.color }}>{stage.file}</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ backgroundColor: stage.color }} />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: stage.color }} />
-          </span>
-          <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: stage.color }}>LIVE</span>
-        </div>
+        className="absolute inset-0 pt-[16px] px-[16px] pb-[16px] flex flex-col justify-between select-none z-[1]"
+        style={{ backgroundColor: "var(--color-background)" }}
+      >
+        <span className="font-mono font-bold text-[8.5px] tracking-[0.08em] uppercase text-slate-400 mb-1.5 self-start">
+          Raw input
+        </span>
+        <pre className="font-mono text-[9.5px] leading-[1.5] text-slate-500 whitespace-pre-wrap text-left">
+          {rawInput}
+        </pre>
       </div>
 
-      {/* Stage tabs */}
-      <div className="flex border-b border-slate-800/40">
-        {PIPELINE_STAGES.map((s, i) => (
-          <button
-            key={s.step}
-            onClick={() => { setActiveStage(i); setRunning(false); }}
-            className="flex-1 py-1.5 text-[8px] font-bold uppercase tracking-wider transition-colors"
-            style={{
-              color: i === activeStage ? s.color : "#475569",
-              borderBottom: i === activeStage ? `1px solid ${s.color}` : "1px solid transparent",
-              background: i === activeStage ? `${s.color}08` : "transparent",
-            }}
-          >
-            {s.step} {s.label}
-          </button>
-        ))}
-      </div>
+      {/* Structured Output (Top Layer, clipped with a smooth ease-out MotionValue) */}
+      <motion.div
+        className="absolute inset-0 pt-[16px] px-[16px] pb-[16px] flex flex-col justify-between select-none z-[2]"
+        style={{
+          clipPath,
+          backgroundColor: "var(--color-background)",
+        }}
+      >
+        <span className="font-mono font-bold text-[8.5px] tracking-[0.08em] uppercase text-slate-400 mb-1.5 self-end">
+          Structured output
+        </span>
+        <pre className="font-mono text-[9.5px] leading-[1.5] text-slate-800 whitespace-pre-wrap text-left">
+          {structuredOutput}
+        </pre>
+      </motion.div>
 
-      {/* Code area */}
-      <div className="px-4 pt-3 pb-2 min-h-[62px]">
-        <div className="flex flex-wrap items-center gap-x-0.5 leading-relaxed">
-          <span className="text-slate-600 text-[8.5px] mr-2 shrink-0">{activeStage + 1}</span>
-          {stage.code.map((tok, i) => (
-            <span key={i} style={{ color: TOKEN_COLORS[tok.t] ?? "#e2e8f0" }}>{tok.v}</span>
-          ))}
+      {/* Slider Line (moves smoothly matching the top layer clip-path transition) */}
+      <motion.div
+        className="absolute top-0 bottom-0 w-[1.5px] z-[10] pointer-events-none"
+        style={{
+          left,
+          backgroundColor: "var(--color-accent-primary)",
+        }}
+      >
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white border-2 shadow-sm cursor-col-resize flex items-center justify-center" 
+          style={{ borderColor: "var(--color-accent-primary)" }}
+        >
+          <div className="w-1 h-1 rounded-full" style={{ backgroundColor: "var(--color-accent-primary)" }} />
         </div>
-        <div className="flex flex-wrap items-center gap-x-0.5 mt-0.5">
-          <span className="text-slate-600 text-[8.5px] mr-2 shrink-0">2</span>
-          <span style={{ color: TOKEN_COLORS.op }}># </span>
-          <span style={{ color: TOKEN_COLORS.str }}>→ {stage.metric}</span>
-        </div>
-      </div>
-
-      {/* Pipeline progress bar */}
-      <div className="px-4 pb-3">
-        <div className="flex items-center gap-1.5 mb-1.5">
-          {PIPELINE_STAGES.map((s, i) => (
-            <div key={s.step} className="flex items-center gap-1">
-              {i === activeStage ? (
-                <Circle size={6} style={{ color: s.color, fill: s.color }} />
-              ) : i < activeStage ? (
-                <CheckCircle2 size={6} style={{ color: s.color }} />
-              ) : (
-                <Circle size={6} className="text-slate-700" />
-              )}
-              {i < PIPELINE_STAGES.length - 1 && (
-                <div
-                  className="h-px w-6 rounded"
-                  style={{ background: i < activeStage ? `${PIPELINE_STAGES[i + 1].color}60` : "#1e293b" }}
-                />
-              )}
-            </div>
-          ))}
-          <span className="ml-auto text-[8px] font-bold" style={{ color: stage.color }}>
-            {stage.status === "running" ? "● running" : stage.status === "scheduled" ? "◐ scheduled" : "✓ complete"}
-          </span>
-        </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
+
+
+const STATIC_PARTICLES = [
+  { id: "p-0", origX: 120, origY: 340, colorIndex: 0, r: 0.8, dur: 8.5 },
+  { id: "p-1", origX: 680, origY: 150, colorIndex: 1, r: 1.2, dur: 10.2 },
+  { id: "p-2", origX: 430, origY: 520, colorIndex: 2, r: 0.6, dur: 7.8 },
+  { id: "p-3", origX: 250, origY: 180, colorIndex: 3, r: 1.4, dur: 11.0 },
+  { id: "p-4", origX: 590, origY: 610, colorIndex: 4, r: 0.9, dur: 9.1 },
+];
 
 /* ─── Interactive Geometric System Background (Mandala / Rangoli Inspired) ─── */
 function InteractiveGeometricBackground() {
   const svgRef = useRef<SVGSVGElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const rafRef = useRef<number>(0);
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Saffron, Deep Indigo, Gold, Neon Teal
-  const colors = useMemo(() => ["#fbbf24", "#f59e0b", "#3730a3", "#14b8a6", "#6366f1"], []);
+  // Consolidate to warning, secondary brand, and primary brand accents
+  const colors = useMemo(() => ["var(--color-warning)", "var(--color-warning)", "var(--color-accent-secondary)", "var(--color-accent-primary)", "var(--color-accent-secondary)"], []);
 
   // 1. Generate Mandala Nodes — reduced: 1 core + 5 inner + 6 mid + 5 outer = 17 nodes (was 31)
   const mandalaNodes = useMemo(() => {
@@ -274,16 +267,11 @@ function InteractiveGeometricBackground() {
 
   // 2. Generate Ambient Particles — reduced to 5
   const ambientParticles = useMemo(() => {
-    if (!mounted) return [];
-    return Array.from({ length: 5 }, (_, i) => ({
-      id: `p-${i}`,
-      origX: Math.random() * 800,
-      origY: Math.random() * 700,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      r: Math.random() * 1.0 + 0.5,
-      dur: 7 + Math.random() * 4,
+    return STATIC_PARTICLES.map((p) => ({
+      ...p,
+      color: colors[p.colorIndex % colors.length],
     }));
-  }, [mounted, colors]);
+  }, [colors]);
 
   // 3. Generate Connections — updated for reduced node counts
   const connections = useMemo(() => {
@@ -465,7 +453,7 @@ function InteractiveGeometricBackground() {
             style={{
               opacity: 0.4,
               animation: `geo-pulse ${p.dur}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * p.dur}s`,
+              animationDelay: `${((p.origX + p.origY) % 5) * 0.8}s`,
             }}
           />
         ))}
@@ -530,8 +518,18 @@ function InteractiveGeometricBackground() {
   );
 }
 
+interface MagneticButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  href?: string;
+  target?: string;
+  rel?: string;
+  download?: string | boolean;
+  "aria-label"?: string;
+}
+
 /* ─── Premium Magnetic Button ─────────────────────────────────────────────── */
-function MagneticButton({ children, className, href, target, rel, download, "aria-label": ariaLabel }: any) {
+function MagneticButton({ children, className, href, target, rel, download, "aria-label": ariaLabel }: MagneticButtonProps) {
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -604,7 +602,6 @@ export default function HeroSection() {
 
   // Slide timer — 500ms tick, drives right-side carousel sync
   useEffect(() => {
-    setProgress(0);
     const tick = 500;
     const steps = (SLIDE_DURATION * 1000) / tick;
     let step = 0;
@@ -618,7 +615,7 @@ export default function HeroSection() {
       }
     }, tick);
     return () => clearInterval(timer);
-  }, [slideIndex]);
+  }, []);
 
   const slide = SLIDES[slideIndex];
 
@@ -729,8 +726,8 @@ export default function HeroSection() {
             </MagneticButton>
           </div>
 
-          {/* 6. Pipeline code card — supporting illustration */}
-          <PipelineCodeCard accentColor={slide.color} />
+          {/* 6. AI Parser comparison card — supporting illustration */}
+          <AIParserCard />
         </motion.div>
 
         {/* ── RIGHT: 3-Phase Diagram Carousel ── */}

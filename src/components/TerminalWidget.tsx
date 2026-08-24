@@ -283,7 +283,7 @@ export default function TerminalWidget() {
   const lineColor: Record<HistoryLine["type"], string> = {
     input: "text-sky-400",
     output: "text-slate-300",
-    error: "text-red-400",
+    error: "text-rose-400",
     success: "text-emerald-400",
     info: "text-indigo-400",
   };

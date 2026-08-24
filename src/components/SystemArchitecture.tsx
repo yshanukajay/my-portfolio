@@ -322,17 +322,20 @@ function TelemetryConsole({
 
   const nodeSpec = selectedNode ? nodeSpecs[selectedNode.label] : null;
 
+  const [prevSelectedNodeId, setPrevSelectedNodeId] = useState<string | null>(null);
   const [displayedLogs, setDisplayedLogs] = useState<string[]>([]);
   const logContainerRef = useRef<HTMLDivElement>(null);
+
+  if (selectedNodeId !== prevSelectedNodeId) {
+    setPrevSelectedNodeId(selectedNodeId);
+    setDisplayedLogs(nodeSpec?.logs || []);
+  }
 
   // Sync and simulate diagnostics logs
   useEffect(() => {
     if (!selectedNode || !nodeSpec) {
-      setDisplayedLogs([]);
       return;
     }
-
-    setDisplayedLogs(nodeSpec.logs);
 
     const interval = setInterval(() => {
       const extraLogs = rotatingLogs[selectedNode.label] || [];

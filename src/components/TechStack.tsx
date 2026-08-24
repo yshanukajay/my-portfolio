@@ -8,7 +8,7 @@ const categories = [
   {
     id: "ml",
     label: "Machine Learning",
-    color: "#818cf8",
+    color: "var(--color-accent-secondary)",
     icon: Cpu,
     description: "Developing and deploying deep learning, computer vision, and predictive models using modern frameworks.",
     highlights: ["CNN & Transfer Learning", "PyTorch & TensorFlow", "Model Optimization"],
@@ -25,7 +25,7 @@ const categories = [
   {
     id: "de",
     label: "Data Engineering",
-    color: "#f59e0b",
+    color: "var(--color-warning)",
     icon: Database,
     description: "Designing reliable, high-throughput ingestion and distributed data processing pipelines.",
     highlights: ["Kafka Message Brokers", "Spark Distributed Compute", "Airflow Orchestration"],
@@ -42,7 +42,7 @@ const categories = [
   {
     id: "be",
     label: "Backend & APIs",
-    color: "#10b981",
+    color: "var(--color-success)",
     icon: Zap,
     description: "Building robust, secure, and low-latency APIs and server-side logic to power intelligent applications.",
     highlights: ["FastAPI Microservices", "High Performance Routers", "Scalable REST Architectures"],
@@ -58,7 +58,7 @@ const categories = [
   {
     id: "cloud",
     label: "Cloud & DevOps",
-    color: "#0ea5e9",
+    color: "var(--color-accent-primary)",
     icon: Cloud,
     description: "Orchestrating cloud infrastructure, automated CI/CD deployments, and high-availability systems.",
     highlights: ["Docker Containerization", "Kubernetes Scaling", "Infrastructure as Code"],
@@ -75,7 +75,7 @@ const categories = [
   {
     id: "db",
     label: "Databases",
-    color: "#f97316",
+    color: "var(--color-warning)",
     icon: Server,
     description: "Modeling relational, document, and vector storage mechanisms tailored for specific queries.",
     highlights: ["SQL Query Tuning", "NoSQL Document Stores", "Vector Indexing (Pinecone)"],
@@ -90,7 +90,7 @@ const categories = [
   {
     id: "mlops",
     label: "MLOps",
-    color: "#2dd4bf",
+    color: "var(--color-accent-primary)",
     icon: GitMerge,
     description: "Automating the lifecycle of machine learning models from experiment tracking to system monitoring.",
     highlights: ["MLflow Experiment Logs", "DVC Data Versioning", "Prometheus & Grafana Alerting"],

@@ -41,16 +41,16 @@ export default function AdditionalSections() {
                 ]}>
                   <defs>
                     <linearGradient id="colorCommits" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--color-accent-primary)" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="var(--color-accent-primary)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <Tooltip
                     contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                    itemStyle={{ color: '#0ea5e9', fontWeight: 'bold' }}
+                    itemStyle={{ color: 'var(--color-accent-primary)', fontWeight: 'bold' }}
                     labelStyle={{ color: '#64748b' }}
                   />
-                  <Area type="monotone" dataKey="commits" stroke="#0ea5e9" strokeWidth={2} fillOpacity={1} fill="url(#colorCommits)" />
+                  <Area type="monotone" dataKey="commits" stroke="var(--color-accent-primary)" strokeWidth={2} fillOpacity={1} fill="url(#colorCommits)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

@@ -11,7 +11,7 @@ const builds = [
   {
     title: "CNN Tomato Disease Classifier",
     desc: "Transfer learning pipeline with automated retraining triggers and model versioning.",
-    color: "#818cf8",
+    color: "var(--color-accent-secondary)",
     progress: 88,
     stack: ["PyTorch", "MLflow", "Docker", "FastAPI"],
     status: "In Progress",
@@ -19,12 +19,11 @@ const builds = [
   {
     title: "Churn Prediction Pipeline",
     desc: "End-to-end ML pipeline predicting customer churn with feature engineering, model serving, and drift monitoring.",
-    color: "#0ea5e9",
+    color: "var(--color-accent-primary)",
     progress: 55,
     stack: ["XGBoost", "MLflow", "FastAPI", "Redis"],
     status: "In Progress",
   },
-
 ];
 
 export default function CurrentlyBuilding() {
@@ -108,7 +107,7 @@ export default function CurrentlyBuilding() {
             style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(8px)", borderColor: "rgba(203,213,225,0.7)", boxShadow: "0 4px 16px rgba(15,23,42,0.06)" }}>
 
             <div className="flex items-center gap-3 mb-6">
-              <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
+              <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" strokeWidth="2">
                 <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
               </svg>
               <div>
@@ -122,13 +121,13 @@ export default function CurrentlyBuilding() {
                 <AreaChart data={commitData}>
                   <defs>
                     <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--color-success)" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="var(--color-success)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Tooltip contentStyle={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#10b981", fontSize: 11 }}
+                  <Tooltip contentStyle={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "var(--color-success)", fontSize: 11 }}
                     labelStyle={{ color: "#64748b" }} />
-                  <Area type="monotone" dataKey="v" stroke="#10b981" strokeWidth={2} fill="url(#cg)" />
+                  <Area type="monotone" dataKey="v" stroke="var(--color-success)" strokeWidth={2} fill="url(#cg)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

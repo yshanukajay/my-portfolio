@@ -30,6 +30,18 @@ interface AnimatedSectionProps {
  * </AnimatedSection>
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const motionMap: Record<string, any> = {
+  div: motion.div,
+  section: motion.section,
+  article: motion.article,
+  aside: motion.aside,
+  header: motion.header,
+  footer: motion.footer,
+  main: motion.main,
+  nav: motion.nav,
+};
+
 export default function AnimatedSection({
   children,
   className,
@@ -50,7 +62,7 @@ export default function AnimatedSection({
     once,
   });
 
-  const MotionTag = motion(Tag as "div");
+  const MotionTag = typeof Tag === "string" ? (motionMap[Tag] || motion.div) : motion.div;
 
   return (
     <MotionTag

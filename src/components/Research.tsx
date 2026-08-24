@@ -28,8 +28,8 @@ const publications = [
     abstract:
       "Explores the design and deployment of a low-cost IoT smart collar system using LoRa communication for real-time cattle health monitoring across remote dry-zone environments in Sri Lanka. The system captures biometric and behavioural data — including temperature, motion, and heart rate — and transmits it over long-range low-power networks to an ML-backed prediction and alert pipeline.",
     keywords: ["IoT", "LoRa", "Cattle Monitoring", "Edge AI", "Real-Time Systems", "Sri Lanka", "Smart Agriculture"],
-    accentColor: "#0ea5e9",
-    accentSecondary: "#6366f1",
+    accentColor: "var(--color-accent-primary)",
+    accentSecondary: "var(--color-accent-secondary)",
     impact: "Applied Research",
     domain: "AgriTech · Edge AI",
   },

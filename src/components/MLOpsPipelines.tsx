@@ -5,41 +5,41 @@ import { Zap, GitBranch, Activity } from "lucide-react";
 const pipelines = [
   {
     icon: <GitBranch size={20} />,
-    iconColor: "#0ea5e9",
+    iconColor: "var(--color-accent-primary)",
     title: "Training Pipeline",
     metric: { label: "Throughput", value: "1.2M events/s" },
     steps: [
-      { name: "Data Validation", color: "#f59e0b" },
-      { name: "Preprocessing", color: "#0ea5e9" },
-      { name: "Feature Engineering", color: "#818cf8" },
-      { name: "Model Training", color: "#10b981" },
-      { name: "Evaluation", color: "#0ea5e9" },
-      { name: "MLflow Tracking", color: "#818cf8" },
+      { name: "Data Validation", color: "var(--color-warning)" },
+      { name: "Preprocessing", color: "var(--color-accent-primary)" },
+      { name: "Feature Engineering", color: "var(--color-accent-secondary)" },
+      { name: "Model Training", color: "var(--color-success)" },
+      { name: "Evaluation", color: "var(--color-accent-primary)" },
+      { name: "MLflow Tracking", color: "var(--color-accent-secondary)" },
     ],
   },
   {
     icon: <Zap size={20} />,
-    iconColor: "#818cf8",
+    iconColor: "var(--color-accent-secondary)",
     title: "Deployment Pipeline",
     metric: { label: "Deploy Time", value: "< 3 min" },
     steps: [
-      { name: "Docker Build", color: "#0ea5e9" },
-      { name: "FastAPI Serving", color: "#f97316" },
-      { name: "CI/CD Actions", color: "#818cf8" },
-      { name: "Cloud Deployment", color: "#2dd4bf" },
+      { name: "Docker Build", color: "var(--color-accent-primary)" },
+      { name: "FastAPI Serving", color: "var(--color-warning)" },
+      { name: "CI/CD Actions", color: "var(--color-accent-secondary)" },
+      { name: "Cloud Deployment", color: "var(--color-accent-primary)" },
     ],
   },
   {
     icon: <Activity size={20} />,
-    iconColor: "#f59e0b",
+    iconColor: "var(--color-warning)",
     title: "Monitoring Pipeline",
     metric: { label: "SLA Uptime", value: "99.98%" },
     steps: [
-      { name: "Prediction Logs", color: "#f59e0b" },
-      { name: "Drift Detection", color: "#818cf8" },
-      { name: "Data Quality", color: "#10b981" },
-      { name: "Performance Monitor", color: "#0ea5e9" },
-      { name: "Alert & Retrain", color: "#ef4444" },
+      { name: "Prediction Logs", color: "var(--color-warning)" },
+      { name: "Drift Detection", color: "var(--color-accent-secondary)" },
+      { name: "Data Quality", color: "var(--color-success)" },
+      { name: "Performance Monitor", color: "var(--color-accent-primary)" },
+      { name: "Alert & Retrain", color: "var(--color-danger)" },
     ],
   },
 ];
@@ -76,7 +76,10 @@ function PipelineCard({ pipeline, delay }: { pipeline: typeof pipelines[0]; dela
               initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.4, delay: delay + idx * 0.08 }}
               className="w-full flex items-center gap-3 py-2.5 px-4 rounded-xl"
-              style={{ background: `${step.color}0f`, border: `1px solid ${step.color}25` }}>
+              style={{
+                background: `color-mix(in srgb, ${step.color} 6%, transparent)`,
+                border: `1px solid color-mix(in srgb, ${step.color} 15%, transparent)`
+              }}>
               <motion.div className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{ background: step.color }}
                 animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.3, 1] }}
@@ -87,7 +90,7 @@ function PipelineCard({ pipeline, delay }: { pipeline: typeof pipelines[0]; dela
             {/* Animated connector */}
             {idx < pipeline.steps.length - 1 && (
               <div className="relative flex flex-col items-center my-1" style={{ height: 20 }}>
-                <motion.div className="w-px flex-1" style={{ background: `${step.color}40` }}
+                <motion.div className="w-px flex-1" style={{ background: `color-mix(in srgb, ${step.color} 25%, transparent)` }}
                   initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }}
                   viewport={{ once: true }} transition={{ duration: 0.4, delay: delay + idx * 0.1 }} />
                 <motion.div className="absolute rounded-full" style={{ width: 5, height: 5, background: step.color }}

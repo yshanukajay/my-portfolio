@@ -25,8 +25,10 @@ export function useCounterAnimation({
   useEffect(() => {
     if (!isInView || hasAnimated.current) return;
     if (prefersReduced) {
-      setValue(target);
       hasAnimated.current = true;
+      requestAnimationFrame(() => {
+        setValue(target);
+      });
       return;
     }
 

@@ -43,7 +43,7 @@ function ContactGrid({ reduced }: { reduced: boolean }) {
       }
       for (let r = 0; r <= rows; r++) {
         const wave = 0.5 + 0.5 * Math.sin(t * 0.38 + (r / rows) * Math.PI * 2.5 + 1);
-        ctx.strokeStyle = `rgba(139,92,246,${0.03 + 0.05 * wave})`;
+        ctx.strokeStyle = `rgba(99,102,241,${0.03 + 0.05 * wave})`;
         ctx.lineWidth = 0.5;
         ctx.beginPath(); ctx.moveTo(-CELL, r * CELL); ctx.lineTo(W + CELL, r * CELL); ctx.stroke();
       }
@@ -52,7 +52,7 @@ function ContactGrid({ reduced }: { reduced: boolean }) {
           const pulse = 0.5 + 0.5 * Math.sin(t * 0.9 + ((c * 3 + r * 5) / (cols + rows)) * Math.PI * 4);
           const bright = (c * 7 + r * 11) % 19 === 0;
           ctx.beginPath(); ctx.arc(c * CELL, r * CELL, bright ? 1.2 + pulse * 0.7 : 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = bright ? `rgba(99,102,241,${0.12 + 0.2 * pulse})` : `rgba(139,92,246,${0.04 + 0.07 * pulse})`;
+          ctx.fillStyle = bright ? `rgba(99,102,241,${0.12 + 0.2 * pulse})` : `rgba(99,102,241,${0.04 + 0.07 * pulse})`;
           ctx.fill();
         }
       }

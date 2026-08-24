@@ -1,14 +1,27 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 @theme {
+  /* Existing — keep */
   --color-background: #F4F8FC;
   --color-foreground: #0F172A;
 
   --font-sans: var(--font-inter), sans-serif;
   --font-heading: var(--font-outfit), sans-serif;
 
-  --color-accent-primary: #0ea5e9;
-  --color-accent-secondary: #3b82f6;
+  /* Neutrals */
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-muted: #64748B;
+
+  /* Brand accents — exactly two */
+  --color-accent-primary: #0EA5E9;   /* sky-500 */
+  --color-accent-primary-hover: #0284C7; /* sky-600 */
+  --color-accent-secondary: #6366F1; /* indigo-500 */
+
+  /* Semantic — exactly three, functional use only */
+  --color-success: #10B981;  /* emerald-500 */
+  --color-warning: #F59E0B;  /* amber-500 */
+  --color-danger: #F43F5E;   /* rose-500 */
 
   --animate-scan: scan 6s ease-in-out infinite;
 }
@@ -32,7 +45,7 @@
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #6366f1 transparent;
+  scrollbar-color: var(--color-accent-secondary) transparent;
 }
 
 /* Chrome / Edge / Safari */
@@ -46,15 +59,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 60%, #a78bfa 100%);
+  background: linear-gradient(180deg, var(--color-accent-secondary) 0%, var(--color-accent-primary) 100%);
   border-radius: 99px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #818cf8 0%, #a78bfa 100%);
-  box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
+  background: linear-gradient(180deg, var(--color-accent-secondary) 0%, var(--color-accent-primary-hover) 100%);
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.25);
 }
 
 ::-webkit-scrollbar-corner {
