@@ -578,7 +578,7 @@ export default function SystemArchitecture() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-bold tracking-[0.25em] text-emerald-600 uppercase mb-3">System Design</p>
+          <p className="font-script text-3xl text-emerald-600 mb-2">System Design</p>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Scalable Architecture</h2>
           <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full mb-6" />
           <div className="flex justify-center">

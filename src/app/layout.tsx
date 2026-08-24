@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Outfit, Caveat } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 
@@ -10,6 +10,11 @@ const inter = Inter({
 
 const outfit = Outfit({
   variable: "--font-outfit",
+  subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
 });
 
@@ -43,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} antialiased`}
+      className={`${inter.variable} ${outfit.variable} ${caveat.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-cyan-100 selection:text-cyan-900">

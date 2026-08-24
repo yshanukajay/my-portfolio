@@ -222,7 +222,7 @@ export default function TechStack() {
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-bold tracking-[0.25em] text-sky-600 uppercase mb-3">
+          <p className="font-script text-3xl text-sky-600 mb-2">
             Tools &amp; Frameworks
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">

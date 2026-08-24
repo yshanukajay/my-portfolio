@@ -62,25 +62,24 @@ const PIPELINE_STAGES = [
     file: "kafka_producer.py",
     label: "Ingest",
     color: "var(--color-warning)",
-    metric: "10k events/s",
+    metric: "10 events/s",
     status: "running",
     code: [
       { t: "kw", v: "from " }, { t: "mod", v: "confluent_kafka " }, { t: "kw", v: "import " }, { t: "cls", v: "Producer" },
       { t: "fn", v: "producer" }, { t: "op", v: "." }, { t: "fn", v: "produce" }, { t: "op", v: "(" },
-      { t: "str", v: "'clickstream'" }, { t: "op", v: ", " }, { t: "var", v: "payload" }, { t: "op", v: ")" },
+      { t: "str", v: "'customer-events'" }, { t: "op", v: ", " }, { t: "var", v: "payload" }, { t: "op", v: ")" },
     ],
   },
   {
     step: "02",
-    file: "spark_stream.py",
-    label: "Transform",
+    file: "churn_consumer.py",
+    label: "Inference",
     color: "var(--color-accent-primary)",
-    metric: "p95 < 420ms",
+    metric: "sub-10ms latency",
     status: "running",
     code: [
-      { t: "var", v: "df" }, { t: "op", v: " = " }, { t: "fn", v: "spark" }, { t: "op", v: "." }, { t: "fn", v: "readStream" },
-      { t: "op", v: "." }, { t: "fn", v: "format" }, { t: "op", v: "(" }, { t: "str", v: "'kafka'" }, { t: "op", v: ")" },
-      { t: "op", v: "." }, { t: "fn", v: "load" }, { t: "op", v: "()" },
+      { t: "var", v: "model" }, { t: "op", v: " = " }, { t: "fn", v: "load_model" }, { t: "op", v: "(" }, { t: "str", v: "'s3://models/'" }, { t: "op", v: ")" },
+      { t: "var", v: "pred" }, { t: "op", v: " = " }, { t: "var", v: "model" }, { t: "op", v: "." }, { t: "fn", v: "predict" }, { t: "op", v: "(" }, { t: "var", v: "features" }, { t: "op", v: ")" },
     ],
   },
   {
@@ -91,7 +90,7 @@ const PIPELINE_STAGES = [
     metric: "SLA 99.9%",
     status: "scheduled",
     code: [
-      { t: "dec", v: "@dag" }, { t: "op", v: "(" }, { t: "var", v: "schedule" }, { t: "op", v: "=" }, { t: "str", v: "'@hourly'" }, { t: "op", v: ")" },
+      { t: "dec", v: "@dag" }, { t: "op", v: "(" }, { t: "var", v: "schedule" }, { t: "op", v: "=" }, { t: "str", v: "'@weekly'" }, { t: "op", v: ")" },
       { t: "kw", v: "def " }, { t: "fn", v: "ml_pipeline" }, { t: "op", v: "(): ..." },
     ],
   },
@@ -100,11 +99,11 @@ const PIPELINE_STAGES = [
     file: "mlflow_run.py",
     label: "Track & Serve",
     color: "var(--color-accent-secondary)",
-    metric: "acc 94.2%",
+    metric: "F1 78.4%",
     status: "complete",
     code: [
       { t: "fn", v: "mlflow" }, { t: "op", v: "." }, { t: "fn", v: "log_metric" }, { t: "op", v: "(" },
-      { t: "str", v: "'accuracy'" }, { t: "op", v: ", " }, { t: "num", v: "0.942" }, { t: "op", v: ")" },
+      { t: "str", v: "'f1_score'" }, { t: "op", v: ", " }, { t: "num", v: "0.784" }, { t: "op", v: ")" },
     ],
   },
 ];
@@ -141,22 +140,20 @@ function AIParserCard() {
     xPercent.set(50); // Snaps back smoothly via Spring
   };
 
-  const rawInput = `Pt: Sarah K. 34F
-Temp 38.2°C SpO2 96%
-Hx: childhood asthma
-Rx: azithromycin 500mg`;
+  const rawInput = `Cust: 15682974 (Active)
+Balance: $48,250.00
+Tenure: 18 months
+Credit: 620 | Products: 2
+Churn Threat: Elevated`;
 
   const structuredOutput = `{
-  "patient": {
-    "name": "Sarah K.",
-    "age": 34,
-    "gender": "F"
+  "customer": 15682974,
+  "features": {
+    "balance": 48250.0,
+    "credit_score": 620,
+    "products_count": 2
   },
-  "vitals": {
-    "temp_c": 38.2,
-    "spo2_percent": 96
-  },
-  "meds": ["azithromycin"]
+  "churn_probability": 0.812
 }`;
 
   return (
@@ -637,6 +634,7 @@ export default function HeroSection() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="flex flex-col space-y-5"
         >
+
           {/* 1. Category badge */}
           <div className="flex items-center space-x-2">
             <span className="h-px w-6 bg-sky-500" />

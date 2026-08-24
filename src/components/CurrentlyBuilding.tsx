@@ -37,10 +37,10 @@ export default function CurrentlyBuilding() {
         <motion.div className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <motion.span className="w-2 h-2 rounded-full bg-emerald-400"
+          <div className="flex items-center justify-center gap-2.5 mb-2">
+            <motion.span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"
               animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.4, repeat: Infinity }} />
-            <p className="text-xs font-bold tracking-[0.25em] text-emerald-600 uppercase">Active Development</p>
+            <p className="font-script text-3xl text-emerald-600">Active Development</p>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Currently Building</h2>
           <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full mb-6" />

@@ -134,19 +134,9 @@ export default function EngineeringPhilosophy() {
           viewport={{ once: true }}
           transition={{ duration: 0.65 }}
         >
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5 border"
-            style={{
-              background: "rgba(99,102,241,0.08)",
-              borderColor: "rgba(99,102,241,0.22)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-            <p className="text-[11px] font-bold tracking-[0.22em] text-indigo-600 uppercase">
-              How I Think
-            </p>
-          </div>
+          <p className="font-script text-3xl text-indigo-600 mb-2">
+            How I Think
+          </p>
 
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Engineering Philosophy

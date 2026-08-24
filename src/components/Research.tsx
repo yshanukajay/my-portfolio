@@ -129,18 +129,9 @@ export default function Research() {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 mb-5"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <Microscope size={13} className="text-sky-400" />
-            <span className="text-[11px] font-bold tracking-[0.25em] text-sky-400 uppercase">
-              Academic Contribution
-            </span>
-          </motion.div>
+          <p className="font-script text-3xl text-sky-500 mb-2">
+            Academic Contribution
+          </p>
 
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-5 leading-tight">
             Research &amp;{" "}

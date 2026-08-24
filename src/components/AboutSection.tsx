@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Brain, Cpu, Cloud, GitMerge, Network, Zap, Bot, Link, GitBranch, BarChart2, type LucideIcon } from "lucide-react";
 
 
@@ -156,6 +156,63 @@ function DomainCard({ domain, index }: { domain: Domain; index: number }) {
 }
 
 export default function AboutSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const expertiseRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress: bioScroll } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const { scrollYProgress: expScroll } = useScroll({
+    target: expertiseRef,
+    offset: ["start end", "end start"]
+  });
+
+  const bioY = useTransform(bioScroll, [0, 1], ["-8%", "8%"]);
+  const expY = useTransform(expScroll, [0, 1], ["-8%", "8%"]);
+
+  const rotations = [-8, 6, -5, 8, -6];
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const wordVariants = {
+    hidden: (i: number) => ({
+      opacity: 0,
+      y: 50,
+      rotate: rotations[i % rotations.length],
+    }),
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotate: 0,
+      transition: {
+        type: "spring" as const,
+        damping: 14,
+        stiffness: 90,
+      },
+    },
+  };
+
+  const squiggleVariants = {
+    hidden: { pathLength: 0 },
+    visible: {
+      pathLength: 1,
+      transition: {
+        delay: 0.55,
+        duration: 0.8,
+        ease: "easeInOut" as const,
+      },
+    },
+  };
+
   const [activeTab, setActiveTab] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -199,16 +256,53 @@ export default function AboutSection() {
   const DomainIcon = activeDomain.icon;
 
   return (
-    <section id="about" className="relative">
+    <section id="about" ref={sectionRef} className="relative">
       {/* Engineering Mindset — white */}
       <div className="py-24 bg-[#F4F8FC] relative overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 10% 90%, rgba(99,102,241,0.04) 0%, transparent 50%)",
-          }}
-        />
+        {/* Parallax Container */}
+        <motion.div style={{ y: bioY }} className="absolute inset-0 pointer-events-none select-none">
+          {/* Subtle grid of dots to fill the background space */}
+          <div
+            className="absolute inset-0 opacity-[0.05]"
+            style={{
+              backgroundImage: "radial-gradient(#475569 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+
+          {/* Dynamic vector curves with linear gradients */}
+          <svg className="absolute inset-0 w-full h-full opacity-40 z-0" xmlns="http://www.w3.org/2000/svg">
+            <path d="M -100 200 C 300 450, 600 50, 1100 300 C 1400 420, 1700 150, 2100 350" fill="none" stroke="url(#grid-line-grad)" strokeWidth="1.5" />
+            <path d="M -100 300 C 400 200, 700 400, 1100 150 C 1400 300, 1700 250, 2100 200" fill="none" stroke="url(#grid-line-grad-2)" strokeWidth="1" opacity="0.6" />
+            <defs>
+              <linearGradient id="grid-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="rgba(99, 102, 241, 0)" />
+                <stop offset="30%" stopColor="rgba(99, 102, 241, 0.12)" />
+                <stop offset="70%" stopColor="rgba(14, 165, 233, 0.18)" />
+                <stop offset="100%" stopColor="rgba(14, 165, 233, 0)" />
+              </linearGradient>
+              <linearGradient id="grid-line-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="rgba(14, 165, 233, 0)" />
+                <stop offset="45%" stopColor="rgba(168, 85, 247, 0.12)" />
+                <stop offset="85%" stopColor="rgba(99, 102, 241, 0.08)" />
+                <stop offset="100%" stopColor="rgba(99, 102, 241, 0)" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          {/* Ambient background light leaks */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-indigo-500/5 blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-[450px] h-[450px] rounded-full bg-amber-500/3 blur-[110px]" />
+
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 10% 90%, rgba(99,102,241,0.04) 0%, transparent 50%)",
+            }}
+          />
+        </motion.div>
+
         <div className="container mx-auto px-6 lg:px-12 relative">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left Column: Premium Developer Profile Card with Soft Floating Glow Background */}
@@ -345,19 +439,67 @@ export default function AboutSection() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="lg:col-span-7"
             >
-              <div className="flex items-center space-x-2 mb-6">
-                <span className="h-px w-8 bg-indigo-500" />
-                <p className="text-sm font-bold tracking-[0.2em] text-indigo-500 uppercase">
-                  AI Engineering Mindset
-                </p>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight">
-                Building{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-violet-500">
-                  Intelligent
-                </span>{" "}
-                AI Systems.
-              </h2>
+              <p className="font-script text-3xl text-indigo-500 mb-2">
+                AI Engineering Mindset
+              </p>
+              <motion.h2
+                className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 mb-8 leading-[1.12] tracking-tight flex flex-wrap gap-x-3.5 gap-y-2 select-none"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+              >
+                {/* Ready to build */}
+                <span className="relative inline-block overflow-hidden pb-3 pr-2">
+                  <motion.span custom={0} variants={wordVariants} className="inline-block origin-bottom-left">
+                    Ready
+                  </motion.span>
+                </span>
+                <span className="relative inline-block overflow-hidden pb-3 pr-2">
+                  <motion.span custom={1} variants={wordVariants} className="inline-block origin-bottom-left">
+                    to
+                  </motion.span>
+                </span>
+                <span className="relative inline-block overflow-hidden pb-3 pr-2">
+                  <motion.span custom={2} variants={wordVariants} className="inline-block origin-bottom-left">
+                    build
+                  </motion.span>
+                </span>
+
+                {/* Line break wrapper */}
+                <div className="w-full h-0" />
+
+                {/* something real? */}
+                <span className="relative inline-block overflow-hidden pb-3 pr-2">
+                  <motion.span custom={3} variants={wordVariants} className="inline-block origin-bottom-left">
+                    something
+                  </motion.span>
+                </span>
+                <span className="relative inline-block pb-3 pr-2">
+                  <motion.span
+                    custom={4}
+                    variants={wordVariants}
+                    className="inline-block origin-bottom-left"
+                  >
+                    real?
+                  </motion.span>
+                  {/* ZuuCrew-inspired Squiggle vector underline */}
+                  <svg
+                    className="absolute -bottom-1 left-0 w-full h-[12px] pointer-events-none select-none"
+                    viewBox="0 0 100 10"
+                    preserveAspectRatio="none"
+                  >
+                    <motion.path
+                      d="M0,7 C30,2 70,12 100,5"
+                      fill="none"
+                      stroke="#F43F5E" // Premium coral/rose rose-500
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      variants={squiggleVariants}
+                    />
+                  </svg>
+                </span>
+              </motion.h2>
               <div className="text-slate-600 space-y-4">
                 <p className="leading-relaxed font-medium text-slate-800 text-xl">
                   I build production AI systems — from LLM-powered agents and RAG pipelines to
@@ -462,17 +604,57 @@ export default function AboutSection() {
       </div>
 
       {/* Core Expertise — full-bleed with side decorations */}
-      <div className="w-full bg-[#F1F5F9] border-y border-[#E2E8F0] py-24 overflow-hidden relative">
-        {/* Subtle engineering dot pattern background */}
-        <div
-          className="absolute inset-0 pointer-events-none select-none opacity-[0.08]"
-          style={{
-            backgroundImage: "radial-gradient(#2563EB 1.5px, transparent 1.5px)",
-            backgroundSize: "24px 24px",
-            maskImage: "radial-gradient(circle at 50% 50%, black, transparent 85%)",
-            WebkitMaskImage: "radial-gradient(circle at 50% 50%, black, transparent 85%)",
-          }}
-        />
+      <div ref={expertiseRef} className="w-full bg-[#F1F5F9] border-y border-[#E2E8F0] py-24 overflow-hidden relative">
+        {/* Parallax Container */}
+        <motion.div style={{ y: expY }} className="absolute inset-0 pointer-events-none select-none">
+          {/* Subtle engineering dot pattern background */}
+          <div
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage: "radial-gradient(#2563EB 1.2px, transparent 1.2px)",
+              backgroundSize: "20px 20px",
+              maskImage: "radial-gradient(circle at 50% 50%, black, transparent 80%)",
+              WebkitMaskImage: "radial-gradient(circle at 50% 50%, black, transparent 80%)",
+            }}
+          />
+
+          {/* Soft floating glowing ambient blobs */}
+          <motion.div
+            animate={{
+              x: [0, 30, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute -top-20 -left-20 w-[350px] h-[350px] rounded-full bg-indigo-500/10 blur-[90px]"
+          />
+          <motion.div
+            animate={{
+              x: [0, -30, 0],
+              y: [0, 20, 0],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-emerald-500/8 blur-[100px]"
+          />
+          <motion.div
+            animate={{
+              y: [0, 25, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[250px] h-[250px] rounded-full bg-sky-500/5 blur-[80px]"
+          />
+        </motion.div>
         <div className="container mx-auto px-6 lg:px-12 relative z-10">
 
           {/* Section header */}
@@ -483,7 +665,7 @@ export default function AboutSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xs font-bold tracking-[0.25em] text-indigo-500 uppercase mb-3">
+            <p className="font-script text-3xl text-indigo-500 mb-2">
               Engineering Focus
             </p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Core Expertise</h2>
