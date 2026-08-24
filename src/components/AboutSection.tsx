@@ -172,45 +172,28 @@ export default function AboutSection() {
   const bioY = useTransform(bioScroll, [0, 1], ["-8%", "8%"]);
   const expY = useTransform(expScroll, [0, 1], ["-8%", "8%"]);
 
-  const rotations = [-8, 6, -5, 8, -6];
+  const assembleProgress = useTransform(bioScroll, [0.02, 0.22], [0, 1]);
+  const invAssembleProgress = useTransform(assembleProgress, (v) => 1 - v);
+  const squiggleProgress = useTransform(bioScroll, [0.18, 0.28], [0, 1]);
 
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.08,
-      },
-    },
-  };
-
-  const wordVariants = {
-    hidden: (i: number) => ({
-      opacity: 0,
-      y: 50,
-      rotate: rotations[i % rotations.length],
-    }),
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotate: 0,
-      transition: {
-        type: "spring" as const,
-        damping: 14,
-        stiffness: 90,
-      },
-    },
-  };
-
-  const squiggleVariants = {
-    hidden: { pathLength: 0 },
-    visible: {
-      pathLength: 1,
-      transition: {
-        delay: 0.55,
-        duration: 0.8,
-        ease: "easeInOut" as const,
-      },
-    },
+  const getScatterStyle = (index: number) => {
+    // Deterministic pseudo-random values for each letter
+    const x = Math.sin(index * 13.5) * 80;
+    const y = Math.cos(index * 29.3) * 60 - 20;
+    const rotate = Math.sin(index * 45.7) * 75;
+    const scale = 0.7 + ((Math.sin(index * 7.8) + 1) / 2) * 0.3;
+    
+    return {
+      display: "inline-block",
+      "--char-x": `${x}px`,
+      "--char-y": `${y}px`,
+      "--char-r": `${rotate}deg`,
+      "--char-s": `${scale}`,
+      transform: "translate(calc(var(--char-x) * var(--inv-progress)), calc(var(--char-y) * var(--inv-progress))) rotate(calc(var(--char-r) * var(--inv-progress))) scale(calc(var(--char-s) + (1 - var(--char-s)) * var(--progress)))",
+      opacity: "calc(0.45 + 0.55 * var(--progress))",
+      filter: "blur(calc(6px * var(--inv-progress)))",
+      transformOrigin: "center center",
+    } as React.CSSProperties;
   };
 
   const [activeTab, setActiveTab] = useState(0);
@@ -443,62 +426,62 @@ export default function AboutSection() {
                 AI Engineering Mindset
               </p>
               <motion.h2
-                className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 mb-8 leading-[1.12] tracking-tight flex flex-wrap gap-x-3.5 gap-y-2 select-none"
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
+                className="text-3xl sm:text-4xl md:text-5xl font-bold font-rounded text-slate-900 mb-8 leading-[1.05] tracking-tight flex flex-col gap-y-0.5 select-none"
+                style={{
+                  "--progress": assembleProgress,
+                  "--inv-progress": invAssembleProgress,
+                } as React.CSSProperties}
               >
-                {/* Ready to build */}
-                <span className="relative inline-block overflow-hidden pb-3 pr-2">
-                  <motion.span custom={0} variants={wordVariants} className="inline-block origin-bottom-left">
-                    Ready
-                  </motion.span>
-                </span>
-                <span className="relative inline-block overflow-hidden pb-3 pr-2">
-                  <motion.span custom={1} variants={wordVariants} className="inline-block origin-bottom-left">
-                    to
-                  </motion.span>
-                </span>
-                <span className="relative inline-block overflow-hidden pb-3 pr-2">
-                  <motion.span custom={2} variants={wordVariants} className="inline-block origin-bottom-left">
-                    build
-                  </motion.span>
-                </span>
+                {(() => {
+                  let globalCharIndex = 0;
+                  const lines = [
+                    [
+                      { text: "Engineering", hasSquiggle: false },
+                      { text: "systems", hasSquiggle: false }
+                    ],
+                    [
+                      { text: "that", hasSquiggle: false },
+                      { text: "think.", hasSquiggle: true }
+                    ]
+                  ];
 
-                {/* Line break wrapper */}
-                <div className="w-full h-0" />
+                  return lines.map((lineWords, lIdx) => (
+                    <div key={lIdx} className="flex flex-wrap gap-x-2 sm:gap-x-3 gap-y-0 leading-[1.05]">
+                      {lineWords.map((wordObj, wIdx) => (
+                        <span key={wIdx} className="relative inline-block pb-1 pr-1.5 whitespace-nowrap">
+                          {wordObj.text.split("").map((char) => {
+                            const index = globalCharIndex++;
+                            return (
+                              <motion.span
+                                key={index}
+                                style={getScatterStyle(index)}
+                              >
+                                {char}
+                              </motion.span>
+                            );
+                          })}
 
-                {/* something real? */}
-                <span className="relative inline-block overflow-hidden pb-3 pr-2">
-                  <motion.span custom={3} variants={wordVariants} className="inline-block origin-bottom-left">
-                    something
-                  </motion.span>
-                </span>
-                <span className="relative inline-block pb-3 pr-2">
-                  <motion.span
-                    custom={4}
-                    variants={wordVariants}
-                    className="inline-block origin-bottom-left"
-                  >
-                    real?
-                  </motion.span>
-                  {/* ZuuCrew-inspired Squiggle vector underline */}
-                  <svg
-                    className="absolute -bottom-1 left-0 w-full h-[12px] pointer-events-none select-none"
-                    viewBox="0 0 100 10"
-                    preserveAspectRatio="none"
-                  >
-                    <motion.path
-                      d="M0,7 C30,2 70,12 100,5"
-                      fill="none"
-                      stroke="#F43F5E" // Premium coral/rose rose-500
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      variants={squiggleVariants}
-                    />
-                  </svg>
-                </span>
+                          {wordObj.hasSquiggle && (
+                            <svg
+                              className="absolute -bottom-0.5 left-0 w-full h-[10px] pointer-events-none select-none"
+                              viewBox="0 0 100 10"
+                              preserveAspectRatio="none"
+                            >
+                              <motion.path
+                                d="M0,7 C30,2 70,12 100,5"
+                                fill="none"
+                                stroke="#F43F5E" // Premium coral/rose rose-500
+                                strokeWidth="4"
+                                strokeLinecap="round"
+                                style={{ pathLength: squiggleProgress }}
+                              />
+                            </svg>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  ));
+                })()}
               </motion.h2>
               <div className="text-slate-600 space-y-4">
                 <p className="leading-relaxed font-medium text-slate-800 text-xl">

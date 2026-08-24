@@ -124,7 +124,7 @@ function AIParserCard() {
   const containerRef = useRef<HTMLDivElement>(null);
   const xPercent = useMotionValue(50);
   const xPercentSpring = useSpring(xPercent, { stiffness: 350, damping: 30, mass: 0.5 });
-  
+
   const clipPath = useTransform(xPercentSpring, (val) => `inset(0 0 0 ${val}%)`);
   const left = useTransform(xPercentSpring, (val) => `${val}%`);
 
@@ -208,8 +208,8 @@ Churn Threat: Elevated`;
           backgroundColor: "var(--color-accent-primary)",
         }}
       >
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white border-2 shadow-sm cursor-col-resize flex items-center justify-center" 
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white border-2 shadow-sm cursor-col-resize flex items-center justify-center"
           style={{ borderColor: "var(--color-accent-primary)" }}
         >
           <div className="w-1 h-1 rounded-full" style={{ backgroundColor: "var(--color-accent-primary)" }} />
@@ -625,7 +625,7 @@ export default function HeroSection() {
       </div>
 
       {/* ── CONTENT GRID ─────────────────────────────────────── */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-50 items-center">
 
         {/* ── LEFT: Text — proper visual hierarchy ── */}
         <motion.div
@@ -644,7 +644,7 @@ export default function HeroSection() {
           </div>
 
           {/* 2. Name — biggest, dominant */}
-          <h1 className="text-[2.8rem] sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 tracking-tight leading-[1.05]">
+          <h1 className="text-[2.4rem] sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 tracking-tight leading-[1.05] whitespace-nowrap">
             Yohan Shanuka
           </h1>
 

@@ -5,9 +5,10 @@
   --color-background: #F4F8FC;
   --color-foreground: #0F172A;
 
-  --font-sans: var(--font-inter), sans-serif;
-  --font-heading: var(--font-outfit), sans-serif;
+  --font-sans: var(--font-comfortaa), sans-serif;
+  --font-heading: var(--font-comfortaa), sans-serif;
   --font-script: var(--font-caveat), cursive;
+  --font-rounded: var(--font-comfortaa), sans-serif;
 
   /* Neutrals */
   --color-surface: #FFFFFF;
@@ -121,7 +122,7 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    font-weight: 600;
+    font-weight: 700; /* bold headings/topics */
     color: #0f172a;
     /* slate-900 */
     letter-spacing: -0.025em;

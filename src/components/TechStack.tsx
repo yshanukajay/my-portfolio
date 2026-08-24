@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Cpu, Database, Zap, Cloud, Server, GitMerge, Award, CheckCircle2 } from "lucide-react";
 
@@ -174,6 +174,207 @@ function ToolCard({
   );
 }
 
+/* ─── Interactive Data Flow Background ───────────────────────────── */
+function InteractiveDataFlowBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let width = 0;
+    let height = 0;
+    let animationFrameId: number;
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      baseVx: number;
+      baseVy: number;
+      radius: number;
+    }> = [];
+
+    const numParticles = 24; // Subtle, lightweight count
+    const connectionDist = 110;
+    const mouse = { x: -1000, y: -1000, active: false };
+
+    const resize = () => {
+      if (!canvas || !canvas.parentElement) return;
+      width = canvas.parentElement.clientWidth;
+      height = canvas.parentElement.clientHeight;
+      canvas.width = width;
+      canvas.height = height;
+
+      if (particles.length === 0) {
+        for (let i = 0; i < numParticles; i++) {
+          const vx = (Math.random() - 0.5) * (prefersReducedMotion ? 0.08 : 0.22);
+          const vy = (Math.random() - 0.5) * (prefersReducedMotion ? 0.08 : 0.22);
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx,
+            vy,
+            baseVx: vx,
+            baseVy: vy,
+            radius: 1.2 + Math.random() * 1.0,
+          });
+        }
+      }
+    };
+
+    const resizeObserver = new ResizeObserver(() => resize());
+    if (canvas.parentElement) {
+      resizeObserver.observe(canvas.parentElement);
+    }
+
+    resize();
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+      mouse.active = false;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeave);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw very soft, subtle cursor glow (if mouse is active)
+      if (mouse.active && !prefersReducedMotion) {
+        const gradient = ctx.createRadialGradient(
+          mouse.x,
+          mouse.y,
+          0,
+          mouse.x,
+          mouse.y,
+          100
+        );
+        gradient.addColorStop(0, "rgba(99, 102, 241, 0.03)");
+        gradient.addColorStop(1, "rgba(99, 102, 241, 0)");
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 100, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Update and draw particles
+      particles.forEach((p, idx) => {
+        // Apply mouse interaction (subtle gravity pull)
+        if (mouse.active && !prefersReducedMotion) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 140) {
+            // Gentle attraction
+            const force = (140 - dist) / 140;
+            const strength = 0.04;
+            p.vx += (dx / dist) * force * strength;
+            p.vy += (dy / dist) * force * strength;
+          }
+        }
+
+        // Add base friction/damping so particles return to standard drift speed
+        const speedDamping = 0.96;
+        p.vx = p.vx * speedDamping + p.baseVx * (1 - speedDamping);
+        p.vy = p.vy * speedDamping + p.baseVy * (1 - speedDamping);
+
+        // Limit speed to prevent runaway acceleration
+        const maxSpeed = 0.5;
+        const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (currentSpeed > maxSpeed) {
+          p.vx = (p.vx / currentSpeed) * maxSpeed;
+          p.vy = (p.vy / currentSpeed) * maxSpeed;
+        }
+
+        // Move
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Bounce at boundaries
+        if (p.x < 0) {
+          p.x = 0;
+          p.vx *= -1;
+          p.baseVx *= -1;
+        } else if (p.x > width) {
+          p.x = width;
+          p.vx *= -1;
+          p.baseVx *= -1;
+        }
+
+        if (p.y < 0) {
+          p.y = 0;
+          p.vy *= -1;
+          p.baseVy *= -1;
+        } else if (p.y > height) {
+          p.y = height;
+          p.vy *= -1;
+          p.baseVy *= -1;
+        }
+
+        // Draw particle
+        ctx.fillStyle = "rgba(99, 102, 241, 0.22)"; // Cool blue/indigo tint
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connect to nearby points
+        for (let j = idx + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p2.x - p.x;
+          const dy = p2.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < connectionDist) {
+            const alpha = (1 - dist / connectionDist) * 0.08; // extremely thin/subtle line
+            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+            ctx.lineWidth = 0.55;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      resizeObserver.disconnect();
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none select-none z-0"
+    />
+  );
+}
+
 /* ─── Main Section ──────────────────────────────────────────────── */
 export default function TechStack() {
   const [activeId, setActiveId] = useState("ml");
@@ -191,28 +392,9 @@ export default function TechStack() {
   return (
     <section
       id="stack"
-      className="py-24 relative overflow-hidden bg-[#F4F8FC] border-y border-[#DDE8F0]"
+      className="py-24 relative overflow-hidden bg-[#FAFBFD] border-y border-slate-200/60"
     >
-      {/* Subtle engineering grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none select-none transition-all duration-700 ease-in-out"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, ${activeCat?.color || "#0ea5e9"}1a 1.2px, transparent 1.2px),
-            linear-gradient(to bottom, ${activeCat?.color || "#0ea5e9"}1a 1.2px, transparent 1.2px)
-          `,
-          backgroundSize: "36px 36px",
-          maskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 90%)",
-          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 90%)",
-        }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 15% 20%, rgba(99,102,241,0.05) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(14,165,233,0.05) 0%, transparent 45%)",
-        }}
-      />
+      <InteractiveDataFlowBackground />
 
       <div className="container mx-auto px-6 lg:px-12 relative">
 

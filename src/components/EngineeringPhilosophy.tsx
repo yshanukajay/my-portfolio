@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import FluidSimulation, { FluidHandle } from "./FluidSimulation";
 
 /* ─── Data ───────────────────────────────────────────────────────── */
@@ -53,6 +53,35 @@ export default function EngineeringPhilosophy() {
 
   const fluidRef = useRef<FluidHandle>(null);
   const sectionRef = useRef<HTMLElement>(null);
+
+  /* ── Letter Scattering Scroll transforms ── */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const assembleProgress = useTransform(scrollYProgress, [0.05, 0.35], [0, 1]);
+  const invAssembleProgress = useTransform(assembleProgress, (v) => 1 - v);
+
+  const getScatterStyle = (index: number) => {
+    // Deterministic pseudo-random offsets for each letter
+    const x = Math.sin(index * 15.3) * 70;
+    const y = Math.cos(index * 23.7) * 50 - 15;
+    const rotate = Math.sin(index * 38.2) * 60;
+    const scale = 0.75 + ((Math.sin(index * 9.4) + 1) / 2) * 0.25;
+    
+    return {
+      display: "inline-block",
+      "--char-x": `${x}px`,
+      "--char-y": `${y}px`,
+      "--char-r": `${rotate}deg`,
+      "--char-s": `${scale}`,
+      transform: "translate(calc(var(--char-x) * var(--inv-progress)), calc(var(--char-y) * var(--inv-progress))) rotate(calc(var(--char-r) * var(--inv-progress))) scale(calc(var(--char-s) + (1 - var(--char-s)) * var(--progress)))",
+      opacity: "calc(0.45 + 0.55 * var(--progress))",
+      filter: "blur(calc(5px * var(--inv-progress)))",
+      transformOrigin: "center center",
+    } as React.CSSProperties;
+  };
 
   /* ── Soft mouse-spotlight (very subtle on light bg) ── */
   const [spotStyle, setSpotStyle] = useState("none");
@@ -138,10 +167,37 @@ export default function EngineeringPhilosophy() {
             How I Think
           </p>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Engineering Philosophy
+          <h2
+            className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 flex flex-wrap justify-center gap-x-3 gap-y-1 select-none font-rounded"
+            style={{
+              "--progress": assembleProgress,
+              "--inv-progress": invAssembleProgress,
+            } as React.CSSProperties}
+          >
+            {(() => {
+              let globalCharIndex = 0;
+              const words = ["Engineering", "Philosophy"];
+              return words.map((word, wIdx) => (
+                <span key={wIdx} className="relative inline-block pb-1 whitespace-nowrap">
+                  {word.split("").map((char) => {
+                    const index = globalCharIndex++;
+                    return (
+                      <motion.span
+                        key={index}
+                        style={getScatterStyle(index)}
+                      >
+                        {char}
+                      </motion.span>
+                    );
+                  })}
+                </span>
+              ));
+            })()}
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-violet-500 mx-auto rounded-full mb-8" />
+          <motion.div
+            className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-violet-500 mx-auto rounded-full mb-8"
+            style={{ scaleX: assembleProgress, transformOrigin: "center center" }}
+          />
 
           {/* Main quote */}
           <motion.blockquote
