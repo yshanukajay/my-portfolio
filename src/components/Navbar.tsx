@@ -10,6 +10,7 @@ const navLinks = [
   { name: "Tech Stack", href: "#stack" },
   { name: "Projects", href: "#projects" },
   { name: "Publications", href: "#publications" },
+  { name: "Blogs", href: "#blogs" },
   { name: "Contact", href: "#contact" },
 ];
 

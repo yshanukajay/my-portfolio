@@ -7,6 +7,7 @@ import Projects from "@/components/Projects";
 import CurrentlyBuilding from "@/components/CurrentlyBuilding";
 import Certifications from "@/components/Certifications";
 import Research from "@/components/Research";
+import BlogSection from "@/components/BlogSection";
 import EngineeringPhilosophy from "@/components/EngineeringPhilosophy";
 import ContactSection from "@/components/ContactSection";
 import TerminalWidget from "@/components/TerminalWidget";
@@ -35,6 +36,11 @@ export default function Home() {
       {/* 5. Research & Publications */}
       <LazySection id="publications" height="500px">
         <Research />
+      </LazySection>
+
+      {/* 6. Blog Posts */}
+      <LazySection id="blogs" height="500px">
+        <BlogSection />
       </LazySection>
 
       {/* 7. Currently Building */}
