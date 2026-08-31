@@ -128,6 +128,42 @@ export const projectsData = [
     tags: ["Computer Vision", "Deep Learning", "Mobile & Web Client"],
     links: { github: "https://github.com/yshanukajay/Tomato_Disease_Prediction_System", demo: "#" },
   },
+  {
+    id: "network-security",
+    title: "Network Security End-to-End — ML Pipeline for Threat Detection",
+    badge: "Cybersecurity",
+    category: "Data Validation · MLflow Tracking · Prediction Service",
+    image: "/project-network-security.jpg",
+    description:
+      "An end-to-end ML pipeline for network security threat detection, featuring automated data ingestion, transformation, validation, model training with experiment tracking via MLflow, and a lightweight prediction web service.",
+    problem: "Manual, ad-hoc model development for network security lacks reproducibility, proper experiment tracking, and a clean serving layer for real-time threat predictions.",
+    dataset: "Network traffic datasets with labeled threat indicators (multi-class classification across attack types)",
+    impact: "Reproducible pipeline from raw data to served model with full MLflow experiment lineage and containerized deployment",
+    stack: {
+      infra: ["MLflow", "FastAPI", "Docker", "SQLite", "MongoDB"],
+      languages: ["Python"]
+    },
+    flow: [
+      { name: "Ingest & Validate", desc: "Schema-driven data contracts" },
+      { name: "Transform & Train", desc: "Feature eng + model training" },
+      { name: "Track & Serve", desc: "MLflow registry + prediction API" }
+    ],
+    metrics: {
+      type: "ml_classification",
+      accuracy: 95,
+      metricLabel: "Accuracy",
+      reduction: "End-to-End",
+      reductionLabel: "Pipeline",
+      reductionSub: "Fully Automated",
+      secondaryLabel: "Tracking",
+      latency: "MLflow",
+      datasetLabel: "Experiment Registry"
+    },
+    color: "#10B981",
+    bgColor: "rgba(16, 185, 129, 0.04)",
+    tags: ["Cybersecurity", "MLOps", "Threat Detection"],
+    links: { github: "https://github.com/yshanukajay/network_security_end_to_end_project", demo: "#" },
+  },
 ];
 
 /* ─── Radial Gauge Component ─────────────────────────────────── */
@@ -431,57 +467,47 @@ export default function Projects() {
     });
 
     // Create ScrollTrigger & Timeline
+    const cardCount = cards.length;
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: () => `+=${window.innerHeight * 2.5}`,
+        end: () => `+=${window.innerHeight * (cardCount - 0.5)}`,
         pin: true,
         scrub: 0.5,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const progress = self.progress;
-          // Dynamically compute active index thresholds
+          // Dynamically compute active index thresholds for N cards
+          const step = 1 / (cardCount - 1);
           let active = 0;
-          if (progress >= 0.70) {
-            active = 2;
-          } else if (progress >= 0.30) {
-            active = 1;
-          } else {
-            active = 0;
+          for (let i = cardCount - 1; i >= 1; i--) {
+            if (progress >= (i - 0.5) * step) {
+              active = i;
+              break;
+            }
           }
           setActiveIndex(active);
         }
       }
     });
 
-    // Animate Card 1 entering, Card 0 receding
-    tl.to(cards[0], {
-      scale: 0.94,
-      opacity: 0.72,
-      yPercent: -3,
-      ease: "power1.inOut"
-    }, "card1")
-      .to(cards[1], {
-        yPercent: 0,
-        opacity: 1,
-        scale: 1,
-        ease: "power2.out"
-      }, "card1")
-
-      // Animate Card 2 entering, Card 1 receding
-      .to(cards[1], {
+    // Dynamically animate card transitions for any number of cards
+    for (let i = 1; i < cardCount; i++) {
+      const label = `card${i}`;
+      tl.to(cards[i - 1], {
         scale: 0.94,
         opacity: 0.72,
         yPercent: -3,
         ease: "power1.inOut"
-      }, "card2")
-      .to(cards[2], {
-        yPercent: 0,
-        opacity: 1,
-        scale: 1,
-        ease: "power2.out"
-      }, "card2");
+      }, label)
+        .to(cards[i], {
+          yPercent: 0,
+          opacity: 1,
+          scale: 1,
+          ease: "power2.out"
+        }, label);
+    }
 
     // Recalculate ScrollTrigger on Lenis Scroll events to ensure exact alignment
     if (lenis) {
@@ -689,7 +715,7 @@ export default function Projects() {
                         </div>
                       </div>
                       <span className="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-semibold sm:self-center">
-                        {explainProject.id === "churn-pipeline" ? "Weekly Retraining DAG" : explainProject.id === "fraud-detection" ? "ETL & Threshold Tuning DAG" : "Model Serving Container"}
+                        {explainProject.id === "churn-pipeline" ? "Weekly Retraining DAG" : explainProject.id === "fraud-detection" ? "ETL & Threshold Tuning DAG" : explainProject.id === "network-security" ? "Ingestion → Validation → Training" : "Model Serving Container"}
                       </span>
                     </div>
 
@@ -702,7 +728,7 @@ export default function Projects() {
                         </div>
                       </div>
                       <span className="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-semibold sm:self-center">
-                        {explainProject.id === "tomo-vision" ? "FastAPI serving predictions under 100ms" : "MLflow Tracking Server"}
+                        {explainProject.id === "tomo-vision" ? "FastAPI serving predictions under 100ms" : explainProject.id === "network-security" ? "MLflow + SQLite Experiment Store" : "MLflow Tracking Server"}
                       </span>
                     </div>
 
@@ -715,7 +741,7 @@ export default function Projects() {
                         </div>
                       </div>
                       <span className="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-semibold sm:self-center">
-                        {explainProject.id === "tomo-vision" ? "EfficientNetB0 (TensorFlow)" : "XGBoost Classifier"}
+                        {explainProject.id === "tomo-vision" ? "EfficientNetB0 (TensorFlow)" : explainProject.id === "network-security" ? "Threat Classification Model" : "XGBoost Classifier"}
                       </span>
                     </div>
                   </div>
